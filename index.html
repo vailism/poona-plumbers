@@ -880,13 +880,50 @@
 
   <section class="section-urban section-urban-grey" id="bookingSection">
     <div class="container">
-      <div style="text-align: center; max-width: 600px; margin: 0 auto 36px auto;">
-        <span class="badge-tag" style="margin-bottom: 8px;">Quick Appointment</span>
+      <div style="text-align: center; max-width: 600px; margin: 0 auto 30px auto;">
+        <span class="badge-tag" style="margin-bottom: 8px;">Easy 3-Step Booking</span>
         <h2 style="font-size: 2rem; margin-bottom: 6px;">Schedule Doorstep Plumbing</h2>
-        <p style="color: var(--text-secondary); font-size: 0.925rem;">Fill out the details below. We confirm your technician dispatch instantly via WhatsApp.</p>
+        <p style="color: var(--text-secondary); font-size: 0.925rem;">Book in under 60 seconds • Pay after service completion via Cash or UPI</p>
       </div>
 
       <div class="booking-section-wrapper reveal-item">
+        <div class="quick-wa-banner">
+          <div class="quick-wa-info">
+            <i data-lucide="zap" style="width: 16px; height: 16px;"></i>
+            <span>Prefer booking in 1 click? Chat with our Pune dispatcher</span>
+          </div>
+          <a href="https://wa.me/919876543210?text=Hi%20Poona%20Plumbers,%20I%20would%20like%20to%20quickly%20book%20a%20technician%20in%20Pune." target="_blank" rel="noopener noreferrer" class="quick-wa-btn">
+            <i data-lucide="message-circle" style="width: 14px; height: 14px;"></i>
+            <span>Quick Book on WhatsApp</span>
+          </a>
+        </div>
+
+        <div class="booking-progress-bar">
+          <div class="progress-step-item active" id="progStep1" onclick="goToStep(1)">
+            <div class="step-num">1</div>
+            <div class="step-text">
+              <span class="step-title">Service & Slot</span>
+              <span class="step-sub" id="progSub1">Pick arrival time</span>
+            </div>
+          </div>
+          <div class="progress-line" id="progLine1"></div>
+          <div class="progress-step-item" id="progStep2" onclick="goToStep(2)">
+            <div class="step-num">2</div>
+            <div class="step-text">
+              <span class="step-title">Address & Contact</span>
+              <span class="step-sub" id="progSub2">Doorstep location</span>
+            </div>
+          </div>
+          <div class="progress-line" id="progLine2"></div>
+          <div class="progress-step-item" id="progStep3" onclick="goToStep(3)">
+            <div class="step-num">3</div>
+            <div class="step-text">
+              <span class="step-title">Review & Confirm</span>
+              <span class="step-sub" id="progSub3">Instant dispatch</span>
+            </div>
+          </div>
+        </div>
+
         <div class="confirmation-card-success" id="bookingSuccessCard">
           <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--black); color: var(--white); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
             <i data-lucide="check" style="width: 28px; height: 28px;"></i>
@@ -900,87 +937,199 @@
           </div>
 
           <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-            <button type="button" class="btn btn-outline" id="bookAnotherBtn">Book Another Service</button>
+            <button type="button" class="btn btn-outline" id="bookAnotherBtn" onclick="resetMultiStepBooking()">Book Another Service</button>
             <button type="button" class="btn btn-black" id="openWhatsAppBookingBtn">
               <i data-lucide="message-circle" style="width: 16px; height: 16px;"></i>
-              Open WhatsApp Ticket
+              <span>Open WhatsApp Ticket</span>
             </button>
           </div>
         </div>
 
-        <form id="appointmentForm">
-          <div class="form-grid-2col">
-            <div class="form-group-uc">
-              <label>Your Full Name *</label>
-              <input type="text" id="bookName" class="form-input-uc" placeholder="e.g. Anand Kulkarni" required />
+        <div class="booking-wizard-container" id="bookingWizardForm">
+          <div class="booking-step active" id="bookingStep1">
+            <div class="step-inner-header">
+              <h3 class="step-inner-title">1. Select Service & Arrival Time</h3>
+              <p class="step-inner-desc">Select the plumbing service and pick your preferred time slot.</p>
             </div>
 
             <div class="form-group-uc">
-              <label>Mobile Number (10 digits) *</label>
-              <input type="tel" id="bookPhone" class="form-input-uc" placeholder="e.g. 9876543210" required />
+              <label>Service Required</label>
+              <select id="bookServiceSelect" class="form-input-uc service-styled-dropdown" required>
+                <option value="Tap & Faucet Repair" data-price="149" data-dur="30 mins">Tap & Faucet Repair (Starts ₹149 • 30 mins)</option>
+                <option value="Wash Basin Installation & Repair" data-price="299" data-dur="60 mins">Wash Basin Installation & Repair (Starts ₹299 • 60 mins)</option>
+                <option value="Bathroom Leakage & Seepage Repair" data-price="249" data-dur="60 mins">Bathroom Leakage & Seepage Repair (Starts ₹249 • 60 mins)</option>
+                <option value="Motorized Drain Cleaning" data-price="199" data-dur="45 mins">Motorized Drain Cleaning (Starts ₹199 • 45 mins)</option>
+                <option value="Shower & Diverter Installation" data-price="349" data-dur="60 mins">Shower & Diverter Installation (Starts ₹349 • 60 mins)</option>
+                <option value="Water Tank Deep Scrub & Cleaning" data-price="499" data-dur="90 mins">Water Tank Deep Scrub & Cleaning (Starts ₹499 • 90 mins)</option>
+                <option value="Water Heater (Geyser) Service & Repair" data-price="349" data-dur="60 mins">Water Heater (Geyser) Service & Repair (Starts ₹349 • 60 mins)</option>
+                <option value="Kitchen Sink Plumbing & Trap Fix" data-price="249" data-dur="45 mins">Kitchen Sink Plumbing & Trap Fix (Starts ₹249 • 45 mins)</option>
+                <option value="Toilet Flush & Jet Spray Repair" data-price="199" data-dur="45 mins">Toilet Flush & Jet Spray Repair (Starts ₹199 • 45 mins)</option>
+                <option value="24/7 Emergency Burst Pipe Clamp" data-price="349" data-dur="30 mins">24/7 Emergency Burst Pipe Clamp (Starts ₹349 • 30 mins)</option>
+                <option value="Custom Plumbing Request & Consultation" data-price="99" data-dur="45 mins">Custom Plumbing Request & Consultation (Visit ₹99)</option>
+              </select>
+            </div>
+
+            <div class="form-group-uc">
+              <label>Preferred Day</label>
+              <div class="date-chips-grid" id="bookingDateChips"></div>
+            </div>
+
+            <div class="form-group-uc">
+              <label>Preferred Time Slot</label>
+              <div class="time-slots-wrapper">
+                <div class="time-slot-btn" data-time="09:00 AM - 12:00 PM">
+                  <span class="slot-time">09:00 AM - 12:00 PM</span>
+                  <span class="slot-tag">Morning</span>
+                </div>
+                <div class="time-slot-btn active" data-time="12:00 PM - 03:00 PM">
+                  <span class="slot-time">12:00 PM - 03:00 PM</span>
+                  <span class="slot-tag">Afternoon</span>
+                </div>
+                <div class="time-slot-btn" data-time="03:00 PM - 06:00 PM">
+                  <span class="slot-time">03:00 PM - 06:00 PM</span>
+                  <span class="slot-tag">Evening</span>
+                </div>
+                <div class="time-slot-btn" data-time="06:00 PM - 08:00 PM">
+                  <span class="slot-time">06:00 PM - 08:00 PM</span>
+                  <span class="slot-tag">Night</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="wizard-actions-row">
+              <button type="button" class="btn btn-black btn-wizard-next" onclick="goToStep(2)">
+                <span>Continue to Address</span>
+                <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+              </button>
             </div>
           </div>
 
-          <div class="form-group-uc">
-            <label>Select Required Service *</label>
-            <select id="bookServiceSelect" class="form-input-uc" required>
-              <option value="">Choose a service</option>
-              <option value="Tap & Faucet Repair">Tap & Faucet Repair (Starts ₹149)</option>
-              <option value="Wash Basin Installation & Repair">Wash Basin Installation & Repair (Starts ₹299)</option>
-              <option value="Bathroom Leakage & Seepage Repair">Bathroom Leakage & Seepage Repair (Starts ₹249)</option>
-              <option value="Motorized Drain Cleaning">Motorized Drain Cleaning (Starts ₹199)</option>
-              <option value="Shower & Diverter Installation">Shower & Diverter Installation (Starts ₹349)</option>
-              <option value="Water Tank Deep Scrub & Cleaning">Water Tank Deep Scrub & Cleaning (Starts ₹499)</option>
-              <option value="Water Heater (Geyser) Service & Repair">Water Heater (Geyser) Service & Repair (Starts ₹349)</option>
-              <option value="Kitchen Sink Plumbing & Trap Fix">Kitchen Sink Plumbing & Trap Fix (Starts ₹249)</option>
-              <option value="Toilet Flush & Jet Spray Repair">Toilet Flush & Jet Spray Repair (Starts ₹199)</option>
-              <option value="24/7 Emergency Burst Pipe Clamp">24/7 Emergency Burst Pipe Clamp (Starts ₹349)</option>
-              <option value="General Plumbing Inspection">General Plumbing Inspection / Other</option>
-            </select>
-          </div>
+          <div class="booking-step" id="bookingStep2">
+            <div class="step-inner-header">
+              <h3 class="step-inner-title">2. Doorstep Address & Contact</h3>
+              <p class="step-inner-desc">Provide your contact info and Pune address for technician dispatch.</p>
+            </div>
 
-          <div class="form-group-uc">
-            <label>Property Type</label>
-            <div class="prop-type-row">
-              <div class="prop-opt-btn active" id="propResBtn">Residential (Home / Flat)</div>
-              <div class="prop-opt-btn" id="propCommBtn">Commercial (Office / Shop)</div>
+            <div class="form-grid-2col">
+              <div class="form-group-uc">
+                <label>Your Full Name *</label>
+                <input type="text" id="bookName" class="form-input-uc" placeholder="e.g. Anand Kulkarni" required />
+              </div>
+
+              <div class="form-group-uc">
+                <label>Mobile Number (10 digits) *</label>
+                <div class="phone-input-wrap">
+                  <span class="phone-prefix">+91</span>
+                  <input type="tel" id="bookPhone" class="form-input-uc" placeholder="9876543210" maxlength="10" required />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group-uc">
+              <label>Doorstep Address in Pune *</label>
+              <input type="text" id="bookAddress" class="form-input-uc" placeholder="Flat / House No., Society Name, Street, Locality" required />
+            </div>
+
+            <div class="form-group-uc">
+              <label>Property Type</label>
+              <div class="prop-type-row">
+                <div class="prop-opt-btn active" id="propResBtn">Residential (Flat / House)</div>
+                <div class="prop-opt-btn" id="propCommBtn">Commercial (Office / Shop)</div>
+              </div>
+            </div>
+
+            <div class="form-group-uc">
+              <label>Specific Instructions / Notes (Optional)</label>
+              <input type="text" id="bookNotes" class="form-input-uc" placeholder="e.g. 3rd floor, gate code, or specific pipe issue..." />
+            </div>
+
+            <div class="wizard-actions-row wizard-actions-between">
+              <button type="button" class="btn btn-outline" onclick="goToStep(1)">
+                <i data-lucide="arrow-left" style="width: 15px; height: 15px;"></i>
+                <span>Back</span>
+              </button>
+              <button type="button" class="btn btn-black btn-wizard-next" onclick="validateAndGoToStep3()">
+                <span>Review Booking</span>
+                <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+              </button>
             </div>
           </div>
 
-          <div class="form-group-uc">
-            <label>Preferred Date</label>
-            <div class="date-chips-grid" id="bookingDateChips"></div>
-          </div>
+          <div class="booking-step" id="bookingStep3">
+            <div class="step-inner-header">
+              <h3 class="step-inner-title">3. Review & Confirm Appointment</h3>
+              <p class="step-inner-desc">Verify your details before instant technician dispatch.</p>
+            </div>
 
-          <div class="form-group-uc">
-            <label>Preferred Time Slot</label>
-            <div class="time-slots-wrapper">
-              <div class="time-slot-btn" data-time="08:00 AM - 10:00 AM">08:00 AM - 10:00 AM</div>
-              <div class="time-slot-btn active" data-time="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</div>
-              <div class="time-slot-btn" data-time="12:00 PM - 02:00 PM">12:00 PM - 02:00 PM</div>
-              <div class="time-slot-btn" data-time="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM</div>
-              <div class="time-slot-btn" data-time="04:00 PM - 06:00 PM">04:00 PM - 06:00 PM</div>
-              <div class="time-slot-btn" data-time="06:00 PM - 08:00 PM">06:00 PM - 08:00 PM</div>
+            <div class="booking-review-card">
+              <div class="review-item-row">
+                <div class="review-item-label">
+                  <i data-lucide="wrench" style="width: 15px; height: 15px;"></i>
+                  <span>Service</span>
+                </div>
+                <div class="review-item-val" id="reviewServiceName">Tap & Faucet Repair</div>
+              </div>
+
+              <div class="review-item-row">
+                <div class="review-item-label">
+                  <i data-lucide="calendar" style="width: 15px; height: 15px;"></i>
+                  <span>Schedule Slot</span>
+                </div>
+                <div class="review-item-val" id="reviewSchedule">Tomorrow (12:00 PM - 03:00 PM)</div>
+              </div>
+
+              <div class="review-item-row">
+                <div class="review-item-label">
+                  <i data-lucide="map-pin" style="width: 15px; height: 15px;"></i>
+                  <span>Doorstep Address</span>
+                </div>
+                <div class="review-item-val" id="reviewAddress">Flat 302, Koregaon Park, Pune</div>
+              </div>
+
+              <div class="review-item-row">
+                <div class="review-item-label">
+                  <i data-lucide="user" style="width: 15px; height: 15px;"></i>
+                  <span>Customer Contact</span>
+                </div>
+                <div class="review-item-val" id="reviewContact">Anand Kulkarni (+91 9876543210)</div>
+              </div>
+
+              <div class="review-item-row review-pricing-row">
+                <div class="review-item-label">
+                  <span style="font-weight: 700; color: var(--black);">Estimated Price</span>
+                  <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Pay securely after service (Cash/UPI)</span>
+                </div>
+                <div class="review-item-val review-price-highlight" id="reviewPrice">Starting at ₹149</div>
+              </div>
+
+              <div class="review-assurances">
+                <div class="review-assurance-tag">
+                  <i data-lucide="shield-check" style="width: 14px; height: 14px;"></i>
+                  <span>30-Day Warranty</span>
+                </div>
+                <div class="review-assurance-tag">
+                  <i data-lucide="check-circle-2" style="width: 14px; height: 14px;"></i>
+                  <span>Zero Advance Pay</span>
+                </div>
+                <div class="review-assurance-tag">
+                  <i data-lucide="user-check" style="width: 14px; height: 14px;"></i>
+                  <span>Verified Master Plumber</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="wizard-actions-row wizard-actions-between">
+              <button type="button" class="btn btn-outline" onclick="goToStep(2)">
+                <i data-lucide="arrow-left" style="width: 15px; height: 15px;"></i>
+                <span>Edit Details</span>
+              </button>
+              <button type="button" class="btn btn-black btn-wizard-confirm" onclick="submitMultiStepBooking()">
+                <i data-lucide="check" style="width: 17px; height: 17px;"></i>
+                <span>Confirm Booking & Dispatch</span>
+              </button>
             </div>
           </div>
-
-          <div class="form-group-uc">
-            <label>Service Address in Pune *</label>
-            <input type="text" id="bookAddress" class="form-input-uc" placeholder="Flat No., Society Name, Street, Locality" required />
-          </div>
-
-          <div class="form-group-uc">
-            <label>Instructions / Problem Notes (Optional)</label>
-            <textarea id="bookNotes" class="form-input-uc" rows="2" placeholder="Briefly describe the leak or issue so the technician carries appropriate replacement spares..."></textarea>
-          </div>
-
-          <button type="submit" class="btn btn-black" style="width: 100%; padding: 16px; font-size: 1rem; margin-top: 10px;">
-            Confirm Booking & Dispatch via WhatsApp
-          </button>
-          <div style="font-size: 0.775rem; text-align: center; color: var(--text-muted); margin-top: 10px;">
-            Pay securely after service completion (Cash or UPI) • 30-day workmanship warranty
-          </div>
-        </form>
+        </div>
       </div>
     </div>
   </section>

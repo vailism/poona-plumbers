@@ -743,6 +743,173 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeDetailsModal();
 });
 
+let currentBookingStep = 1;
+
+function goToStep(step) {
+  if (step === 3) {
+    if (!validateStep2()) return;
+  }
+  currentBookingStep = step;
+
+  document.querySelectorAll('.booking-step').forEach(s => s.classList.remove('active'));
+  const activeStepEl = document.getElementById(`bookingStep${step}`);
+  if (activeStepEl) activeStepEl.classList.add('active');
+
+  for (let i = 1; i <= 3; i++) {
+    const item = document.getElementById(`progStep${i}`);
+    if (item) {
+      item.classList.remove('active', 'completed');
+      if (i === step) {
+        item.classList.add('active');
+      } else if (i < step) {
+        item.classList.add('completed');
+      }
+    }
+  }
+
+  const line1 = document.getElementById('progLine1');
+  const line2 = document.getElementById('progLine2');
+  if (line1) {
+    if (step > 1) line1.classList.add('active');
+    else line1.classList.remove('active');
+  }
+  if (line2) {
+    if (step > 2) line2.classList.add('active');
+    else line2.classList.remove('active');
+  }
+
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+}
+
+function validateStep2() {
+  const name = document.getElementById('bookName').value.trim();
+  const phone = document.getElementById('bookPhone').value.trim();
+  const address = document.getElementById('bookAddress').value.trim();
+
+  if (name.length < 2) {
+    alert('Please enter your full name');
+    document.getElementById('bookName').focus();
+    return false;
+  }
+  if (!/^[6-9]\d{9}$/.test(phone.replace(/\D/g, ''))) {
+    alert('Please enter a valid 10-digit mobile number');
+    document.getElementById('bookPhone').focus();
+    return false;
+  }
+  if (address.length < 4) {
+    alert('Please provide your complete doorstep address in Pune');
+    document.getElementById('bookAddress').focus();
+    return false;
+  }
+  return true;
+}
+
+function validateAndGoToStep3() {
+  if (!validateStep2()) return;
+
+  const select = document.getElementById('bookServiceSelect');
+  const serviceName = select ? select.value : 'General Plumbing';
+  const opt = select ? select.options[select.selectedIndex] : null;
+  const price = opt && opt.dataset.price ? `Starting at ₹${opt.dataset.price}` : 'Starting at ₹149';
+
+  const name = document.getElementById('bookName').value.trim();
+  const phone = document.getElementById('bookPhone').value.trim();
+  const address = document.getElementById('bookAddress').value.trim();
+
+  const rService = document.getElementById('reviewServiceName');
+  const rSchedule = document.getElementById('reviewSchedule');
+  const rAddress = document.getElementById('reviewAddress');
+  const rContact = document.getElementById('reviewContact');
+  const rPrice = document.getElementById('reviewPrice');
+
+  if (rService) rService.textContent = serviceName;
+  if (rSchedule) rSchedule.textContent = `${selectedDate} (${selectedTime})`;
+  if (rAddress) rAddress.textContent = `${address} (${selectedPropType})`;
+  if (rContact) rContact.textContent = `${name} (+91 ${phone})`;
+  if (rPrice) rPrice.textContent = price;
+
+  goToStep(3);
+}
+
+function submitMultiStepBooking() {
+  if (!validateStep2()) {
+    goToStep(2);
+    return;
+  }
+
+  const name = document.getElementById('bookName').value.trim();
+  const phone = document.getElementById('bookPhone').value.trim();
+  const select = document.getElementById('bookServiceSelect');
+  const service = select ? select.value : 'General Plumbing';
+  const address = document.getElementById('bookAddress').value.trim();
+  const notes = document.getElementById('bookNotes').value.trim();
+
+  const bookingId = `PN-${Math.floor(10000 + Math.random() * 90000)}`;
+
+  const summaryDetails = document.getElementById('confirmedSummaryDetails');
+  if (summaryDetails) {
+    summaryDetails.innerHTML = `
+      <strong>Booking ID:</strong> ${bookingId}<br/>
+      <strong>Service:</strong> ${service}<br/>
+      <strong>Schedule:</strong> ${selectedDate} (${selectedTime})<br/>
+      <strong>Customer:</strong> ${name} (+91 ${phone})<br/>
+      <strong>Address:</strong> ${address} (${selectedPropType})<br/>
+      <strong>Payment Mode:</strong> Pay After Service (Cash / UPI)
+    `;
+  }
+
+  const wizard = document.getElementById('bookingWizardForm');
+  const progBar = document.querySelector('.booking-progress-bar');
+  const successCard = document.getElementById('bookingSuccessCard');
+
+  if (wizard) wizard.style.display = 'none';
+  if (progBar) progBar.style.display = 'none';
+  if (successCard) successCard.classList.add('active');
+
+  const msg = `🔧 *Poona Plumbers - Direct Booking Request (${bookingId})*\n\n` +
+    `👤 *Customer:* ${name}\n` +
+    `📞 *Phone:* ${phone}\n` +
+    `🛠️ *Service:* ${service}\n` +
+    `📅 *Schedule:* ${selectedDate} (${selectedTime})\n` +
+    `🏠 *Property:* ${selectedPropType}\n` +
+    `📍 *Address:* ${address}, ${activeLocation}\n` +
+    `${notes ? `📝 *Notes:* ${notes}\n` : ''}\n` +
+    `_Please confirm technician dispatch. Thank you!_`;
+
+  const waBtn = document.getElementById('openWhatsAppBookingBtn');
+  if (waBtn) {
+    waBtn.onclick = () => {
+      window.open(`https://wa.me/919876543210?text=${encodeURIComponent(msg)}`, '_blank');
+    };
+  }
+
+  window.open(`https://wa.me/919876543210?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+function resetMultiStepBooking() {
+  const wizard = document.getElementById('bookingWizardForm');
+  const progBar = document.querySelector('.booking-progress-bar');
+  const successCard = document.getElementById('bookingSuccessCard');
+
+  if (wizard) wizard.style.display = 'block';
+  if (progBar) progBar.style.display = 'flex';
+  if (successCard) successCard.classList.remove('active');
+
+  const bName = document.getElementById('bookName');
+  const bPhone = document.getElementById('bookPhone');
+  const bAddress = document.getElementById('bookAddress');
+  const bNotes = document.getElementById('bookNotes');
+
+  if (bName) bName.value = '';
+  if (bPhone) bPhone.value = '';
+  if (bAddress) bAddress.value = '';
+  if (bNotes) bNotes.value = '';
+
+  goToStep(1);
+}
+
 function selectAndBook(serviceId) {
   const s = SERVICES.find(item => item.id === serviceId);
   const select = document.getElementById('bookServiceSelect');
@@ -754,11 +921,13 @@ function selectAndBook(serviceId) {
       }
     }
   }
+  goToStep(1);
   const formSection = document.getElementById('bookingSection');
   if (formSection) {
     formSection.scrollIntoView({ behavior: 'smooth' });
-    const nameInput = document.getElementById('bookName');
-    if (nameInput) setTimeout(() => nameInput.focus(), 600);
+    formSection.classList.remove('section-flash-highlight');
+    void formSection.offsetWidth;
+    formSection.classList.add('section-flash-highlight');
   }
 }
 
@@ -766,7 +935,7 @@ function initDateChips() {
   const row = document.getElementById('bookingDateChips');
   if (!row) return;
 
-  const days = ['Today', 'Tomorrow', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const days = ['Today', 'Tomorrow', 'Wed', 'Thu', 'Fri'];
   row.innerHTML = days.map((d, i) => `
     <div class="date-pill-opt ${i === 1 ? 'active' : ''}" data-day="${d}" onclick="pickDate(this)">
       <div style="font-size: 0.7rem; color: inherit; opacity: 0.7;">Day</div>
@@ -805,81 +974,7 @@ function pickDate(el) {
 }
 
 function initBookingForm() {
-  const form = document.getElementById('appointmentForm');
-  const successCard = document.getElementById('bookingSuccessCard');
-  if (!form || !successCard) return;
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const name = document.getElementById('bookName').value.trim();
-    const phone = document.getElementById('bookPhone').value.trim();
-    const service = document.getElementById('bookServiceSelect').value;
-    const address = document.getElementById('bookAddress').value.trim();
-    const notes = document.getElementById('bookNotes').value.trim();
-
-    if (name.length < 2) {
-      alert('Please enter your full name');
-      return;
-    }
-    if (!/^[6-9]\d{9}$/.test(phone.replace(/\D/g, ''))) {
-      alert('Please enter a valid 10-digit mobile number');
-      return;
-    }
-    if (!service) {
-      alert('Please select a required plumbing service');
-      return;
-    }
-    if (address.length < 4) {
-      alert('Please provide your complete address');
-      return;
-    }
-
-    const bookingId = `PN-${Math.floor(10000 + Math.random() * 90000)}`;
-
-    const summaryDetails = document.getElementById('confirmedSummaryDetails');
-    if (summaryDetails) {
-      summaryDetails.innerHTML = `
-        <strong>Booking ID:</strong> ${bookingId}<br/>
-        <strong>Service:</strong> ${service}<br/>
-        <strong>Schedule:</strong> ${selectedDate} (${selectedTime})<br/>
-        <strong>Customer:</strong> ${name} (${phone})<br/>
-        <strong>Address:</strong> ${address} (${selectedPropType})<br/>
-        <strong>Payment Mode:</strong> Pay After Service (Cash / UPI)
-      `;
-    }
-
-    form.style.display = 'none';
-    successCard.classList.add('active');
-
-    const msg = `🔧 *Poona Plumbers - Direct Booking Request (${bookingId})*\n\n` +
-      `👤 *Customer:* ${name}\n` +
-      `📞 *Phone:* ${phone}\n` +
-      `🛠️ *Service:* ${service}\n` +
-      `📅 *Schedule:* ${selectedDate} (${selectedTime})\n` +
-      `🏠 *Property:* ${selectedPropType}\n` +
-      `📍 *Address:* ${address}, ${activeLocation}\n` +
-      `${notes ? `📝 *Notes:* ${notes}\n` : ''}\n` +
-      `_Please confirm technician dispatch. Thank you!_`;
-
-    const waBtn = document.getElementById('openWhatsAppBookingBtn');
-    if (waBtn) {
-      waBtn.onclick = () => {
-        window.open(`https://wa.me/919876543210?text=${encodeURIComponent(msg)}`, '_blank');
-      };
-    }
-
-    window.open(`https://wa.me/919876543210?text=${encodeURIComponent(msg)}`, '_blank');
-  });
-
-  const resetBtn = document.getElementById('bookAnotherBtn');
-  if (resetBtn) {
-    resetBtn.addEventListener('click', () => {
-      form.reset();
-      form.style.display = 'block';
-      successCard.classList.remove('active');
-    });
-  }
+  initDateChips();
 }
 
 function initFaq() {
