@@ -236,13 +236,13 @@ let selectedPropType = 'Residential';
 
 document.addEventListener('DOMContentLoaded', () => {
   renderLocation();
-  renderServices();
   initCategories();
   initSearch();
   initDateChips();
   initBookingForm();
   initForumForm();
   initFaq();
+  initScrollEffects();
   initLucide();
 });
 
@@ -266,70 +266,42 @@ function switchLocation() {
   renderLocation();
 }
 
-function renderServices() {
+function filterServices() {
+  const cards = document.querySelectorAll('#servicesGrid .uc-card');
+  const q = searchQuery.toLowerCase().trim();
+  let visibleCount = 0;
+
+  cards.forEach(card => {
+    const cardCat = card.dataset.category;
+    const cardSearch = (card.dataset.search || '') + ' ' + (card.querySelector('.uc-card-title')?.textContent || '');
+    const matchesCat = (selectedCategory === 'all' || cardCat === selectedCategory);
+    const matchesQuery = (q === '' || cardSearch.toLowerCase().includes(q));
+
+    if (matchesCat && matchesQuery) {
+      card.style.display = 'flex';
+      visibleCount++;
+    } else {
+      card.style.display = 'none';
+    }
+  });
+
+  let emptyMsg = document.getElementById('servicesEmptyMessage');
   const grid = document.getElementById('servicesGrid');
-  if (!grid) return;
-
-  let list = SERVICES;
-  if (selectedCategory !== 'all') {
-    list = list.filter(s => s.category === selectedCategory);
-  }
-  if (searchQuery.trim() !== '') {
-    const q = searchQuery.toLowerCase();
-    list = list.filter(s => 
-      s.name.toLowerCase().includes(q) || 
-      s.desc.toLowerCase().includes(q) ||
-      s.categoryName.toLowerCase().includes(q)
-    );
-  }
-
-  if (list.length === 0) {
-    grid.innerHTML = `
-      <div style="grid-column: 1 / -1; text-align: center; padding: 48px; border: 1px dashed var(--grey-border); border-radius: var(--radius-md);">
+  if (visibleCount === 0) {
+    if (!emptyMsg && grid) {
+      emptyMsg = document.createElement('div');
+      emptyMsg.id = 'servicesEmptyMessage';
+      emptyMsg.style.cssText = 'grid-column: 1 / -1; text-align: center; padding: 48px 24px; border: 1px dashed var(--grey-border); border-radius: var(--radius-md); background: var(--grey-light);';
+      emptyMsg.innerHTML = `
         <h3 style="font-size: 1.15rem; margin-bottom: 6px;">No services matching "${searchQuery}"</h3>
         <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 16px;">Try searching for tap, leakage, drain, or tank.</p>
-        <button class="btn btn-black btn-sm" onclick="resetSearch()">Show All Services</button>
-      </div>
-    `;
-    initLucide();
-    return;
+        <button type="button" class="btn btn-black btn-sm" onclick="resetSearch()">Show All Services</button>
+      `;
+      grid.appendChild(emptyMsg);
+    }
+  } else if (emptyMsg) {
+    emptyMsg.remove();
   }
-
-  grid.innerHTML = list.map(s => `
-    <div class="uc-card">
-      <div class="uc-card-media">
-        <img src="${s.image}" alt="${s.name}" loading="lazy" />
-        <span class="uc-card-time">
-          <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
-          ${s.duration}
-        </span>
-      </div>
-      <div class="uc-card-body">
-        <div class="uc-rating-tag">
-          <span>★ ${s.rating}</span>
-          <span style="color: var(--text-muted); font-weight: 400;">(${s.reviews.toLocaleString()} reviews)</span>
-        </div>
-        <h3 class="uc-card-title">${s.name}</h3>
-        <p class="uc-card-desc">${s.desc}</p>
-        <div class="uc-card-footer">
-          <div class="uc-price-block">
-            <span class="uc-price-label">Starting at</span>
-            <span class="uc-price-val">₹${s.price}</span>
-          </div>
-          <div class="uc-actions-row">
-            <button type="button" class="btn btn-outline btn-sm" onclick="openDetailsModal('${s.id}')">
-              Details
-            </button>
-            <button type="button" class="btn btn-black btn-sm" onclick="selectAndBook('${s.id}')">
-              Book Now
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  `).join('');
-
-  initLucide();
 }
 
 function resetSearch() {
@@ -338,7 +310,7 @@ function resetSearch() {
   const input = document.getElementById('heroSearchInput');
   if (input) input.value = '';
   document.querySelectorAll('.category-pill').forEach(p => p.classList.toggle('active', p.dataset.category === 'all'));
-  renderServices();
+  filterServices();
 }
 
 function initCategories() {
@@ -347,7 +319,7 @@ function initCategories() {
       document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
       pill.classList.add('active');
       selectedCategory = pill.dataset.category;
-      renderServices();
+      filterServices();
       const s = document.getElementById('popularServicesSection');
       if (s) s.scrollIntoView({ behavior: 'smooth' });
     });
@@ -356,19 +328,27 @@ function initCategories() {
 
 function initSearch() {
   const input = document.getElementById('heroSearchInput');
-  if (!input) return;
-
-  input.addEventListener('input', (e) => {
-    searchQuery = e.target.value.trim();
-    renderServices();
-  });
+  if (input) {
+    input.addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      filterServices();
+    });
+    input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        filterServices();
+        const s = document.getElementById('popularServicesSection');
+        if (s) s.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }
 
   document.querySelectorAll('.tag-chip').forEach(chip => {
     chip.addEventListener('click', () => {
       const q = chip.dataset.query;
-      input.value = q;
+      if (input) input.value = q;
       searchQuery = q;
-      renderServices();
+      filterServices();
       const s = document.getElementById('popularServicesSection');
       if (s) s.scrollIntoView({ behavior: 'smooth' });
     });
@@ -385,18 +365,18 @@ function openDetailsModal(serviceId) {
 
   body.innerHTML = `
     <div style="height: 240px; width: 100%; position: relative; background: var(--grey-light);">
-      <img src="${s.image}" style="width: 100%; height: 100%; object-fit: cover;" />
+      <img src="${s.image}" alt="${s.name}" style="width: 100%; height: 100%; object-fit: cover;" />
     </div>
     <div style="padding: 28px;">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; gap: 12px;">
         <div>
           <span class="badge-tag" style="margin-bottom: 6px;">${s.categoryName}</span>
           <h2 style="font-size: 1.5rem; margin-bottom: 4px;">${s.name}</h2>
           <div style="font-size: 0.85rem; color: var(--text-secondary);">
-            <strong style="color: var(--black);">★ ${s.rating}</strong> (${s.reviews} verified reviews) • ⏱ ${s.duration}
+            <strong style="color: var(--black);">★ ${s.rating}</strong> (${s.reviews.toLocaleString()} reviews) • ⏱ ${s.duration}
           </div>
         </div>
-        <div style="text-align: right;">
+        <div style="text-align: right; flex-shrink: 0;">
           <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Standard Rate</div>
           <div style="font-size: 1.6rem; font-weight: 800; color: var(--black);">₹${s.price}</div>
         </div>
@@ -407,7 +387,7 @@ function openDetailsModal(serviceId) {
       </p>
 
       <div style="border: 1px solid var(--grey-border); border-radius: var(--radius-md); padding: 18px; background: var(--grey-card); margin-bottom: 24px;">
-        <h4 style="font-size: 0.875rem; font-weight: 700; margin-bottom: 10px;">What's Included:</h4>
+        <h4 style="font-size: 0.875rem; font-weight: 700; margin-bottom: 10px; color: var(--black);">What's Included:</h4>
         <ul style="list-style: none; font-size: 0.85rem; color: var(--text-primary); line-height: 1.8;">
           ${s.included.map(i => `<li>✓ ${i}</li>`).join('')}
         </ul>
@@ -420,9 +400,9 @@ function openDetailsModal(serviceId) {
       <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--grey-border); padding-top: 18px;">
         <div>
           <div style="font-size: 0.75rem; color: var(--text-muted);">Pay after service</div>
-          <div style="font-weight: 800; font-size: 1.25rem;">₹${s.price}</div>
+          <div style="font-weight: 800; font-size: 1.25rem; color: var(--black);">₹${s.price}</div>
         </div>
-        <button class="btn btn-black" onclick="closeDetailsModal(); selectAndBook('${s.id}')">
+        <button type="button" class="btn btn-black" onclick="closeDetailsModal(); selectAndBook('${s.id}')">
           Book This Service
         </button>
       </div>
@@ -430,18 +410,31 @@ function openDetailsModal(serviceId) {
   `;
 
   modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
 }
 
 function closeDetailsModal() {
   const modal = document.getElementById('serviceDetailModal');
-  if (modal) modal.classList.remove('active');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
 }
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeDetailsModal();
+});
 
 function selectAndBook(serviceId) {
   const s = SERVICES.find(item => item.id === serviceId);
   const select = document.getElementById('bookServiceSelect');
   if (select && s) {
-    select.value = s.name;
+    for (let i = 0; i < select.options.length; i++) {
+      if (select.options[i].text.includes(s.name) || select.options[i].value === s.name) {
+        select.selectedIndex = i;
+        break;
+      }
+    }
   }
   const formSection = document.getElementById('bookingSection');
   if (formSection) {
@@ -529,7 +522,7 @@ function initBookingForm() {
       summaryDetails.innerHTML = `
         <strong>Booking ID:</strong> ${bookingId}<br/>
         <strong>Service:</strong> ${service}<br/>
-        <strong>Date & Slot:</strong> ${selectedDate} • ${selectedTime}<br/>
+        <strong>Schedule:</strong> ${selectedDate} (${selectedTime})<br/>
         <strong>Customer:</strong> ${name} (${phone})<br/>
         <strong>Address:</strong> ${address} (${selectedPropType})<br/>
         <strong>Payment Mode:</strong> Pay After Service (Cash / UPI)
@@ -606,4 +599,53 @@ function initFaq() {
       if (!isOpen) card.classList.add('active');
     };
   });
+}
+
+function toggleMoreAreas() {
+  const hiddenPills = document.querySelectorAll('.area-pill-item.hidden-pill');
+  const btn = document.getElementById('toggleMoreAreasBtn');
+  if (!hiddenPills.length || !btn) return;
+
+  const isExpanded = hiddenPills[0].classList.contains('show');
+  hiddenPills.forEach(p => p.classList.toggle('show', !isExpanded));
+  btn.textContent = isExpanded ? 'View All Localities (+12)' : 'Show Fewer Localities';
+}
+
+function toggleMobileMenu() {
+  const drawer = document.getElementById('mobileNavDrawer');
+  if (drawer) {
+    drawer.classList.toggle('open');
+  }
+}
+
+function initScrollEffects() {
+  const bar = document.getElementById('scrollProgressBar');
+  const nav = document.getElementById('navbar');
+
+  window.addEventListener('scroll', () => {
+    const st = window.scrollY || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    if (bar && height > 0) {
+      const p = (st / height) * 100;
+      bar.style.width = `${p}%`;
+    }
+    if (nav) {
+      nav.classList.toggle('scrolled', st > 20);
+    }
+  }, { passive: true });
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal-item').forEach(el => observer.observe(el));
+  } else {
+    document.querySelectorAll('.reveal-item').forEach(el => el.classList.add('revealed'));
+  }
 }

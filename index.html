@@ -16,11 +16,11 @@
 </head>
 <body>
 
-  <!-- Sticky Minimal Navbar -->
+  <div id="scrollProgressBar"></div>
+
   <header class="navbar" id="navbar">
     <div class="container">
       <div class="nav-inner">
-        <!-- Brand -->
         <a href="#home" class="brand-wrapper">
           <div class="brand-icon">
             <i data-lucide="wrench" style="width: 18px; height: 18px;"></i>
@@ -31,25 +31,23 @@
           </div>
         </a>
 
-        <!-- Location Selector -->
-        <button type="button" class="location-dropdown-btn" onclick="switchLocation()" title="Click to change Pune area">
+        <button type="button" class="location-chip-btn" onclick="switchLocation()" title="Click to change Pune area">
           <i data-lucide="map-pin" style="width: 14px; height: 14px;"></i>
           <span id="locationDisplay">Koregaon Park, Pune</span>
           <i data-lucide="refresh-cw" style="width: 12px; height: 12px; color: var(--text-muted);"></i>
         </button>
 
-        <!-- Navigation Links -->
         <ul class="nav-links-group">
           <li><a href="#popularServicesSection" class="nav-item-link">Services</a></li>
           <li><a href="#whyUsSection" class="nav-item-link">Why Us</a></li>
           <li><a href="#howItWorksSection" class="nav-item-link">How It Works</a></li>
-          <li><a href="#verifiedProsSection" class="nav-item-link">Verified Pros</a></li>
+          <li><a href="#projectsSection" class="nav-item-link">Projects</a></li>
+          <li><a href="#verifiedProsSection" class="nav-item-link">Technicians</a></li>
           <li><a href="#reviewsSection" class="nav-item-link">Reviews</a></li>
           <li><a href="#forumSection" class="nav-item-link">Ask Plumber</a></li>
           <li><a href="#faqSection" class="nav-item-link">FAQ</a></li>
         </ul>
 
-        <!-- Action Buttons -->
         <div class="nav-actions-group">
           <a href="tel:+919876543210" class="btn btn-outline btn-sm">
             <i data-lucide="phone" style="width: 14px; height: 14px;"></i>
@@ -58,18 +56,34 @@
           <a href="#bookingSection" class="btn btn-black btn-sm">
             <span>Book Service</span>
           </a>
+          <button type="button" class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle Navigation">
+            <i data-lucide="menu" style="width: 22px; height: 22px;"></i>
+          </button>
         </div>
+      </div>
+    </div>
+
+    <div class="mobile-nav-drawer" id="mobileNavDrawer">
+      <ul class="mobile-nav-links">
+        <li><a href="#popularServicesSection" onclick="toggleMobileMenu()">Services</a></li>
+        <li><a href="#whyUsSection" onclick="toggleMobileMenu()">Why Us</a></li>
+        <li><a href="#howItWorksSection" onclick="toggleMobileMenu()">How It Works</a></li>
+        <li><a href="#projectsSection" onclick="toggleMobileMenu()">Projects</a></li>
+        <li><a href="#verifiedProsSection" onclick="toggleMobileMenu()">Technicians</a></li>
+        <li><a href="#reviewsSection" onclick="toggleMobileMenu()">Reviews</a></li>
+        <li><a href="#forumSection" onclick="toggleMobileMenu()">Ask Plumber</a></li>
+        <li><a href="#faqSection" onclick="toggleMobileMenu()">FAQ</a></li>
+      </ul>
+      <div style="display: flex; gap: 10px;">
+        <a href="tel:+919876543210" class="btn btn-outline btn-sm" style="flex: 1;">Call Now</a>
+        <a href="#bookingSection" class="btn btn-black btn-sm" style="flex: 1;" onclick="toggleMobileMenu()">Book Service</a>
       </div>
     </div>
   </header>
 
-  <!-- ==========================================================================
-       HERO SECTION (URBAN COMPANY STYLE)
-       ========================================================================== -->
   <section class="hero-uc" id="home">
     <div class="container">
       <div class="hero-uc-grid">
-        <!-- Content -->
         <div>
           <div class="badge-tag" style="margin-bottom: 16px;">
             <span class="badge-verified">✓ Verified</span>
@@ -81,19 +95,17 @@
           </h1>
 
           <p class="hero-subtitle">
-            Discover trusted plumbing professionals for your home. Transparent pricing, convenient scheduling, and quality service at your doorstep.
+            Discover trusted plumbing professionals for your home. Transparent pricing, convenient scheduling, and quality service at your doorstep across Pune.
           </p>
 
-          <!-- Search Bar -->
           <div class="hero-search-wrapper">
             <div class="search-box-inner">
               <i data-lucide="search" style="width: 18px; height: 18px; color: var(--text-muted); flex-shrink: 0;"></i>
-              <input type="text" id="heroSearchInput" placeholder="What plumbing service do you need? (e.g. tap, leakage, drain)..." />
-              <button type="button" class="btn btn-black btn-sm" onclick="renderServices()">Search</button>
+              <input type="text" id="heroSearchInput" placeholder="What plumbing service do you need? (e.g. tap, leakage, drain, heater)..." />
+              <button type="button" class="btn btn-black btn-sm" onclick="filterServices()">Search</button>
             </div>
           </div>
 
-          <!-- Quick Tags -->
           <div class="quick-tags-row">
             <span style="font-size: 0.775rem; color: var(--text-muted); font-weight: 600;">Popular:</span>
             <span class="tag-chip" data-query="tap">Tap Repair</span>
@@ -101,12 +113,42 @@
             <span class="tag-chip" data-query="drain">Drain Cleaning</span>
             <span class="tag-chip" data-query="tank">Water Tank</span>
             <span class="tag-chip" data-query="geyser">Water Heater</span>
+            <span class="tag-chip" data-query="toilet">Toilet Flush</span>
+          </div>
+
+          <div class="hero-trust-counters">
+            <div class="trust-counter-box">
+              <div class="counter-num">15+</div>
+              <div class="counter-label">Years in Pune</div>
+            </div>
+            <div class="trust-counter-box">
+              <div class="counter-num">30 Min</div>
+              <div class="counter-label">Fast Response</div>
+            </div>
+            <div class="trust-counter-box">
+              <div class="counter-num">100%</div>
+              <div class="counter-label">Verified Techs</div>
+            </div>
+            <div class="trust-counter-box">
+              <div class="counter-num">12,400+</div>
+              <div class="counter-label">Homes Serviced</div>
+            </div>
           </div>
         </div>
 
-        <!-- Visual Card -->
         <div class="hero-visual-box">
           <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=1200&q=80" alt="Professional Plumber at Work" />
+          <div class="hero-floating-card-1">
+            <div style="font-weight: 800; font-size: 1.05rem; color: var(--black);">★ 4.9 Rating</div>
+            <div style="font-size: 0.725rem; color: var(--text-secondary);">2,500+ Verified Reviews</div>
+          </div>
+          <div class="hero-floating-card-2">
+            <div class="pulse-radar-dot"></div>
+            <div>
+              <div style="font-size: 0.8rem; font-weight: 700; color: var(--black);">Technicians On Duty</div>
+              <div style="font-size: 0.7rem; color: var(--text-secondary);">Covering all Pune localities</div>
+            </div>
+          </div>
           <div class="hero-metric-bar">
             <div>
               <div class="metric-num">4.9 ★</div>
@@ -117,8 +159,8 @@
               <div class="metric-lbl">Homes Serviced</div>
             </div>
             <div>
-              <div class="metric-num">100%</div>
-              <div class="metric-lbl">Verified Plumbers</div>
+              <div class="metric-num">30 Days</div>
+              <div class="metric-lbl">Service Warranty</div>
             </div>
           </div>
         </div>
@@ -126,9 +168,6 @@
     </div>
   </section>
 
-  <!-- ==========================================================================
-       HORIZONTALLY SCROLLABLE CATEGORIES (URBAN COMPANY STYLE)
-       ========================================================================== -->
   <section class="category-scroll-bar">
     <div class="container">
       <div class="category-chips-wrap">
@@ -172,9 +211,6 @@
     </div>
   </section>
 
-  <!-- ==========================================================================
-       POPULAR SERVICES (URBAN COMPANY CARDS)
-       ========================================================================== -->
   <section class="section-urban" id="popularServicesSection">
     <div class="container">
       <div class="section-header-row">
@@ -188,14 +224,290 @@
         </button>
       </div>
 
-      <!-- Services Grid (Populated via script.js) -->
-      <div class="services-grid-uc" id="servicesGrid"></div>
+      <div class="services-grid-uc" id="servicesGrid">
+        <div class="uc-card reveal-item" data-id="tap-repair" data-category="tap" data-search="tap faucet repair leak mixer dripping">
+          <div class="uc-card-media">
+            <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80" alt="Tap & Faucet Repair" loading="lazy" />
+            <span class="uc-card-time">
+              <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+              30 mins
+            </span>
+          </div>
+          <div class="uc-card-body">
+            <div class="uc-rating-tag">
+              <span>★ 4.88</span>
+              <span style="color: var(--text-muted); font-weight: 400;">(1,420 reviews)</span>
+            </div>
+            <h3 class="uc-card-title">Tap & Faucet Repair</h3>
+            <p class="uc-card-desc">Fix dripping taps, loose handles, low flow, and leaking wall mixer valves with warranty.</p>
+            <div class="uc-card-footer">
+              <div class="uc-price-block">
+                <span class="uc-price-label">Starting at</span>
+                <span class="uc-price-val">₹149</span>
+              </div>
+              <div class="uc-actions-row">
+                <button type="button" class="btn btn-outline btn-sm" onclick="openDetailsModal('tap-repair')">Details</button>
+                <button type="button" class="btn btn-black btn-sm" onclick="selectAndBook('tap-repair')">Book Now</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="uc-card reveal-item" data-id="wash-basin" data-category="bathroom" data-search="wash basin installation repair pedestal counter bottle trap">
+          <div class="uc-card-media">
+            <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=600&q=80" alt="Wash Basin Installation & Repair" loading="lazy" />
+            <span class="uc-card-time">
+              <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+              60 mins
+            </span>
+          </div>
+          <div class="uc-card-body">
+            <div class="uc-rating-tag">
+              <span>★ 4.85</span>
+              <span style="color: var(--text-muted); font-weight: 400;">(980 reviews)</span>
+            </div>
+            <h3 class="uc-card-title">Wash Basin Installation & Repair</h3>
+            <p class="uc-card-desc">Mounting of pedestal, table-top, or counter basins with waste coupling and bottle trap alignment.</p>
+            <div class="uc-card-footer">
+              <div class="uc-price-block">
+                <span class="uc-price-label">Starting at</span>
+                <span class="uc-price-val">₹299</span>
+              </div>
+              <div class="uc-actions-row">
+                <button type="button" class="btn btn-outline btn-sm" onclick="openDetailsModal('wash-basin')">Details</button>
+                <button type="button" class="btn btn-black btn-sm" onclick="selectAndBook('wash-basin')">Book Now</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="uc-card reveal-item" data-id="pipe-leakage" data-category="leakage" data-search="bathroom leakage seepage repair pipe acoustic moisture joint">
+          <div class="uc-card-media">
+            <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=600&q=80" alt="Bathroom Leakage & Seepage Repair" loading="lazy" />
+            <span class="uc-card-time">
+              <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+              45 mins
+            </span>
+          </div>
+          <div class="uc-card-body">
+            <div class="uc-rating-tag">
+              <span>★ 4.92</span>
+              <span style="color: var(--text-muted); font-weight: 400;">(2,150 reviews)</span>
+            </div>
+            <h3 class="uc-card-title">Bathroom Leakage & Seepage Repair</h3>
+            <p class="uc-card-desc">Acoustic inspection and pinpoint fix for concealed wall pipes, diverter drips, and floor trap seepage.</p>
+            <div class="uc-card-footer">
+              <div class="uc-price-block">
+                <span class="uc-price-label">Starting at</span>
+                <span class="uc-price-val">₹249</span>
+              </div>
+              <div class="uc-actions-row">
+                <button type="button" class="btn btn-outline btn-sm" onclick="openDetailsModal('pipe-leakage')">Details</button>
+                <button type="button" class="btn btn-black btn-sm" onclick="selectAndBook('pipe-leakage')">Book Now</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="uc-card reveal-item" data-id="drain-cleaning" data-category="drain" data-search="motorized drain cleaning unclog snake blockage bathroom floor gully">
+          <div class="uc-card-media">
+            <img src="https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=600&q=80" alt="Motorized Drain Cleaning" loading="lazy" />
+            <span class="uc-card-time">
+              <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+              45 mins
+            </span>
+          </div>
+          <div class="uc-card-body">
+            <div class="uc-rating-tag">
+              <span>★ 4.89</span>
+              <span style="color: var(--text-muted); font-weight: 400;">(1,870 reviews)</span>
+            </div>
+            <h3 class="uc-card-title">Motorized Drain Cleaning</h3>
+            <p class="uc-card-desc">High-speed motorized snake clearance for choked bathroom drains, balconies, and floor gullies.</p>
+            <div class="uc-card-footer">
+              <div class="uc-price-block">
+                <span class="uc-price-label">Starting at</span>
+                <span class="uc-price-val">₹199</span>
+              </div>
+              <div class="uc-actions-row">
+                <button type="button" class="btn btn-outline btn-sm" onclick="openDetailsModal('drain-cleaning')">Details</button>
+                <button type="button" class="btn btn-black btn-sm" onclick="selectAndBook('drain-cleaning')">Book Now</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="uc-card reveal-item" data-id="shower-install" data-category="bathroom" data-search="shower diverter installation rain overhead panel handheld">
+          <div class="uc-card-media">
+            <img src="https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=600&q=80" alt="Shower & Diverter Installation" loading="lazy" />
+            <span class="uc-card-time">
+              <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+              60 mins
+            </span>
+          </div>
+          <div class="uc-card-body">
+            <div class="uc-rating-tag">
+              <span>★ 4.86</span>
+              <span style="color: var(--text-muted); font-weight: 400;">(760 reviews)</span>
+            </div>
+            <h3 class="uc-card-title">Shower & Diverter Installation</h3>
+            <p class="uc-card-desc">Fit overhead rain showers, handheld showers, multi-flow panels, and concealed diverter plates.</p>
+            <div class="uc-card-footer">
+              <div class="uc-price-block">
+                <span class="uc-price-label">Starting at</span>
+                <span class="uc-price-val">₹349</span>
+              </div>
+              <div class="uc-actions-row">
+                <button type="button" class="btn btn-outline btn-sm" onclick="openDetailsModal('shower-install')">Details</button>
+                <button type="button" class="btn btn-black btn-sm" onclick="selectAndBook('shower-install')">Book Now</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="uc-card reveal-item" data-id="water-tank" data-category="tank" data-search="water tank cleaning deep scrub sanitization sludge descaling">
+          <div class="uc-card-media">
+            <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80" alt="Water Tank Deep Scrub & Cleaning" loading="lazy" />
+            <span class="uc-card-time">
+              <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+              90 mins
+            </span>
+          </div>
+          <div class="uc-card-body">
+            <div class="uc-rating-tag">
+              <span>★ 4.94</span>
+              <span style="color: var(--text-muted); font-weight: 400;">(3,120 reviews)</span>
+            </div>
+            <h3 class="uc-card-title">Water Tank Deep Scrub & Cleaning</h3>
+            <p class="uc-card-desc">Multi-stage de-sludging, motorized high-pressure scrubbing, and antibacterial sanitization.</p>
+            <div class="uc-card-footer">
+              <div class="uc-price-block">
+                <span class="uc-price-label">Starting at</span>
+                <span class="uc-price-val">₹499</span>
+              </div>
+              <div class="uc-actions-row">
+                <button type="button" class="btn btn-outline btn-sm" onclick="openDetailsModal('water-tank')">Details</button>
+                <button type="button" class="btn btn-black btn-sm" onclick="selectAndBook('water-tank')">Book Now</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="uc-card reveal-item" data-id="geyser-service" data-category="heater" data-search="water heater geyser service repair thermostat coil descaling">
+          <div class="uc-card-media">
+            <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=600&q=80" alt="Water Heater (Geyser) Service & Repair" loading="lazy" />
+            <span class="uc-card-time">
+              <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+              60 mins
+            </span>
+          </div>
+          <div class="uc-card-body">
+            <div class="uc-rating-tag">
+              <span>★ 4.91</span>
+              <span style="color: var(--text-muted); font-weight: 400;">(1,640 reviews)</span>
+            </div>
+            <h3 class="uc-card-title">Water Heater (Geyser) Service & Repair</h3>
+            <p class="uc-card-desc">Heating coil descaling, thermostat testing, safety valve replacement, and braided pipe leak fix.</p>
+            <div class="uc-card-footer">
+              <div class="uc-price-block">
+                <span class="uc-price-label">Starting at</span>
+                <span class="uc-price-val">₹349</span>
+              </div>
+              <div class="uc-actions-row">
+                <button type="button" class="btn btn-outline btn-sm" onclick="openDetailsModal('geyser-service')">Details</button>
+                <button type="button" class="btn btn-black btn-sm" onclick="selectAndBook('geyser-service')">Book Now</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="uc-card reveal-item" data-id="kitchen-sink" data-category="kitchen" data-search="kitchen sink plumbing trap fix bottle coupling ro pipe">
+          <div class="uc-card-media">
+            <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=600&q=80" alt="Kitchen Sink Plumbing & Trap Fix" loading="lazy" />
+            <span class="uc-card-time">
+              <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+              45 mins
+            </span>
+          </div>
+          <div class="uc-card-body">
+            <div class="uc-rating-tag">
+              <span>★ 4.87</span>
+              <span style="color: var(--text-muted); font-weight: 400;">(1,150 reviews)</span>
+            </div>
+            <h3 class="uc-card-title">Kitchen Sink Plumbing & Trap Fix</h3>
+            <p class="uc-card-desc">Sink coupling replacement, anti-foul trap installation, and grease blockage clearance.</p>
+            <div class="uc-card-footer">
+              <div class="uc-price-block">
+                <span class="uc-price-label">Starting at</span>
+                <span class="uc-price-val">₹249</span>
+              </div>
+              <div class="uc-actions-row">
+                <button type="button" class="btn btn-outline btn-sm" onclick="openDetailsModal('kitchen-sink')">Details</button>
+                <button type="button" class="btn btn-black btn-sm" onclick="selectAndBook('kitchen-sink')">Book Now</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="uc-card reveal-item" data-id="toilet-flush" data-category="bathroom" data-search="toilet flush jet spray repair health faucet syphon overflow">
+          <div class="uc-card-media">
+            <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80" alt="Toilet Flush & Jet Spray Repair" loading="lazy" />
+            <span class="uc-card-time">
+              <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+              45 mins
+            </span>
+          </div>
+          <div class="uc-card-body">
+            <div class="uc-rating-tag">
+              <span>★ 4.88</span>
+              <span style="color: var(--text-muted); font-weight: 400;">(1,980 reviews)</span>
+            </div>
+            <h3 class="uc-card-title">Toilet Flush & Jet Spray Repair</h3>
+            <p class="uc-card-desc">Fix continuous flush tank overflow, broken flush levers, dual-flush valves, and leaking health faucets.</p>
+            <div class="uc-card-footer">
+              <div class="uc-price-block">
+                <span class="uc-price-label">Starting at</span>
+                <span class="uc-price-val">₹199</span>
+              </div>
+              <div class="uc-actions-row">
+                <button type="button" class="btn btn-outline btn-sm" onclick="openDetailsModal('toilet-flush')">Details</button>
+                <button type="button" class="btn btn-black btn-sm" onclick="selectAndBook('toilet-flush')">Book Now</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="uc-card reveal-item" data-id="emergency-clamp" data-category="emergency" data-search="24/7 emergency burst pipe clamp flood isolation rapid 30 mins">
+          <div class="uc-card-media">
+            <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=600&q=80" alt="24/7 Emergency Burst Pipe Clamp" loading="lazy" />
+            <span class="uc-card-time">
+              <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+              30 mins
+            </span>
+          </div>
+          <div class="uc-card-body">
+            <div class="uc-rating-tag">
+              <span>★ 4.96</span>
+              <span style="color: var(--text-muted); font-weight: 400;">(1,540 reviews)</span>
+            </div>
+            <h3 class="uc-card-title">24/7 Emergency Burst Pipe Clamp</h3>
+            <p class="uc-card-desc">Immediate emergency dispatch across Pune to stop major pipe bursts, valve blowouts, and severe flooding.</p>
+            <div class="uc-card-footer">
+              <div class="uc-price-block">
+                <span class="uc-price-label">Starting at</span>
+                <span class="uc-price-val">₹349</span>
+              </div>
+              <div class="uc-actions-row">
+                <button type="button" class="btn btn-outline btn-sm" onclick="openDetailsModal('emergency-clamp')">Details</button>
+                <button type="button" class="btn btn-black btn-sm" onclick="selectAndBook('emergency-clamp')">Book Now</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- ==========================================================================
-       WHY CUSTOMERS CHOOSE US
-       ========================================================================== -->
   <section class="section-urban section-urban-grey" id="whyUsSection">
     <div class="container">
       <div style="max-width: 600px; margin-bottom: 36px;">
@@ -205,7 +517,7 @@
       </div>
 
       <div class="why-grid-uc">
-        <div class="uc-panel-box">
+        <div class="uc-panel-box reveal-item">
           <div style="width: 40px; height: 40px; background: var(--grey-light); border: 1px solid var(--grey-border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
             <i data-lucide="user-check" style="width: 20px; height: 20px; color: var(--black);"></i>
           </div>
@@ -213,7 +525,7 @@
           <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">Every plumber is background-verified, certified, and trained for clean home visits.</p>
         </div>
 
-        <div class="uc-panel-box">
+        <div class="uc-panel-box reveal-item">
           <div style="width: 40px; height: 40px; background: var(--grey-light); border: 1px solid var(--grey-border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
             <i data-lucide="receipt" style="width: 20px; height: 20px; color: var(--black);"></i>
           </div>
@@ -221,7 +533,7 @@
           <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">Standard rate cards with zero hidden charges. Pay safely after inspection & service.</p>
         </div>
 
-        <div class="uc-panel-box">
+        <div class="uc-panel-box reveal-item">
           <div style="width: 40px; height: 40px; background: var(--grey-light); border: 1px solid var(--grey-border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
             <i data-lucide="calendar-check-2" style="width: 20px; height: 20px; color: var(--black);"></i>
           </div>
@@ -229,7 +541,7 @@
           <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">Pick convenient 2-hour doorstep arrival slots that fit your busy schedule seamlessly.</p>
         </div>
 
-        <div class="uc-panel-box">
+        <div class="uc-panel-box reveal-item">
           <div style="width: 40px; height: 40px; background: var(--grey-light); border: 1px solid var(--grey-border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
             <i data-lucide="shield-check" style="width: 20px; height: 20px; color: var(--black);"></i>
           </div>
@@ -240,9 +552,6 @@
     </div>
   </section>
 
-  <!-- ==========================================================================
-       HOW IT WORKS (01, 02, 03)
-       ========================================================================== -->
   <section class="section-urban" id="howItWorksSection">
     <div class="container">
       <div style="text-align: center; max-width: 600px; margin: 0 auto 48px auto;">
@@ -252,19 +561,19 @@
       </div>
 
       <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;">
-        <div class="uc-panel-box">
+        <div class="uc-panel-box reveal-item">
           <div style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 12px;">01 — DISCOVER</div>
           <h3 style="font-size: 1.2rem; margin-bottom: 8px;">Choose a Service</h3>
           <p style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6;">Browse transparently priced plumbing services with detailed inclusions and duration estimates.</p>
         </div>
 
-        <div class="uc-panel-box">
+        <div class="uc-panel-box reveal-item">
           <div style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 12px;">02 — SCHEDULE</div>
           <h3 style="font-size: 1.2rem; margin-bottom: 8px;">Select Your Schedule</h3>
           <p style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6;">Pick your convenient date and 2-hour arrival window. Enter your address in Pune.</p>
         </div>
 
-        <div class="uc-panel-box">
+        <div class="uc-panel-box reveal-item">
           <div style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 12px;">03 — RELAX</div>
           <h3 style="font-size: 1.2rem; margin-bottom: 8px;">Relax, We've Got It Covered</h3>
           <p style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6;">A verified master plumber arrives equipped with genuine parts. Pay securely after service completion.</p>
@@ -273,10 +582,207 @@
     </div>
   </section>
 
-  <!-- ==========================================================================
-       APPOINTMENT BOOKING ENGINE
-       ========================================================================== -->
-  <section class="section-urban section-urban-grey" id="bookingSection">
+  <section class="section-urban section-urban-grey" id="projectsSection">
+    <div class="container">
+      <div class="section-header-row">
+        <div>
+          <span class="badge-tag" style="margin-bottom: 8px;">Field Portfolio</span>
+          <h2 class="section-title-uc">Recent Works Across Pune Homes</h2>
+          <p style="color: var(--text-secondary); font-size: 0.925rem;">Quality sanitary installations, non-destructive leak repairs, and tank cleanings.</p>
+        </div>
+      </div>
+
+      <div class="projects-grid-uc">
+        <div class="project-card-uc reveal-item">
+          <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80" alt="Concealed Diverter Installation" loading="lazy" />
+          <div class="project-overlay-uc">
+            <span class="project-tag-pill">Koregaon Park</span>
+            <h4 style="font-size: 1.1rem; margin-bottom: 4px;">Luxury Diverter & Rain Shower</h4>
+            <p style="font-size: 0.8rem; opacity: 0.85;">Precision concealed valve alignment and pressure calibration.</p>
+          </div>
+        </div>
+
+        <div class="project-card-uc reveal-item">
+          <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80" alt="Water Tank Scrubbing" loading="lazy" />
+          <div class="project-overlay-uc">
+            <span class="project-tag-pill">Kothrud</span>
+            <h4 style="font-size: 1.1rem; margin-bottom: 4px;">High-Pressure Tank Sanitization</h4>
+            <p style="font-size: 0.8rem; opacity: 0.85;">Complete 2,000L rooftop tank sludge vacuuming and UV spray.</p>
+          </div>
+        </div>
+
+        <div class="project-card-uc reveal-item">
+          <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=800&q=80" alt="Acoustic Leak Detection" loading="lazy" />
+          <div class="project-overlay-uc">
+            <span class="project-tag-pill">Kalyani Nagar</span>
+            <h4 style="font-size: 1.1rem; margin-bottom: 4px;">Acoustic Concealed Leak Fix</h4>
+            <p style="font-size: 0.8rem; opacity: 0.85;">Pinpoint acoustic sensor detection without tile breakage.</p>
+          </div>
+        </div>
+
+        <div class="project-card-uc reveal-item">
+          <img src="https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=800&q=80" alt="Drainage Clearance" loading="lazy" />
+          <div class="project-overlay-uc">
+            <span class="project-tag-pill">Baner</span>
+            <h4 style="font-size: 1.1rem; margin-bottom: 4px;">Motorized Snake Drain Clearance</h4>
+            <p style="font-size: 0.8rem; opacity: 0.85;">Heavy grease clearance from 40-foot main kitchen runoff.</p>
+          </div>
+        </div>
+
+        <div class="project-card-uc reveal-item">
+          <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80" alt="Kitchen Sink Integration" loading="lazy" />
+          <div class="project-overlay-uc">
+            <span class="project-tag-pill">Hinjewadi</span>
+            <h4 style="font-size: 1.1rem; margin-bottom: 4px;">Sink & RO Waste Line Fitment</h4>
+            <p style="font-size: 0.8rem; opacity: 0.85;">Granite counter coupling alignment with zero dripping.</p>
+          </div>
+        </div>
+
+        <div class="project-card-uc reveal-item">
+          <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80" alt="Geyser Pressure Line" loading="lazy" />
+          <div class="project-overlay-uc">
+            <span class="project-tag-pill">Aundh</span>
+            <h4 style="font-size: 1.1rem; margin-bottom: 4px;">Pressure Pump & Geyser Service</h4>
+            <p style="font-size: 0.8rem; opacity: 0.85;">Dual-stage pressure check with braided stainless hoses.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-urban" id="verifiedProsSection">
+    <div class="container">
+      <div class="section-header-row">
+        <div>
+          <span class="badge-tag" style="margin-bottom: 8px;">Vetted Specialists</span>
+          <h2 class="section-title-uc">Featured Verified Professionals</h2>
+          <p style="color: var(--text-secondary); font-size: 0.925rem;">Certified master technicians stationed across Pune's major hubs.</p>
+        </div>
+      </div>
+
+      <div class="pros-grid-uc">
+        <div class="uc-panel-box reveal-item" style="text-align: center;">
+          <div style="position: relative; width: 76px; height: 76px; margin: 0 auto 14px auto;">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" alt="Rajesh More" />
+            <span class="badge-verified" style="position: absolute; bottom: 0; right: 0; padding: 2px 5px; font-size: 0.65rem;">✓</span>
+          </div>
+          <h4 style="font-size: 1rem; margin-bottom: 2px;">Rajesh More</h4>
+          <div style="font-size: 0.775rem; color: var(--text-secondary); margin-bottom: 12px;">Leakage & Sanitary Expert</div>
+          <div style="display: flex; justify-content: center; gap: 12px; font-size: 0.775rem; border-top: 1px solid var(--grey-border); padding-top: 10px; font-weight: 600;">
+            <span>★ 4.92</span>
+            <span>•</span>
+            <span>1,840+ Jobs</span>
+            <span>•</span>
+            <span>12 Yrs</span>
+          </div>
+        </div>
+
+        <div class="uc-panel-box reveal-item" style="text-align: center;">
+          <div style="position: relative; width: 76px; height: 76px; margin: 0 auto 14px auto;">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" alt="Santosh Patil" />
+            <span class="badge-verified" style="position: absolute; bottom: 0; right: 0; padding: 2px 5px; font-size: 0.65rem;">✓</span>
+          </div>
+          <h4 style="font-size: 1rem; margin-bottom: 2px;">Santosh Patil</h4>
+          <div style="font-size: 0.775rem; color: var(--text-secondary); margin-bottom: 12px;">Drain & Tank Specialist</div>
+          <div style="display: flex; justify-content: center; gap: 12px; font-size: 0.775rem; border-top: 1px solid var(--grey-border); padding-top: 10px; font-weight: 600;">
+            <span>★ 4.88</span>
+            <span>•</span>
+            <span>1,320+ Jobs</span>
+            <span>•</span>
+            <span>9 Yrs</span>
+          </div>
+        </div>
+
+        <div class="uc-panel-box reveal-item" style="text-align: center;">
+          <div style="position: relative; width: 76px; height: 76px; margin: 0 auto 14px auto;">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" alt="Amit Kulkarni" />
+            <span class="badge-verified" style="position: absolute; bottom: 0; right: 0; padding: 2px 5px; font-size: 0.65rem;">✓</span>
+          </div>
+          <h4 style="font-size: 1rem; margin-bottom: 2px;">Amit Kulkarni</h4>
+          <div style="font-size: 0.775rem; color: var(--text-secondary); margin-bottom: 12px;">Master Plumbing & Diverters</div>
+          <div style="display: flex; justify-content: center; gap: 12px; font-size: 0.775rem; border-top: 1px solid var(--grey-border); padding-top: 10px; font-weight: 600;">
+            <span>★ 4.95</span>
+            <span>•</span>
+            <span>2,150+ Jobs</span>
+            <span>•</span>
+            <span>14 Yrs</span>
+          </div>
+        </div>
+
+        <div class="uc-panel-box reveal-item" style="text-align: center;">
+          <div style="position: relative; width: 76px; height: 76px; margin: 0 auto 14px auto;">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=300&q=80" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" alt="Sandeep Shinde" />
+            <span class="badge-verified" style="position: absolute; bottom: 0; right: 0; padding: 2px 5px; font-size: 0.65rem;">✓</span>
+          </div>
+          <h4 style="font-size: 1rem; margin-bottom: 2px;">Sandeep Shinde</h4>
+          <div style="font-size: 0.775rem; color: var(--text-secondary); margin-bottom: 12px;">Water Heater & Pressure Pumps</div>
+          <div style="display: flex; justify-content: center; gap: 12px; font-size: 0.775rem; border-top: 1px solid var(--grey-border); padding-top: 10px; font-weight: 600;">
+            <span>★ 4.86</span>
+            <span>•</span>
+            <span>980+ Jobs</span>
+            <span>•</span>
+            <span>8 Yrs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-urban section-urban-grey" id="reviewsSection">
+    <div class="container">
+      <div style="text-align: center; max-width: 600px; margin: 0 auto 40px auto;">
+        <span class="badge-tag" style="margin-bottom: 8px;">Customer Ratings</span>
+        <h2 style="font-size: 2rem; margin-bottom: 6px;">Real Reviews from Pune Homes</h2>
+        <p style="color: var(--text-secondary); font-size: 0.925rem;">Rated 4.9 out of 5 based on 2,500+ verified customer feedbacks.</p>
+      </div>
+
+      <div class="reviews-grid-uc">
+        <div class="uc-panel-box reveal-item">
+          <div style="font-size: 0.85rem; font-weight: 700; color: var(--black); margin-bottom: 10px;">★ ★ ★ ★ ★ 5.0</div>
+          <p style="font-size: 0.875rem; color: var(--text-primary); line-height: 1.6; margin-bottom: 18px;">
+            “Booking was so fast and straightforward. The technician Rajesh arrived on time, pinpointed our concealed wall leakage without breaking extra tiles, and charged the exact ₹249 listed on the site.”
+          </p>
+          <div style="display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--grey-border); padding-top: 12px;">
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--grey-light); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem;">VK</div>
+            <div>
+              <div style="font-weight: 700; font-size: 0.85rem;">Vikram K.</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">Koregaon Park, Pune</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="uc-panel-box reveal-item">
+          <div style="font-size: 0.85rem; font-weight: 700; color: var(--black); margin-bottom: 10px;">★ ★ ★ ★ ★ 5.0</div>
+          <p style="font-size: 0.875rem; color: var(--text-primary); line-height: 1.6; margin-bottom: 18px;">
+            “Our kitchen drain was overflowing on a Sunday morning. Booked online, plumber arrived in 40 minutes with motorized snake machine. Cleared grease blockages cleanly. No toxic acids used!”
+          </p>
+          <div style="display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--grey-border); padding-top: 12px;">
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--grey-light); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem;">SM</div>
+            <div>
+              <div style="font-weight: 700; font-size: 0.85rem;">Sneha Mandlik</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">Baner, Pune</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="uc-panel-box reveal-item">
+          <div style="font-size: 0.85rem; font-weight: 700; color: var(--black); margin-bottom: 10px;">★ ★ ★ ★ ★ 5.0</div>
+          <p style="font-size: 0.875rem; color: var(--text-primary); line-height: 1.6; margin-bottom: 18px;">
+            “Got our society water tank and geyser serviced. The professional had proper ID, carried safety equipment, and provided an itemized WhatsApp receipt. Highly recommended.”
+          </p>
+          <div style="display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--grey-border); padding-top: 12px;">
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--grey-light); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem;">AG</div>
+            <div>
+              <div style="font-weight: 700; font-size: 0.85rem;">Aniket Gokhale</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">Kothrud, Pune</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-urban" id="bookingSection">
     <div class="container">
       <div style="text-align: center; max-width: 600px; margin: 0 auto 36px auto;">
         <span class="badge-tag" style="margin-bottom: 8px;">Quick Appointment</span>
@@ -284,22 +790,20 @@
         <p style="color: var(--text-secondary); font-size: 0.925rem;">Fill out the details below. We confirm your technician dispatch instantly via WhatsApp.</p>
       </div>
 
-      <div class="booking-section-wrapper">
-        <!-- Success State -->
+      <div class="booking-section-wrapper reveal-item">
         <div class="confirmation-card-success" id="bookingSuccessCard">
           <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--black); color: var(--white); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
             <i data-lucide="check" style="width: 28px; height: 28px;"></i>
           </div>
-          <h3 style="font-size: 1.5rem; margin-bottom: 6px;">Booking Dispatched Successfully! 🎉</h3>
+          <h3 style="font-size: 1.5rem; margin-bottom: 6px;">Booking Dispatched Successfully!</h3>
           <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 18px;">
             Your booking details have been routed to our Pune dispatch team. A verified professional will contact you prior to arrival.
           </p>
 
           <div style="background: var(--white); border: 1px solid var(--grey-border); border-radius: var(--radius-md); padding: 18px; max-width: 500px; margin: 0 auto 24px auto; text-align: left; font-size: 0.85rem; line-height: 1.8;" id="confirmedSummaryDetails">
-            <!-- Dynamic summary -->
           </div>
 
-          <div style="display: flex; gap: 12px; justify-content: center;">
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
             <button type="button" class="btn btn-outline" id="bookAnotherBtn">Book Another Service</button>
             <button type="button" class="btn btn-black" id="openWhatsAppBookingBtn">
               <i data-lucide="message-circle" style="width: 16px; height: 16px;"></i>
@@ -308,23 +812,19 @@
           </div>
         </div>
 
-        <!-- Booking Form -->
         <form id="appointmentForm">
           <div class="form-grid-2col">
-            <!-- Full Name -->
             <div class="form-group-uc">
               <label>Your Full Name *</label>
               <input type="text" id="bookName" class="form-input-uc" placeholder="e.g. Anand Kulkarni" required />
             </div>
 
-            <!-- Mobile Number -->
             <div class="form-group-uc">
               <label>Mobile Number (10 digits) *</label>
               <input type="tel" id="bookPhone" class="form-input-uc" placeholder="e.g. 9876543210" required />
             </div>
           </div>
 
-          <!-- Select Service -->
           <div class="form-group-uc">
             <label>Select Required Service *</label>
             <select id="bookServiceSelect" class="form-input-uc" required>
@@ -343,24 +843,19 @@
             </select>
           </div>
 
-          <!-- Property Type Toggle -->
           <div class="form-group-uc">
             <label>Property Type</label>
             <div class="prop-type-row">
-              <div class="prop-opt-btn active" id="propResBtn">🏠 Residential (Home / Flat)</div>
-              <div class="prop-opt-btn" id="propCommBtn">🏢 Commercial (Office / Shop)</div>
+              <div class="prop-opt-btn active" id="propResBtn">Residential (Home / Flat)</div>
+              <div class="prop-opt-btn" id="propCommBtn">Commercial (Office / Shop)</div>
             </div>
           </div>
 
-          <!-- Date Selector -->
           <div class="form-group-uc">
             <label>Preferred Date</label>
-            <div class="date-chips-grid" id="bookingDateChips">
-              <!-- Rendered via JS -->
-            </div>
+            <div class="date-chips-grid" id="bookingDateChips"></div>
           </div>
 
-          <!-- Time Slot Selector -->
           <div class="form-group-uc">
             <label>Preferred Time Slot</label>
             <div class="time-slots-wrapper">
@@ -373,13 +868,11 @@
             </div>
           </div>
 
-          <!-- Complete Address -->
           <div class="form-group-uc">
             <label>Service Address in Pune *</label>
             <input type="text" id="bookAddress" class="form-input-uc" placeholder="Flat No., Society Name, Street, Locality" required />
           </div>
 
-          <!-- Notes -->
           <div class="form-group-uc">
             <label>Instructions / Problem Notes (Optional)</label>
             <textarea id="bookNotes" class="form-input-uc" rows="2" placeholder="Briefly describe the leak or issue so the technician carries appropriate replacement spares..."></textarea>
@@ -389,19 +882,16 @@
             Confirm Booking & Dispatch via WhatsApp
           </button>
           <div style="font-size: 0.775rem; text-align: center; color: var(--text-muted); margin-top: 10px;">
-            🔒 Pay securely after service completion (Cash or UPI) • 30-day workmanship warranty
+            Pay securely after service completion (Cash or UPI) • 30-day workmanship warranty
           </div>
         </form>
       </div>
     </div>
   </section>
 
-  <!-- ==========================================================================
-       PUNE PLUMBING FORUM & DIRECT CONSULTATION
-       ========================================================================== -->
   <section class="section-urban" id="forumSection">
     <div class="container">
-      <div class="forum-box-uc">
+      <div class="forum-box-uc reveal-item">
         <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: center;">
           <div>
             <span class="badge-tag" style="background: #222222; border-color: #333333; color: var(--white); margin-bottom: 12px;">
@@ -417,12 +907,11 @@
             </div>
           </div>
 
-          <!-- Forum Query Form -->
           <form id="forumDirectForm" style="background: #161616; border: 1px solid #282828; border-radius: var(--radius-md); padding: 24px;">
             <input type="text" id="forumUserName" class="forum-input-dark" placeholder="Your Name" />
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
               <input type="text" id="forumUserArea" class="forum-input-dark" placeholder="Pune Area (e.g. Kothrud)" />
-              <select id="forumUserCat" class="forum-input-dark" style="background: #1C1C1C;">
+              <select id="forumUserCat" class="forum-input-dark" style="background: #111111;">
                 <option value="Pipe Leakage">Pipe Leakage</option>
                 <option value="Drainage Block">Drainage Block</option>
                 <option value="Water Pressure">Water Pressure</option>
@@ -441,148 +930,48 @@
     </div>
   </section>
 
-  <!-- ==========================================================================
-       FEATURED VERIFIED PROFESSIONALS
-       ========================================================================== -->
-  <section class="section-urban section-urban-grey" id="verifiedProsSection">
-    <div class="container">
-      <div class="section-header-row">
-        <div>
-          <span class="badge-tag" style="margin-bottom: 8px;">Vetted Specialists</span>
-          <h2 class="section-title-uc">Featured Verified Professionals</h2>
-          <p style="color: var(--text-secondary); font-size: 0.925rem;">Certified master technicians stationed across Pune's major hubs.</p>
-        </div>
+  <section class="section-urban section-urban-grey" id="localitiesSection">
+    <div class="container" style="text-align: center;">
+      <div style="max-width: 600px; margin: 0 auto 32px auto;">
+        <span class="badge-tag" style="margin-bottom: 8px;">Locality Coverage</span>
+        <h2 style="font-size: 2rem; margin-bottom: 6px;">Service Localities Across Pune</h2>
+        <p style="color: var(--text-secondary); font-size: 0.925rem;">Our mobile vans are stationed across major neighborhoods for fast 30-minute arrival.</p>
       </div>
 
-      <div class="pros-grid-uc">
-        <div class="uc-panel-box" style="text-align: center;">
-          <div style="position: relative; width: 76px; height: 76px; margin: 0 auto 14px auto;">
-            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" />
-            <span class="badge-verified" style="position: absolute; bottom: 0; right: 0; padding: 2px 5px; font-size: 0.65rem;">✓</span>
-          </div>
-          <h4 style="font-size: 1rem; margin-bottom: 2px;">Rajesh More</h4>
-          <div style="font-size: 0.775rem; color: var(--text-secondary); margin-bottom: 12px;">Leakage & Sanitary Expert</div>
-          <div style="display: flex; justify-content: center; gap: 12px; font-size: 0.775rem; border-top: 1px solid var(--grey-border); padding-top: 10px; font-weight: 600;">
-            <span>★ 4.92</span>
-            <span>•</span>
-            <span>1,840+ Jobs</span>
-            <span>•</span>
-            <span>12 Yrs</span>
-          </div>
-        </div>
-
-        <div class="uc-panel-box" style="text-align: center;">
-          <div style="position: relative; width: 76px; height: 76px; margin: 0 auto 14px auto;">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" />
-            <span class="badge-verified" style="position: absolute; bottom: 0; right: 0; padding: 2px 5px; font-size: 0.65rem;">✓</span>
-          </div>
-          <h4 style="font-size: 1rem; margin-bottom: 2px;">Santosh Patil</h4>
-          <div style="font-size: 0.775rem; color: var(--text-secondary); margin-bottom: 12px;">Drain & Tank Specialist</div>
-          <div style="display: flex; justify-content: center; gap: 12px; font-size: 0.775rem; border-top: 1px solid var(--grey-border); padding-top: 10px; font-weight: 600;">
-            <span>★ 4.88</span>
-            <span>•</span>
-            <span>1,320+ Jobs</span>
-            <span>•</span>
-            <span>9 Yrs</span>
-          </div>
-        </div>
-
-        <div class="uc-panel-box" style="text-align: center;">
-          <div style="position: relative; width: 76px; height: 76px; margin: 0 auto 14px auto;">
-            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" />
-            <span class="badge-verified" style="position: absolute; bottom: 0; right: 0; padding: 2px 5px; font-size: 0.65rem;">✓</span>
-          </div>
-          <h4 style="font-size: 1rem; margin-bottom: 2px;">Amit Kulkarni</h4>
-          <div style="font-size: 0.775rem; color: var(--text-secondary); margin-bottom: 12px;">Master Plumbing & Diverters</div>
-          <div style="display: flex; justify-content: center; gap: 12px; font-size: 0.775rem; border-top: 1px solid var(--grey-border); padding-top: 10px; font-weight: 600;">
-            <span>★ 4.95</span>
-            <span>•</span>
-            <span>2,150+ Jobs</span>
-            <span>•</span>
-            <span>14 Yrs</span>
-          </div>
-        </div>
-
-        <div class="uc-panel-box" style="text-align: center;">
-          <div style="position: relative; width: 76px; height: 76px; margin: 0 auto 14px auto;">
-            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=300&q=80" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" />
-            <span class="badge-verified" style="position: absolute; bottom: 0; right: 0; padding: 2px 5px; font-size: 0.65rem;">✓</span>
-          </div>
-          <h4 style="font-size: 1rem; margin-bottom: 2px;">Sandeep Shinde</h4>
-          <div style="font-size: 0.775rem; color: var(--text-secondary); margin-bottom: 12px;">Water Heater & Pressure Pumps</div>
-          <div style="display: flex; justify-content: center; gap: 12px; font-size: 0.775rem; border-top: 1px solid var(--grey-border); padding-top: 10px; font-weight: 600;">
-            <span>★ 4.86</span>
-            <span>•</span>
-            <span>980+ Jobs</span>
-            <span>•</span>
-            <span>8 Yrs</span>
-          </div>
-        </div>
+      <div class="areas-pills-wrap" id="areasWrap">
+        <span class="area-pill-item"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Koregaon Park</span>
+        <span class="area-pill-item"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Kothrud</span>
+        <span class="area-pill-item"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Baner</span>
+        <span class="area-pill-item"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Hinjewadi</span>
+        <span class="area-pill-item"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Viman Nagar</span>
+        <span class="area-pill-item"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Kalyani Nagar</span>
+        <span class="area-pill-item"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Aundh</span>
+        <span class="area-pill-item"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Wakad</span>
+        <span class="area-pill-item"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Magarpatta City</span>
+        <span class="area-pill-item"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Hadapsar</span>
+        <span class="area-pill-item"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Shivaji Nagar</span>
+        <span class="area-pill-item"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Pune Camp / MG Road</span>
+        <span class="area-pill-item hidden-pill"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Bavdhan</span>
+        <span class="area-pill-item hidden-pill"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Pimple Saudagar</span>
+        <span class="area-pill-item hidden-pill"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Pashan</span>
+        <span class="area-pill-item hidden-pill"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Senapati Bapat Road</span>
+        <span class="area-pill-item hidden-pill"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Kharadi</span>
+        <span class="area-pill-item hidden-pill"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Warje</span>
+        <span class="area-pill-item hidden-pill"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Bibwewadi</span>
+        <span class="area-pill-item hidden-pill"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Dhankawadi</span>
+        <span class="area-pill-item hidden-pill"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Katraj</span>
+        <span class="area-pill-item hidden-pill"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Erandwane</span>
+        <span class="area-pill-item hidden-pill"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Deccan Gymkhana</span>
+        <span class="area-pill-item hidden-pill"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i> Model Colony</span>
       </div>
+
+      <button type="button" class="btn btn-outline btn-sm" id="toggleMoreAreasBtn" onclick="toggleMoreAreas()">
+        View All Localities (+12)
+      </button>
     </div>
   </section>
 
-  <!-- ==========================================================================
-       CUSTOMER REVIEWS
-       ========================================================================== -->
-  <section class="section-urban" id="reviewsSection">
-    <div class="container">
-      <div style="text-align: center; max-width: 600px; margin: 0 auto 40px auto;">
-        <span class="badge-tag" style="margin-bottom: 8px;">Customer Ratings</span>
-        <h2 style="font-size: 2rem; margin-bottom: 6px;">Real Reviews from Pune Homes</h2>
-        <p style="color: var(--text-secondary); font-size: 0.925rem;">Rated 4.9 out of 5 based on 2,500+ verified customer feedbacks.</p>
-      </div>
-
-      <div class="reviews-grid-uc">
-        <div class="uc-panel-box">
-          <div style="font-size: 0.85rem; font-weight: 700; color: var(--black); margin-bottom: 10px;">★ ★ ★ ★ ★ 5.0</div>
-          <p style="font-size: 0.875rem; color: var(--text-primary); line-height: 1.6; margin-bottom: 18px;">
-            “Booking was so fast and straightforward. The technician Rajesh arrived on time, pinpointed our concealed wall leakage without breaking extra tiles, and charged the exact ₹249 listed on the site.”
-          </p>
-          <div style="display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--grey-border); padding-top: 12px;">
-            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--grey-light); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem;">VK</div>
-            <div>
-              <div style="font-weight: 700; font-size: 0.85rem;">Vikram K.</div>
-              <div style="font-size: 0.75rem; color: var(--text-secondary);">Koregaon Park, Pune</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="uc-panel-box">
-          <div style="font-size: 0.85rem; font-weight: 700; color: var(--black); margin-bottom: 10px;">★ ★ ★ ★ ★ 5.0</div>
-          <p style="font-size: 0.875rem; color: var(--text-primary); line-height: 1.6; margin-bottom: 18px;">
-            “Our kitchen drain was overflowing on a Sunday morning. Booked online, plumber arrived in 40 minutes with motorized snake machine. Cleared grease blockages cleanly. No toxic acids used!”
-          </p>
-          <div style="display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--grey-border); padding-top: 12px;">
-            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--grey-light); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem;">SM</div>
-            <div>
-              <div style="font-weight: 700; font-size: 0.85rem;">Sneha Mandlik</div>
-              <div style="font-size: 0.75rem; color: var(--text-secondary);">Baner, Pune</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="uc-panel-box">
-          <div style="font-size: 0.85rem; font-weight: 700; color: var(--black); margin-bottom: 10px;">★ ★ ★ ★ ★ 5.0</div>
-          <p style="font-size: 0.875rem; color: var(--text-primary); line-height: 1.6; margin-bottom: 18px;">
-            “Got our society water tank and geyser serviced. The professional had proper ID, carried safety equipment, and provided an itemized WhatsApp receipt. Highly recommended.”
-          </p>
-          <div style="display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--grey-border); padding-top: 12px;">
-            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--grey-light); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem;">AG</div>
-            <div>
-              <div style="font-weight: 700; font-size: 0.85rem;">Aniket Gokhale</div>
-              <div style="font-size: 0.75rem; color: var(--text-secondary);">Kothrud, Pune</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==========================================================================
-       FAQ ACCORDION
-       ========================================================================== -->
-  <section class="section-urban section-urban-grey" id="faqSection">
+  <section class="section-urban" id="faqSection">
     <div class="container">
       <div style="text-align: center; max-width: 600px; margin: 0 auto 36px auto;">
         <span class="badge-tag" style="margin-bottom: 8px;">Got Questions?</span>
@@ -591,7 +980,7 @@
       </div>
 
       <div class="faq-minimal-list">
-        <div class="faq-minimal-card active">
+        <div class="faq-minimal-card active reveal-item">
           <button type="button" class="faq-trigger-btn">
             <span>How does standardized pricing work?</span>
             <i data-lucide="chevron-down" style="width: 16px; height: 16px; transition: transform 0.2s;"></i>
@@ -601,7 +990,7 @@
           </div>
         </div>
 
-        <div class="faq-minimal-card">
+        <div class="faq-minimal-card reveal-item">
           <button type="button" class="faq-trigger-btn">
             <span>Are the plumbers background-verified?</span>
             <i data-lucide="chevron-down" style="width: 16px; height: 16px; transition: transform 0.2s;"></i>
@@ -611,7 +1000,7 @@
           </div>
         </div>
 
-        <div class="faq-minimal-card">
+        <div class="faq-minimal-card reveal-item">
           <button type="button" class="faq-trigger-btn">
             <span>What if the leak or problem returns?</span>
             <i data-lucide="chevron-down" style="width: 16px; height: 16px; transition: transform 0.2s;"></i>
@@ -621,7 +1010,7 @@
           </div>
         </div>
 
-        <div class="faq-minimal-card">
+        <div class="faq-minimal-card reveal-item">
           <button type="button" class="faq-trigger-btn">
             <span>Do you provide 24/7 emergency response?</span>
             <i data-lucide="chevron-down" style="width: 16px; height: 16px; transition: transform 0.2s;"></i>
@@ -630,13 +1019,20 @@
             Yes, our emergency burst pipe and flood isolation vans are stationed across Pune to reach emergency call-outs within 30 to 45 minutes.
           </div>
         </div>
+
+        <div class="faq-minimal-card reveal-item">
+          <button type="button" class="faq-trigger-btn">
+            <span>What payment methods are accepted?</span>
+            <i data-lucide="chevron-down" style="width: 16px; height: 16px; transition: transform 0.2s;"></i>
+          </button>
+          <div class="faq-body-text">
+            We accept all UPI applications (Google Pay, PhonePe, Paytm), cash, and direct bank transfers. You only pay after you test and approve the completed plumbing work.
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ==========================================================================
-       MINIMAL MONOCHROME FOOTER
-       ========================================================================== -->
   <footer class="footer-uc">
     <div class="container">
       <div class="footer-uc-grid">
@@ -671,6 +1067,7 @@
           <ul class="footer-links-uc">
             <li><a href="#howItWorksSection">How It Works</a></li>
             <li><a href="#whyUsSection">Why Choose Us</a></li>
+            <li><a href="#projectsSection">Projects</a></li>
             <li><a href="#verifiedProsSection">Verified Technicians</a></li>
             <li><a href="#reviewsSection">Customer Reviews</a></li>
             <li><a href="#bookingSection">Book Service</a></li>
@@ -699,7 +1096,6 @@
     </div>
   </footer>
 
-  <!-- Service Detail Drawer Modal -->
   <div class="service-drawer-overlay" id="serviceDetailModal" onclick="if(event.target===this) closeDetailsModal()">
     <div class="service-drawer-modal">
       <button type="button" class="close-modal-btn" onclick="closeDetailsModal()">
@@ -709,7 +1105,16 @@
     </div>
   </div>
 
-  <!-- Floating Sticky WhatsApp Button -->
+  <div class="mobile-bottom-bar">
+    <a href="tel:+919876543210" class="btn btn-outline btn-sm" style="flex: 1;">
+      <i data-lucide="phone" style="width: 14px; height: 14px;"></i>
+      Call Now
+    </a>
+    <a href="#bookingSection" class="btn btn-black btn-sm" style="flex: 1;">
+      Book Service
+    </a>
+  </div>
+
   <a href="https://wa.me/919876543210?text=Hi%20Poona%20Plumbers,%20I%20need%20plumbing%20services.%20Please%20share%20details." target="_blank" class="floating-whatsapp-btn" aria-label="Chat on WhatsApp">
     <i data-lucide="message-circle" style="width: 28px; height: 28px;"></i>
   </a>
