@@ -707,9 +707,14 @@ button, input, select, textarea {
 }
 
 .category-scroll-bar {
-  padding: 20px 0 32px 0;
+  position: sticky;
+  top: 72px;
+  z-index: 90;
+  padding: 16px 0;
   border-bottom: 1px solid var(--grey-border);
-  background: var(--white);
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(10px);
+  transition: top var(--transition-fast);
 }
 
 .category-chips-wrap {
@@ -2212,6 +2217,48 @@ button, input, select, textarea {
   color: var(--text-muted);
 }
 
+.locality-availability-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--grey-card);
+  border: 1px solid var(--grey-border);
+  border-radius: var(--radius-pill);
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+  transition: all var(--transition-fast);
+}
+
+.live-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--black);
+  animation: pulseDot 2s infinite;
+  flex-shrink: 0;
+}
+
+.booking-trust-pills {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.trust-pill-tag {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  background: var(--grey-light);
+  border: 1px solid var(--grey-border);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-weight: 500;
+}
+
 .floating-contact-group {
   position: fixed;
   bottom: 24px;
@@ -2220,6 +2267,35 @@ button, input, select, textarea {
   flex-direction: column;
   gap: 10px;
   z-index: 999;
+}
+
+.floating-btn-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.floating-tooltip {
+  position: absolute;
+  right: calc(100% + 12px);
+  background: var(--black);
+  color: var(--white);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(8px);
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.floating-btn-wrap:hover .floating-tooltip {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .floating-call-btn,
@@ -2358,102 +2434,157 @@ button, input, select, textarea {
 }
 
 @media (max-width: 768px) {
+  .nav-container {
+    height: 64px;
+    gap: 8px;
+    padding: 0 16px;
+  }
   .nav-links-group {
     display: none;
   }
+  .nav-actions-group .nav-wa-btn,
+  .nav-actions-group .btn-black {
+    display: none;
+  }
+  .brand-sub {
+    display: none;
+  }
+  .brand-title {
+    font-size: 0.95rem;
+    letter-spacing: -0.01em;
+  }
+  .nav-location-dropdown {
+    max-width: 150px;
+  }
+  .nav-loc-btn {
+    padding: 5px 8px;
+    max-width: 140px;
+    font-size: 0.75rem;
+    gap: 4px;
+  }
+  .nav-loc-btn .loc-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 90px;
+    font-size: 0.72rem;
+  }
   .mobile-menu-btn {
     display: block;
+    padding: 6px;
+  }
+  .hero-uc {
+    padding: 32px 0 24px 0;
   }
   .hero-heading {
-    font-size: 2.3rem;
+    font-size: 2.1rem;
+    line-height: 1.15;
+    word-break: break-word;
+  }
+  .hero-subtitle {
+    font-size: 0.925rem;
+    line-height: 1.55;
+    margin-bottom: 18px;
+  }
+  .service-mode-toggle {
+    width: 100%;
+    display: flex;
+    margin-bottom: 18px;
+  }
+  .mode-btn {
+    flex: 1;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.75rem;
+    padding: 8px 6px;
+  }
+  .hero-search-wrapper {
+    margin-bottom: 16px;
+  }
+  .search-box-inner {
+    padding: 4px 6px 4px 12px;
+  }
+  .hero-search-input {
+    font-size: 16px;
+    padding: 10px 6px;
+  }
+  .btn-search {
+    padding: 9px 12px;
+  }
+  .btn-search span {
+    display: none;
+  }
+  .hero-trust-counters {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .trust-counter-box {
+    padding: 12px 10px;
+  }
+  .counter-num {
+    font-size: 1.15rem;
+  }
+  .counter-label {
+    font-size: 0.7rem;
+  }
+  .hero-visual-box {
+    min-height: 340px;
+  }
+  .hero-visual-box img {
+    height: 340px;
+    padding: 24px 16px 75px 16px;
+  }
+  .hero-floating-card-1 {
+    top: 12px;
+    right: 12px;
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+  .hero-floating-card-2 {
+    bottom: 72px;
+    left: 12px;
+    padding: 6px 10px;
+    font-size: 0.72rem;
+  }
+  .hero-metric-bar {
+    padding: 10px 8px;
+  }
+  .metric-num {
+    font-size: 0.95rem;
+  }
+  .metric-lbl {
+    font-size: 0.62rem;
+  }
+  .category-scroll-bar {
+    top: 64px;
+    padding: 10px 0;
+  }
+  .category-chips-wrap {
+    padding: 2px 16px;
+    gap: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .category-pill {
+    padding: 8px 14px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
   .services-grid-uc, .reviews-grid-uc, .why-grid-uc, .projects-grid-uc, .footer-uc-grid, .form-grid-2col, .calc-items-grid {
     grid-template-columns: 1fr;
   }
-  .hero-trust-counters {
-    grid-template-columns: repeat(2, 1fr);
+  .services-grid-uc {
+    gap: 16px;
   }
-  .booking-section-wrapper {
-    padding: 24px 18px;
+  .uc-card-media {
+    height: 180px;
   }
-  .quick-wa-banner {
-    flex-direction: column;
-    text-align: center;
+  .uc-card-body {
+    padding: 18px 16px;
   }
-  .quick-wa-btn {
-    width: 100%;
-    justify-content: center;
-  }
-  .booking-progress-bar {
-    padding: 10px 12px;
-  }
-  .step-sub {
-    display: none;
-  }
-  .progress-line {
-    margin: 0 8px;
-  }
-  .step-num {
-    width: 26px;
-    height: 26px;
-    font-size: 0.75rem;
-  }
-  .step-title {
-    font-size: 0.75rem;
-  }
-  .time-slots-wrapper {
-    grid-template-columns: 1fr;
-  }
-  .review-item-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-  }
-  .review-item-val {
-    max-width: 100%;
-    text-align: left;
-  }
-  .wizard-actions-between {
-    flex-direction: column-reverse;
-    gap: 10px;
-  }
-  .wizard-actions-between .btn {
-    width: 100%;
-    justify-content: center;
-  }
-  .comparison-slider-box {
-    height: 300px;
-  }
-  .emergency-banner-box {
-    flex-direction: column;
-    text-align: center;
-  }
-  .hero-visual-box {
-    min-height: 380px;
-  }
-  .hero-visual-box img {
-    height: 380px;
-    padding: 30px 16px 85px 16px;
-  }
-  .mobile-bottom-bar {
-    display: flex;
-  }
-  body {
-    padding-bottom: 70px;
-  }
-  .floating-contact-group {
-    bottom: 80px;
-    right: 14px;
-    gap: 8px;
-  }
-  .floating-call-btn,
-  .floating-gmail-btn,
-  .floating-contact-group .floating-whatsapp-btn {
-    width: 46px;
-    height: 46px;
-  }
-  .nav-wa-btn span {
-    display: none;
+  .uc-card-footer {
+    padding: 14px 16px;
   }
   .services-grid-uc .uc-card.uc-card-custom {
     grid-column: span 1;
@@ -2462,12 +2593,13 @@ button, input, select, textarea {
   .uc-custom-media {
     width: 100%;
     min-width: 100%;
-    height: 190px;
+    height: 180px;
   }
   .uc-custom-content {
     padding: 18px 16px;
   }
   .uc-custom-footer {
+    padding: 14px 16px;
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
@@ -2481,12 +2613,166 @@ button, input, select, textarea {
   .btn-custom-whatsapp, .btn-custom-phone {
     flex: 1;
     justify-content: center;
+    padding: 10px 8px;
+    font-size: 0.82rem;
+  }
+  .calculator-wrapper {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .calc-items-grid {
+    gap: 10px;
+  }
+  .calc-item-card {
+    padding: 12px 14px;
+  }
+  .calc-summary-panel {
+    padding: 20px 16px;
+  }
+  .comparison-slider-box {
+    height: 240px;
+  }
+  .emergency-banner-box {
+    flex-direction: column;
+    text-align: center;
+  }
+  .booking-section-wrapper {
+    padding: 20px 14px;
+  }
+  .quick-wa-banner {
+    flex-direction: column;
+    text-align: center;
+  }
+  .quick-wa-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .booking-progress-bar {
+    padding: 8px 10px;
+    margin-bottom: 20px;
+  }
+  .step-sub {
+    display: none;
+  }
+  .progress-line {
+    margin: 0 6px;
+  }
+  .step-num {
+    width: 24px;
+    height: 24px;
+    font-size: 0.72rem;
+  }
+  .step-title {
+    font-size: 0.72rem;
+  }
+  .property-type-tabs {
+    margin-bottom: 16px;
+  }
+  .prop-tab-btn {
+    padding: 8px 6px;
+    font-size: 0.75rem;
+  }
+  .date-chips-grid {
+    gap: 8px;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+  .date-pill-opt {
+    flex: 0 0 66px;
+    padding: 10px 6px;
+  }
+  .time-slots-wrapper {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .time-slot-btn {
+    padding: 10px 6px;
+    font-size: 0.75rem;
+    text-align: center;
+  }
+  .wizard-actions-between {
+    flex-direction: column-reverse;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .wizard-actions-between .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .review-item-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .review-item-val {
+    max-width: 100%;
+    text-align: left;
+  }
+  .mobile-bottom-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--grey-border);
+    padding: 10px 14px;
+    z-index: 998;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+    gap: 8px;
+    align-items: center;
+  }
+  .mobile-bottom-bar .btn {
     padding: 10px 12px;
+    font-size: 0.82rem;
+  }
+  body {
+    padding-bottom: 68px;
+  }
+  .floating-contact-group {
+    display: none;
+  }
+  .service-drawer-modal {
+    width: 95%;
+    max-height: 92vh;
+    margin: 10px auto;
+  }
+  .call-modal-box {
+    width: 92%;
+    padding: 24px 18px;
+  }
+  input, select, textarea {
+    font-size: 16px !important;
   }
 }
 
 @media (max-width: 480px) {
+  .hero-heading {
+    font-size: 1.85rem;
+  }
   .uc-custom-actions {
     flex-direction: column;
+  }
+  .container {
+    padding: 0 16px;
+  }
+  .hero-trust-counters {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 380px) {
+  .nav-location-dropdown {
+    max-width: 120px;
+  }
+  .nav-loc-btn .loc-text {
+    max-width: 65px;
+  }
+  .brand-title {
+    font-size: 0.88rem;
+  }
+  .time-slots-wrapper {
+    grid-template-columns: 1fr;
   }
 }

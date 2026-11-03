@@ -282,6 +282,10 @@ function initLucide() {
 function renderLocation() {
   const el = document.getElementById('locationDisplay');
   if (el) el.textContent = activeLocation;
+  const navLoc = document.getElementById('activeLocLabel');
+  if (navLoc) navLoc.textContent = activeLocation;
+  const pillName = document.getElementById('locAvailabilityName');
+  if (pillName) pillName.textContent = activeLocation;
 }
 
 function switchLocation() {

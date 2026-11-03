@@ -1,0 +1,21 @@
+{
+  "name": "Poona Plumbers - Pune Plumbing Hub",
+  "short_name": "Poona Plumbers",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#111111",
+  "description": "Professional residential and commercial plumbing services in Pune. Verified technicians, transparent pricing.",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "PP.png",
+      "sizes": "296x303",
+      "type": "image/png"
+    }
+  ]
+}
