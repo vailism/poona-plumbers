@@ -218,6 +218,28 @@ const SERVICES = [
     excluded: [
       'Extensive wall demolition or replastering'
     ]
+  },
+  {
+    id: 'custom-service',
+    name: 'Custom Plumbing Request & Consultation',
+    category: 'custom',
+    categoryName: 'Custom Solution',
+    image: 'https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=600&q=80',
+    rating: 4.97,
+    reviews: 640,
+    price: 99,
+    originalPrice: 199,
+    duration: '45 mins',
+    desc: 'Bespoke diagnostic visit and technical consultation for unique or unlisted plumbing requirements across Pune.',
+    included: [
+      'Comprehensive inspection by senior technician',
+      'Instant written estimate and component breakdown',
+      'Diagnostic fee adjusted if full repair is booked',
+      'Direct WhatsApp and phone priority support'
+    ],
+    excluded: [
+      'Materials and spare parts (charged transparently per MRP)'
+    ]
   }
 ];
 
@@ -328,8 +350,9 @@ function filterServices() {
 
   cards.forEach(card => {
     const cardCat = card.dataset.category;
-    const cardSearch = (card.dataset.search || '') + ' ' + (card.querySelector('.uc-card-title')?.textContent || '');
-    const matchesCat = (selectedCategory === 'all' || cardCat === selectedCategory);
+    const cardSearch = (card.dataset.search || '') + ' ' + (card.querySelector('.uc-card-title')?.textContent || '') + ' ' + (card.querySelector('.uc-custom-title')?.textContent || '');
+    const isCustom = card.classList.contains('uc-card-custom');
+    const matchesCat = (selectedCategory === 'all' || cardCat === selectedCategory || (isCustom && (selectedCategory === 'all' || selectedCategory === 'custom')));
     const matchesQuery = (q === '' || cardSearch.toLowerCase().includes(q));
 
     if (matchesCat && matchesQuery) {
