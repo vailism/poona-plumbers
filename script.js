@@ -234,16 +234,20 @@ let selectedDate = 'Tomorrow';
 let selectedTime = '10:00 AM - 12:00 PM';
 let selectedPropType = 'Residential';
 let countersAnimated = false;
+let selectedCalcItems = new Set(['tap-repair', 'drain-cleaning']);
 
 document.addEventListener('DOMContentLoaded', () => {
   renderLocation();
   initCategories();
   initSearch();
+  initAutocomplete();
   initDateChips();
   initBookingForm();
   initFaq();
   initScrollEffects();
   initServiceButtons();
+  initCalculator();
+  initComparisonSlider();
   initLucide();
 });
 
@@ -265,6 +269,33 @@ function switchLocation() {
   activeLocation = `${LOCALITIES[nextIndex]}, Pune`;
   localStorage.setItem('pp_loc', activeLocation);
   renderLocation();
+}
+
+function setServiceMode(mode) {
+  const stdBtn = document.getElementById('modeStandardBtn');
+  const emgBtn = document.getElementById('modeEmergencyBtn');
+  const banner = document.getElementById('emergencyBanner');
+  const heading = document.getElementById('heroHeading');
+  const subtitle = document.getElementById('heroSubtitle');
+
+  if (mode === 'emergency') {
+    if (stdBtn) stdBtn.classList.remove('active');
+    if (emgBtn) emgBtn.classList.add('active');
+    if (banner) banner.classList.add('active');
+    if (heading) heading.textContent = '⚡ 30-Minute Priority Emergency Plumbing Dispatch';
+    if (subtitle) subtitle.textContent = 'Rapid-response isolation vans stationed in Koregaon Park, Baner, Kothrud & Hinjewadi. Guaranteed doorstep arrival under 30–45 mins.';
+    selectedCategory = 'emergency';
+    document.querySelectorAll('.category-pill').forEach(p => p.classList.toggle('active', p.dataset.category === 'emergency'));
+    filterServices();
+    scrollToServices();
+  } else {
+    if (stdBtn) stdBtn.classList.add('active');
+    if (emgBtn) emgBtn.classList.remove('active');
+    if (banner) banner.classList.remove('active');
+    if (heading) heading.textContent = 'Professional Plumbing Services. Booked in Minutes.';
+    if (subtitle) subtitle.textContent = 'Discover trusted plumbing professionals for your home. Transparent pricing, convenient scheduling, and quality service at your doorstep across Pune.';
+    resetSearch();
+  }
 }
 
 function scrollToServices() {
@@ -359,12 +390,14 @@ function initSearch() {
     input.addEventListener('input', (e) => {
       searchQuery = e.target.value;
       filterServices();
+      renderAutocomplete(searchQuery);
     });
     input.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
         filterServices();
         scrollToServices();
+        hideAutocomplete();
       }
     });
   }
@@ -376,7 +409,239 @@ function initSearch() {
       searchQuery = q;
       filterServices();
       scrollToServices();
+      hideAutocomplete();
     });
+  });
+}
+
+function initAutocomplete() {
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.hero-search-wrapper')) {
+      hideAutocomplete();
+    }
+  });
+}
+
+function renderAutocomplete(query) {
+  const box = document.getElementById('searchAutocomplete');
+  if (!box) return;
+
+  const q = query.toLowerCase().trim();
+  if (q.length === 0) {
+    hideAutocomplete();
+    return;
+  }
+
+  const matches = SERVICES.filter(s => 
+    s.name.toLowerCase().includes(q) || 
+    s.desc.toLowerCase().includes(q) || 
+    s.categoryName.toLowerCase().includes(q)
+  ).slice(0, 4);
+
+  if (matches.length === 0) {
+    hideAutocomplete();
+    return;
+  }
+
+  box.innerHTML = matches.map(s => `
+    <div class="autocomplete-item" onclick="openDetailsModal('${s.id}'); hideAutocomplete();">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <img src="${s.image}" style="width: 38px; height: 38px; border-radius: var(--radius-xs); object-fit: cover;" alt="${s.name}" />
+        <div>
+          <div style="font-weight: 700; font-size: 0.875rem; color: var(--black);">${s.name}</div>
+          <div style="font-size: 0.75rem; color: var(--text-secondary);">${s.categoryName} • ⏱ ${s.duration}</div>
+        </div>
+      </div>
+      <div style="text-align: right;">
+        <span class="badge-tag" style="padding: 2px 8px; font-weight: 700;">₹${s.price}</span>
+      </div>
+    </div>
+  `).join('');
+
+  box.classList.add('active');
+}
+
+function hideAutocomplete() {
+  const box = document.getElementById('searchAutocomplete');
+  if (box) box.classList.remove('active');
+}
+
+function initCalculator() {
+  const grid = document.getElementById('calcItemsGrid');
+  if (!grid) return;
+
+  grid.innerHTML = SERVICES.map(s => {
+    const isChecked = selectedCalcItems.has(s.id);
+    return `
+      <div class="calc-item-card ${isChecked ? 'selected' : ''}" data-id="${s.id}" onclick="toggleCalcItem('${s.id}')">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div class="calc-check-box">${isChecked ? '✓' : ''}</div>
+          <div>
+            <div style="font-weight: 700; font-size: 0.875rem; color: var(--black);">${s.name}</div>
+            <div style="font-size: 0.75rem; color: var(--text-secondary);">⏱ ${s.duration}</div>
+          </div>
+        </div>
+        <div style="font-weight: 800; font-size: 0.95rem; color: var(--black);">₹${s.price}</div>
+      </div>
+    `;
+  }).join('');
+
+  updateCalculatorSummary();
+}
+
+function toggleCalcItem(serviceId) {
+  if (selectedCalcItems.has(serviceId)) {
+    selectedCalcItems.delete(serviceId);
+  } else {
+    selectedCalcItems.add(serviceId);
+  }
+
+  document.querySelectorAll('.calc-item-card').forEach(card => {
+    const id = card.getAttribute('data-id');
+    const isSelected = selectedCalcItems.has(id);
+    card.classList.toggle('selected', isSelected);
+    const box = card.querySelector('.calc-check-box');
+    if (box) box.textContent = isSelected ? '✓' : '';
+  });
+
+  updateCalculatorSummary();
+}
+
+function updateCalculatorSummary() {
+  const listEl = document.getElementById('calcSummaryList');
+  const countBadge = document.getElementById('calcCountBadge');
+  const totalVal = document.getElementById('calcTotalVal');
+  const discountText = document.getElementById('calcDiscountText');
+  if (!listEl || !countBadge || !totalVal) return;
+
+  const items = SERVICES.filter(s => selectedCalcItems.has(s.id));
+  countBadge.textContent = `${items.length} ${items.length === 1 ? 'service' : 'services'}`;
+
+  if (items.length === 0) {
+    listEl.innerHTML = `<li style="font-size: 0.85rem; color: var(--text-muted); padding: 12px 0;">No services selected yet. Click any service card on the left.</li>`;
+    totalVal.textContent = '₹0';
+    if (discountText) discountText.textContent = '';
+    return;
+  }
+
+  listEl.innerHTML = items.map(i => `
+    <li class="calc-summary-item">
+      <span>${i.name}</span>
+      <strong>₹${i.price}</strong>
+    </li>
+  `).join('');
+
+  const rawTotal = items.reduce((sum, item) => sum + item.price, 0);
+  let finalTotal = rawTotal;
+  let discount = 0;
+
+  if (items.length >= 2) {
+    discount = 99;
+    finalTotal = Math.max(rawTotal - discount, 99);
+    if (discountText) discountText.textContent = '⚡ ₹99 Multi-Service Bundle Discount Applied!';
+  } else if (discountText) {
+    discountText.textContent = '';
+  }
+
+  totalVal.textContent = `₹${finalTotal}`;
+}
+
+function dispatchCalculatorWhatsApp() {
+  const items = SERVICES.filter(s => selectedCalcItems.has(s.id));
+  if (items.length === 0) {
+    alert('Please select at least one service in the calculator.');
+    return;
+  }
+
+  const rawTotal = items.reduce((sum, item) => sum + item.price, 0);
+  const discount = items.length >= 2 ? 99 : 0;
+  const finalTotal = Math.max(rawTotal - discount, 99);
+
+  const listText = items.map(i => `• ${i.name} (₹${i.price})`).join('\n');
+  const msg = `📦 *Poona Plumbers - Custom Package Booking*\n\n` +
+    `🛠️ *Selected Services (${items.length}):*\n${listText}\n\n` +
+    `${discount > 0 ? `🎉 *Bundle Discount:* -₹${discount}\n` : ''}` +
+    `💰 *Estimated Total:* ₹${finalTotal}\n` +
+    `📍 *Location:* ${activeLocation}\n\n` +
+    `_Please check technician availability for this package visit._`;
+
+  window.open(`https://wa.me/919876543210?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+function transferCalculatorToBooking() {
+  const items = SERVICES.filter(s => selectedCalcItems.has(s.id));
+  if (items.length === 0) {
+    alert('Please select at least one service in the calculator.');
+    return;
+  }
+
+  const select = document.getElementById('bookServiceSelect');
+  if (select) {
+    for (let i = 0; i < select.options.length; i++) {
+      if (select.options[i].text.includes(items[0].name)) {
+        select.selectedIndex = i;
+        break;
+      }
+    }
+  }
+
+  const notes = document.getElementById('bookNotes');
+  if (notes) {
+    const names = items.map(i => i.name).join(', ');
+    notes.value = `Custom Multi-Service Bundle: ${names}`;
+  }
+
+  const bookingSection = document.getElementById('bookingSection');
+  if (bookingSection) {
+    bookingSection.scrollIntoView({ behavior: 'smooth' });
+    const nameInput = document.getElementById('bookName');
+    if (nameInput) setTimeout(() => nameInput.focus(), 600);
+  }
+}
+
+function initComparisonSlider() {
+  const slider = document.getElementById('comparisonSlider');
+  const beforeWrap = document.getElementById('beforeWrap');
+  const handle = document.getElementById('sliderHandle');
+  if (!slider || !beforeWrap || !handle) return;
+
+  let isDragging = false;
+
+  function setSliderPos(clientX) {
+    const rect = slider.getBoundingClientRect();
+    let pos = (clientX - rect.left) / rect.width;
+    pos = Math.max(0.05, Math.min(0.95, pos));
+    const pct = pos * 100;
+    beforeWrap.style.width = `${pct}%`;
+    handle.style.left = `${pct}%`;
+  }
+
+  slider.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    setSliderPos(e.clientX);
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    setSliderPos(e.clientX);
+  });
+
+  window.addEventListener('mouseup', () => {
+    isDragging = false;
+  });
+
+  slider.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    setSliderPos(e.touches[0].clientX);
+  }, { passive: true });
+
+  window.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    setSliderPos(e.touches[0].clientX);
+  }, { passive: true });
+
+  window.addEventListener('touchend', () => {
+    isDragging = false;
   });
 }
 
