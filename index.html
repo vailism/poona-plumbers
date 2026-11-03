@@ -38,23 +38,19 @@
         </button>
 
         <ul class="nav-links-group">
-          <li><a href="#popularServicesSection" class="nav-item-link">Services</a></li>
+          <li><a href="#popularServicesSection" class="nav-item-link" id="navServicesBtn">Services</a></li>
           <li><a href="#whyUsSection" class="nav-item-link">Why Us</a></li>
           <li><a href="#howItWorksSection" class="nav-item-link">How It Works</a></li>
           <li><a href="#projectsSection" class="nav-item-link">Projects</a></li>
           <li><a href="#verifiedProsSection" class="nav-item-link">Technicians</a></li>
           <li><a href="#reviewsSection" class="nav-item-link">Reviews</a></li>
-          <li><a href="#forumSection" class="nav-item-link">Ask Plumber</a></li>
           <li><a href="#faqSection" class="nav-item-link">FAQ</a></li>
         </ul>
 
         <div class="nav-actions-group">
-          <a href="tel:+919876543210" class="btn btn-outline btn-sm">
+          <a href="tel:+919876543210" class="btn btn-black btn-sm">
             <i data-lucide="phone" style="width: 14px; height: 14px;"></i>
             <span>Call Now</span>
-          </a>
-          <a href="#bookingSection" class="btn btn-black btn-sm">
-            <span>Book Service</span>
           </a>
           <button type="button" class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle Navigation">
             <i data-lucide="menu" style="width: 22px; height: 22px;"></i>
@@ -65,18 +61,17 @@
 
     <div class="mobile-nav-drawer" id="mobileNavDrawer">
       <ul class="mobile-nav-links">
-        <li><a href="#popularServicesSection" onclick="toggleMobileMenu()">Services</a></li>
+        <li><a href="#popularServicesSection" onclick="toggleMobileMenu(); scrollToServices();">Services</a></li>
         <li><a href="#whyUsSection" onclick="toggleMobileMenu()">Why Us</a></li>
         <li><a href="#howItWorksSection" onclick="toggleMobileMenu()">How It Works</a></li>
         <li><a href="#projectsSection" onclick="toggleMobileMenu()">Projects</a></li>
         <li><a href="#verifiedProsSection" onclick="toggleMobileMenu()">Technicians</a></li>
         <li><a href="#reviewsSection" onclick="toggleMobileMenu()">Reviews</a></li>
-        <li><a href="#forumSection" onclick="toggleMobileMenu()">Ask Plumber</a></li>
         <li><a href="#faqSection" onclick="toggleMobileMenu()">FAQ</a></li>
       </ul>
       <div style="display: flex; gap: 10px;">
-        <a href="tel:+919876543210" class="btn btn-outline btn-sm" style="flex: 1;">Call Now</a>
-        <a href="#bookingSection" class="btn btn-black btn-sm" style="flex: 1;" onclick="toggleMobileMenu()">Book Service</a>
+        <a href="tel:+919876543210" class="btn btn-black btn-sm" style="flex: 1;">Call Now</a>
+        <a href="#popularServicesSection" class="btn btn-outline btn-sm" style="flex: 1;" onclick="toggleMobileMenu(); scrollToServices();">Explore Services</a>
       </div>
     </div>
   </header>
@@ -102,7 +97,7 @@
             <div class="search-box-inner">
               <i data-lucide="search" style="width: 18px; height: 18px; color: var(--text-muted); flex-shrink: 0;"></i>
               <input type="text" id="heroSearchInput" placeholder="What plumbing service do you need? (e.g. tap, leakage, drain, heater)..." />
-              <button type="button" class="btn btn-black btn-sm" onclick="filterServices()">Search</button>
+              <button type="button" class="btn btn-black btn-sm" onclick="filterServices(); scrollToServices();">Search</button>
             </div>
           </div>
 
@@ -116,21 +111,21 @@
             <span class="tag-chip" data-query="toilet">Toilet Flush</span>
           </div>
 
-          <div class="hero-trust-counters">
+          <div class="hero-trust-counters" id="heroCounters">
             <div class="trust-counter-box">
-              <div class="counter-num">15+</div>
+              <div class="counter-num"><span class="counter-val" data-target="15">15</span>+</div>
               <div class="counter-label">Years in Pune</div>
             </div>
             <div class="trust-counter-box">
-              <div class="counter-num">30 Min</div>
+              <div class="counter-num"><span class="counter-val" data-target="30">30</span> Min</div>
               <div class="counter-label">Fast Response</div>
             </div>
             <div class="trust-counter-box">
-              <div class="counter-num">100%</div>
+              <div class="counter-num"><span class="counter-val" data-target="100">100</span>%</div>
               <div class="counter-label">Verified Techs</div>
             </div>
             <div class="trust-counter-box">
-              <div class="counter-num">12,400+</div>
+              <div class="counter-num"><span class="counter-val" data-target="12400">12,400</span>+</div>
               <div class="counter-label">Homes Serviced</div>
             </div>
           </div>
@@ -225,7 +220,7 @@
       </div>
 
       <div class="services-grid-uc" id="servicesGrid">
-        <div class="uc-card reveal-item" data-id="tap-repair" data-category="tap" data-search="tap faucet repair leak mixer dripping">
+        <div class="uc-card reveal-item reveal-delay-1" data-id="tap-repair" data-category="tap" data-search="tap faucet repair leak mixer dripping">
           <div class="uc-card-media">
             <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80" alt="Tap & Faucet Repair" loading="lazy" />
             <span class="uc-card-time">
@@ -253,7 +248,7 @@
           </div>
         </div>
 
-        <div class="uc-card reveal-item" data-id="wash-basin" data-category="bathroom" data-search="wash basin installation repair pedestal counter bottle trap">
+        <div class="uc-card reveal-item reveal-delay-2" data-id="wash-basin" data-category="bathroom" data-search="wash basin installation repair pedestal counter bottle trap">
           <div class="uc-card-media">
             <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=600&q=80" alt="Wash Basin Installation & Repair" loading="lazy" />
             <span class="uc-card-time">
@@ -281,7 +276,7 @@
           </div>
         </div>
 
-        <div class="uc-card reveal-item" data-id="pipe-leakage" data-category="leakage" data-search="bathroom leakage seepage repair pipe acoustic moisture joint">
+        <div class="uc-card reveal-item reveal-delay-3" data-id="pipe-leakage" data-category="leakage" data-search="bathroom leakage seepage repair pipe acoustic moisture joint">
           <div class="uc-card-media">
             <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=600&q=80" alt="Bathroom Leakage & Seepage Repair" loading="lazy" />
             <span class="uc-card-time">
@@ -309,7 +304,7 @@
           </div>
         </div>
 
-        <div class="uc-card reveal-item" data-id="drain-cleaning" data-category="drain" data-search="motorized drain cleaning unclog snake blockage bathroom floor gully">
+        <div class="uc-card reveal-item reveal-delay-1" data-id="drain-cleaning" data-category="drain" data-search="motorized drain cleaning unclog snake blockage bathroom floor gully">
           <div class="uc-card-media">
             <img src="https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=600&q=80" alt="Motorized Drain Cleaning" loading="lazy" />
             <span class="uc-card-time">
@@ -337,7 +332,7 @@
           </div>
         </div>
 
-        <div class="uc-card reveal-item" data-id="shower-install" data-category="bathroom" data-search="shower diverter installation rain overhead panel handheld">
+        <div class="uc-card reveal-item reveal-delay-2" data-id="shower-install" data-category="bathroom" data-search="shower diverter installation rain overhead panel handheld">
           <div class="uc-card-media">
             <img src="https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=600&q=80" alt="Shower & Diverter Installation" loading="lazy" />
             <span class="uc-card-time">
@@ -365,7 +360,7 @@
           </div>
         </div>
 
-        <div class="uc-card reveal-item" data-id="water-tank" data-category="tank" data-search="water tank cleaning deep scrub sanitization sludge descaling">
+        <div class="uc-card reveal-item reveal-delay-3" data-id="water-tank" data-category="tank" data-search="water tank cleaning deep scrub sanitization sludge descaling">
           <div class="uc-card-media">
             <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80" alt="Water Tank Deep Scrub & Cleaning" loading="lazy" />
             <span class="uc-card-time">
@@ -393,7 +388,7 @@
           </div>
         </div>
 
-        <div class="uc-card reveal-item" data-id="geyser-service" data-category="heater" data-search="water heater geyser service repair thermostat coil descaling">
+        <div class="uc-card reveal-item reveal-delay-1" data-id="geyser-service" data-category="heater" data-search="water heater geyser service repair thermostat coil descaling">
           <div class="uc-card-media">
             <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=600&q=80" alt="Water Heater (Geyser) Service & Repair" loading="lazy" />
             <span class="uc-card-time">
@@ -421,7 +416,7 @@
           </div>
         </div>
 
-        <div class="uc-card reveal-item" data-id="kitchen-sink" data-category="kitchen" data-search="kitchen sink plumbing trap fix bottle coupling ro pipe">
+        <div class="uc-card reveal-item reveal-delay-2" data-id="kitchen-sink" data-category="kitchen" data-search="kitchen sink plumbing trap fix bottle coupling ro pipe">
           <div class="uc-card-media">
             <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=600&q=80" alt="Kitchen Sink Plumbing & Trap Fix" loading="lazy" />
             <span class="uc-card-time">
@@ -449,7 +444,7 @@
           </div>
         </div>
 
-        <div class="uc-card reveal-item" data-id="toilet-flush" data-category="bathroom" data-search="toilet flush jet spray repair health faucet syphon overflow">
+        <div class="uc-card reveal-item reveal-delay-3" data-id="toilet-flush" data-category="bathroom" data-search="toilet flush jet spray repair health faucet syphon overflow">
           <div class="uc-card-media">
             <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80" alt="Toilet Flush & Jet Spray Repair" loading="lazy" />
             <span class="uc-card-time">
@@ -477,7 +472,7 @@
           </div>
         </div>
 
-        <div class="uc-card reveal-item" data-id="emergency-clamp" data-category="emergency" data-search="24/7 emergency burst pipe clamp flood isolation rapid 30 mins">
+        <div class="uc-card reveal-item reveal-delay-1" data-id="emergency-clamp" data-category="emergency" data-search="24/7 emergency burst pipe clamp flood isolation rapid 30 mins">
           <div class="uc-card-media">
             <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=600&q=80" alt="24/7 Emergency Burst Pipe Clamp" loading="lazy" />
             <span class="uc-card-time">
@@ -517,7 +512,7 @@
       </div>
 
       <div class="why-grid-uc">
-        <div class="uc-panel-box reveal-item">
+        <div class="uc-panel-box reveal-item reveal-delay-1">
           <div style="width: 40px; height: 40px; background: var(--grey-light); border: 1px solid var(--grey-border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
             <i data-lucide="user-check" style="width: 20px; height: 20px; color: var(--black);"></i>
           </div>
@@ -525,7 +520,7 @@
           <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">Every plumber is background-verified, certified, and trained for clean home visits.</p>
         </div>
 
-        <div class="uc-panel-box reveal-item">
+        <div class="uc-panel-box reveal-item reveal-delay-2">
           <div style="width: 40px; height: 40px; background: var(--grey-light); border: 1px solid var(--grey-border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
             <i data-lucide="receipt" style="width: 20px; height: 20px; color: var(--black);"></i>
           </div>
@@ -533,7 +528,7 @@
           <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">Standard rate cards with zero hidden charges. Pay safely after inspection & service.</p>
         </div>
 
-        <div class="uc-panel-box reveal-item">
+        <div class="uc-panel-box reveal-item reveal-delay-3">
           <div style="width: 40px; height: 40px; background: var(--grey-light); border: 1px solid var(--grey-border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
             <i data-lucide="calendar-check-2" style="width: 20px; height: 20px; color: var(--black);"></i>
           </div>
@@ -541,7 +536,7 @@
           <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">Pick convenient 2-hour doorstep arrival slots that fit your busy schedule seamlessly.</p>
         </div>
 
-        <div class="uc-panel-box reveal-item">
+        <div class="uc-panel-box reveal-item reveal-delay-4">
           <div style="width: 40px; height: 40px; background: var(--grey-light); border: 1px solid var(--grey-border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
             <i data-lucide="shield-check" style="width: 20px; height: 20px; color: var(--black);"></i>
           </div>
@@ -561,19 +556,19 @@
       </div>
 
       <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;">
-        <div class="uc-panel-box reveal-item">
+        <div class="uc-panel-box reveal-item reveal-delay-1">
           <div style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 12px;">01 — DISCOVER</div>
           <h3 style="font-size: 1.2rem; margin-bottom: 8px;">Choose a Service</h3>
           <p style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6;">Browse transparently priced plumbing services with detailed inclusions and duration estimates.</p>
         </div>
 
-        <div class="uc-panel-box reveal-item">
+        <div class="uc-panel-box reveal-item reveal-delay-2">
           <div style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 12px;">02 — SCHEDULE</div>
           <h3 style="font-size: 1.2rem; margin-bottom: 8px;">Select Your Schedule</h3>
           <p style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6;">Pick your convenient date and 2-hour arrival window. Enter your address in Pune.</p>
         </div>
 
-        <div class="uc-panel-box reveal-item">
+        <div class="uc-panel-box reveal-item reveal-delay-3">
           <div style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 12px;">03 — RELAX</div>
           <h3 style="font-size: 1.2rem; margin-bottom: 8px;">Relax, We've Got It Covered</h3>
           <p style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6;">A verified master plumber arrives equipped with genuine parts. Pay securely after service completion.</p>
@@ -593,7 +588,7 @@
       </div>
 
       <div class="projects-grid-uc">
-        <div class="project-card-uc reveal-item">
+        <div class="project-card-uc reveal-item reveal-delay-1">
           <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80" alt="Concealed Diverter Installation" loading="lazy" />
           <div class="project-overlay-uc">
             <span class="project-tag-pill">Koregaon Park</span>
@@ -602,7 +597,7 @@
           </div>
         </div>
 
-        <div class="project-card-uc reveal-item">
+        <div class="project-card-uc reveal-item reveal-delay-2">
           <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80" alt="Water Tank Scrubbing" loading="lazy" />
           <div class="project-overlay-uc">
             <span class="project-tag-pill">Kothrud</span>
@@ -611,7 +606,7 @@
           </div>
         </div>
 
-        <div class="project-card-uc reveal-item">
+        <div class="project-card-uc reveal-item reveal-delay-3">
           <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=800&q=80" alt="Acoustic Leak Detection" loading="lazy" />
           <div class="project-overlay-uc">
             <span class="project-tag-pill">Kalyani Nagar</span>
@@ -620,7 +615,7 @@
           </div>
         </div>
 
-        <div class="project-card-uc reveal-item">
+        <div class="project-card-uc reveal-item reveal-delay-1">
           <img src="https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=800&q=80" alt="Drainage Clearance" loading="lazy" />
           <div class="project-overlay-uc">
             <span class="project-tag-pill">Baner</span>
@@ -629,7 +624,7 @@
           </div>
         </div>
 
-        <div class="project-card-uc reveal-item">
+        <div class="project-card-uc reveal-item reveal-delay-2">
           <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80" alt="Kitchen Sink Integration" loading="lazy" />
           <div class="project-overlay-uc">
             <span class="project-tag-pill">Hinjewadi</span>
@@ -638,7 +633,7 @@
           </div>
         </div>
 
-        <div class="project-card-uc reveal-item">
+        <div class="project-card-uc reveal-item reveal-delay-3">
           <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80" alt="Geyser Pressure Line" loading="lazy" />
           <div class="project-overlay-uc">
             <span class="project-tag-pill">Aundh</span>
@@ -661,7 +656,7 @@
       </div>
 
       <div class="pros-grid-uc">
-        <div class="uc-panel-box reveal-item" style="text-align: center;">
+        <div class="uc-panel-box reveal-item reveal-delay-1" style="text-align: center;">
           <div style="position: relative; width: 76px; height: 76px; margin: 0 auto 14px auto;">
             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" alt="Rajesh More" />
             <span class="badge-verified" style="position: absolute; bottom: 0; right: 0; padding: 2px 5px; font-size: 0.65rem;">✓</span>
@@ -677,7 +672,7 @@
           </div>
         </div>
 
-        <div class="uc-panel-box reveal-item" style="text-align: center;">
+        <div class="uc-panel-box reveal-item reveal-delay-2" style="text-align: center;">
           <div style="position: relative; width: 76px; height: 76px; margin: 0 auto 14px auto;">
             <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" alt="Santosh Patil" />
             <span class="badge-verified" style="position: absolute; bottom: 0; right: 0; padding: 2px 5px; font-size: 0.65rem;">✓</span>
@@ -693,7 +688,7 @@
           </div>
         </div>
 
-        <div class="uc-panel-box reveal-item" style="text-align: center;">
+        <div class="uc-panel-box reveal-item reveal-delay-3" style="text-align: center;">
           <div style="position: relative; width: 76px; height: 76px; margin: 0 auto 14px auto;">
             <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" alt="Amit Kulkarni" />
             <span class="badge-verified" style="position: absolute; bottom: 0; right: 0; padding: 2px 5px; font-size: 0.65rem;">✓</span>
@@ -709,7 +704,7 @@
           </div>
         </div>
 
-        <div class="uc-panel-box reveal-item" style="text-align: center;">
+        <div class="uc-panel-box reveal-item reveal-delay-4" style="text-align: center;">
           <div style="position: relative; width: 76px; height: 76px; margin: 0 auto 14px auto;">
             <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=300&q=80" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" alt="Sandeep Shinde" />
             <span class="badge-verified" style="position: absolute; bottom: 0; right: 0; padding: 2px 5px; font-size: 0.65rem;">✓</span>
@@ -737,7 +732,7 @@
       </div>
 
       <div class="reviews-grid-uc">
-        <div class="uc-panel-box reveal-item">
+        <div class="uc-panel-box reveal-item reveal-delay-1">
           <div style="font-size: 0.85rem; font-weight: 700; color: var(--black); margin-bottom: 10px;">★ ★ ★ ★ ★ 5.0</div>
           <p style="font-size: 0.875rem; color: var(--text-primary); line-height: 1.6; margin-bottom: 18px;">
             “Booking was so fast and straightforward. The technician Rajesh arrived on time, pinpointed our concealed wall leakage without breaking extra tiles, and charged the exact ₹249 listed on the site.”
@@ -751,7 +746,7 @@
           </div>
         </div>
 
-        <div class="uc-panel-box reveal-item">
+        <div class="uc-panel-box reveal-item reveal-delay-2">
           <div style="font-size: 0.85rem; font-weight: 700; color: var(--black); margin-bottom: 10px;">★ ★ ★ ★ ★ 5.0</div>
           <p style="font-size: 0.875rem; color: var(--text-primary); line-height: 1.6; margin-bottom: 18px;">
             “Our kitchen drain was overflowing on a Sunday morning. Booked online, plumber arrived in 40 minutes with motorized snake machine. Cleared grease blockages cleanly. No toxic acids used!”
@@ -765,7 +760,7 @@
           </div>
         </div>
 
-        <div class="uc-panel-box reveal-item">
+        <div class="uc-panel-box reveal-item reveal-delay-3">
           <div style="font-size: 0.85rem; font-weight: 700; color: var(--black); margin-bottom: 10px;">★ ★ ★ ★ ★ 5.0</div>
           <p style="font-size: 0.875rem; color: var(--text-primary); line-height: 1.6; margin-bottom: 18px;">
             “Got our society water tank and geyser serviced. The professional had proper ID, carried safety equipment, and provided an itemized WhatsApp receipt. Highly recommended.”
@@ -786,7 +781,7 @@
     <div class="container">
       <div style="text-align: center; max-width: 600px; margin: 0 auto 36px auto;">
         <span class="badge-tag" style="margin-bottom: 8px;">Quick Appointment</span>
-        <h2 style="font-size: 2rem; margin-bottom: 6px;">Book a Verified Professional</h2>
+        <h2 style="font-size: 2rem; margin-bottom: 6px;">Schedule Doorstep Plumbing</h2>
         <p style="color: var(--text-secondary); font-size: 0.925rem;">Fill out the details below. We confirm your technician dispatch instantly via WhatsApp.</p>
       </div>
 
@@ -889,47 +884,6 @@
     </div>
   </section>
 
-  <section class="section-urban" id="forumSection">
-    <div class="container">
-      <div class="forum-box-uc reveal-item">
-        <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: center;">
-          <div>
-            <span class="badge-tag" style="background: #222222; border-color: #333333; color: var(--white); margin-bottom: 12px;">
-              Direct WhatsApp Forum
-            </span>
-            <h3>Ask Pune's Master Plumbers</h3>
-            <p style="color: #AAAAAA; font-size: 0.925rem; line-height: 1.6; margin-bottom: 20px;">
-              Not sure what's causing low water pressure, a sudden pipe drip, or strange geyser sounds? Post your query below. Our on-duty master plumber reviews it on WhatsApp and sends back diagnosis & estimates within 5 minutes.
-            </p>
-            <div style="display: flex; gap: 16px; font-size: 0.825rem; color: #888888;">
-              <div>⚡ Average Reply: <strong>Under 5 mins</strong></div>
-              <div>📍 Coverage: <strong>All Pune Localities</strong></div>
-            </div>
-          </div>
-
-          <form id="forumDirectForm" style="background: #161616; border: 1px solid #282828; border-radius: var(--radius-md); padding: 24px;">
-            <input type="text" id="forumUserName" class="forum-input-dark" placeholder="Your Name" />
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-              <input type="text" id="forumUserArea" class="forum-input-dark" placeholder="Pune Area (e.g. Kothrud)" />
-              <select id="forumUserCat" class="forum-input-dark" style="background: #111111;">
-                <option value="Pipe Leakage">Pipe Leakage</option>
-                <option value="Drainage Block">Drainage Block</option>
-                <option value="Water Pressure">Water Pressure</option>
-                <option value="Geyser Service">Geyser Service</option>
-                <option value="Water Tank">Water Tank</option>
-                <option value="Sanitary Fitting">Sanitary Fitting</option>
-              </select>
-            </div>
-            <textarea id="forumUserQuery" class="forum-input-dark" rows="3" placeholder="Describe the plumbing problem..." required></textarea>
-            <button type="submit" class="btn btn-outline btn-sm" style="width: 100%; border-color: var(--white); color: var(--black); background: var(--white);">
-              Send to Master Plumber on WhatsApp
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <section class="section-urban section-urban-grey" id="localitiesSection">
     <div class="container" style="text-align: center;">
       <div style="max-width: 600px; margin: 0 auto 32px auto;">
@@ -980,50 +934,50 @@
       </div>
 
       <div class="faq-minimal-list">
-        <div class="faq-minimal-card active reveal-item">
+        <div class="faq-minimal-card active reveal-item reveal-delay-1">
           <button type="button" class="faq-trigger-btn">
             <span>How does standardized pricing work?</span>
-            <i data-lucide="chevron-down" style="width: 16px; height: 16px; transition: transform 0.2s;"></i>
+            <i data-lucide="chevron-down" style="width: 16px; height: 16px;"></i>
           </button>
           <div class="faq-body-text">
             Every service has an upfront standard inspection and repair fee. If replacement parts (like a new brass tap or pipes) are required, they are billed transparently at actual MRP after your approval. You pay after the job is completed.
           </div>
         </div>
 
-        <div class="faq-minimal-card reveal-item">
+        <div class="faq-minimal-card reveal-item reveal-delay-2">
           <button type="button" class="faq-trigger-btn">
             <span>Are the plumbers background-verified?</span>
-            <i data-lucide="chevron-down" style="width: 16px; height: 16px; transition: transform 0.2s;"></i>
+            <i data-lucide="chevron-down" style="width: 16px; height: 16px;"></i>
           </button>
           <div class="faq-body-text">
             Yes, 100% of technicians undergo police background verification, technical plumbing skill audits, and etiquette training.
           </div>
         </div>
 
-        <div class="faq-minimal-card reveal-item">
+        <div class="faq-minimal-card reveal-item reveal-delay-3">
           <button type="button" class="faq-trigger-btn">
             <span>What if the leak or problem returns?</span>
-            <i data-lucide="chevron-down" style="width: 16px; height: 16px; transition: transform 0.2s;"></i>
+            <i data-lucide="chevron-down" style="width: 16px; height: 16px;"></i>
           </button>
           <div class="faq-body-text">
             Every service comes with our 30-day workmanship warranty. If the exact serviced joint or problem recurs, a technician will revisit and fix it completely free of charge.
           </div>
         </div>
 
-        <div class="faq-minimal-card reveal-item">
+        <div class="faq-minimal-card reveal-item reveal-delay-1">
           <button type="button" class="faq-trigger-btn">
             <span>Do you provide 24/7 emergency response?</span>
-            <i data-lucide="chevron-down" style="width: 16px; height: 16px; transition: transform 0.2s;"></i>
+            <i data-lucide="chevron-down" style="width: 16px; height: 16px;"></i>
           </button>
           <div class="faq-body-text">
             Yes, our emergency burst pipe and flood isolation vans are stationed across Pune to reach emergency call-outs within 30 to 45 minutes.
           </div>
         </div>
 
-        <div class="faq-minimal-card reveal-item">
+        <div class="faq-minimal-card reveal-item reveal-delay-2">
           <button type="button" class="faq-trigger-btn">
             <span>What payment methods are accepted?</span>
-            <i data-lucide="chevron-down" style="width: 16px; height: 16px; transition: transform 0.2s;"></i>
+            <i data-lucide="chevron-down" style="width: 16px; height: 16px;"></i>
           </button>
           <div class="faq-body-text">
             We accept all UPI applications (Google Pay, PhonePe, Paytm), cash, and direct bank transfers. You only pay after you test and approve the completed plumbing work.
@@ -1054,11 +1008,11 @@
         <div>
           <h4>Services</h4>
           <ul class="footer-links-uc">
-            <li><a href="#popularServicesSection" onclick="resetSearch()">Tap & Faucet Repair</a></li>
-            <li><a href="#popularServicesSection" onclick="resetSearch()">Wash Basin Installation</a></li>
-            <li><a href="#popularServicesSection" onclick="resetSearch()">Pipe Leakage Detection</a></li>
-            <li><a href="#popularServicesSection" onclick="resetSearch()">Drain Snake Cleaning</a></li>
-            <li><a href="#popularServicesSection" onclick="resetSearch()">Water Tank Cleaning</a></li>
+            <li><a href="#popularServicesSection" onclick="resetSearch(); scrollToServices();">Tap & Faucet Repair</a></li>
+            <li><a href="#popularServicesSection" onclick="resetSearch(); scrollToServices();">Wash Basin Installation</a></li>
+            <li><a href="#popularServicesSection" onclick="resetSearch(); scrollToServices();">Pipe Leakage Detection</a></li>
+            <li><a href="#popularServicesSection" onclick="resetSearch(); scrollToServices();">Drain Snake Cleaning</a></li>
+            <li><a href="#popularServicesSection" onclick="resetSearch(); scrollToServices();">Water Tank Cleaning</a></li>
           </ul>
         </div>
 
@@ -1070,7 +1024,7 @@
             <li><a href="#projectsSection">Projects</a></li>
             <li><a href="#verifiedProsSection">Verified Technicians</a></li>
             <li><a href="#reviewsSection">Customer Reviews</a></li>
-            <li><a href="#bookingSection">Book Service</a></li>
+            <li><a href="#faqSection">FAQ</a></li>
           </ul>
         </div>
 
@@ -1106,12 +1060,12 @@
   </div>
 
   <div class="mobile-bottom-bar">
-    <a href="tel:+919876543210" class="btn btn-outline btn-sm" style="flex: 1;">
+    <a href="tel:+919876543210" class="btn btn-black btn-sm" style="flex: 1;">
       <i data-lucide="phone" style="width: 14px; height: 14px;"></i>
       Call Now
     </a>
-    <a href="#bookingSection" class="btn btn-black btn-sm" style="flex: 1;">
-      Book Service
+    <a href="#popularServicesSection" class="btn btn-outline btn-sm" style="flex: 1;" onclick="scrollToServices()">
+      Explore Services
     </a>
   </div>
 

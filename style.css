@@ -34,6 +34,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 85px;
   font-size: 16px;
   background-color: var(--white);
 }
@@ -103,6 +104,12 @@ button, input, select, textarea {
   font-weight: 600;
   color: var(--black);
   letter-spacing: 0.02em;
+  transition: all var(--transition-fast);
+}
+
+.badge-tag:hover {
+  border-color: var(--black);
+  transform: translateY(-1px);
 }
 
 .badge-verified {
@@ -134,6 +141,10 @@ button, input, select, textarea {
   white-space: nowrap;
 }
 
+.btn:active {
+  transform: scale(0.97);
+}
+
 .btn-black {
   background: var(--black);
   color: var(--white);
@@ -141,7 +152,7 @@ button, input, select, textarea {
 
 .btn-black:hover {
   background: var(--black-hover);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
 }
 
@@ -154,6 +165,7 @@ button, input, select, textarea {
 .btn-outline:hover {
   border-color: var(--black);
   background: var(--grey-light);
+  transform: translateY(-2px);
 }
 
 .btn-white {
@@ -164,7 +176,7 @@ button, input, select, textarea {
 
 .btn-white:hover {
   background: var(--grey-light);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
 .btn-sm {
@@ -200,6 +212,11 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   gap: 10px;
+  transition: transform var(--transition-fast);
+}
+
+.brand-wrapper:hover {
+  transform: translateY(-1px);
 }
 
 .brand-icon {
@@ -211,6 +228,11 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform var(--transition-fast);
+}
+
+.brand-wrapper:hover .brand-icon {
+  transform: rotate(-10deg);
 }
 
 .brand-title {
@@ -247,6 +269,11 @@ button, input, select, textarea {
 .location-chip-btn:hover {
   background: var(--white);
   border-color: var(--black);
+  transform: translateY(-1px);
+}
+
+.location-chip-btn:active {
+  transform: scale(0.97);
 }
 
 .nav-links-group {
@@ -260,10 +287,27 @@ button, input, select, textarea {
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--text-secondary);
+  position: relative;
+  padding: 4px 0;
+}
+
+.nav-item-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: var(--black);
+  transition: width var(--transition-fast);
 }
 
 .nav-item-link:hover {
   color: var(--black);
+}
+
+.nav-item-link:hover::after {
+  width: 100%;
 }
 
 .nav-actions-group {
@@ -279,6 +323,11 @@ button, input, select, textarea {
   cursor: pointer;
   color: var(--black);
   padding: 6px;
+  transition: transform var(--transition-fast);
+}
+
+.mobile-menu-btn:active {
+  transform: scale(0.9);
 }
 
 .mobile-nav-drawer {
@@ -287,6 +336,18 @@ button, input, select, textarea {
   border-top: 1px solid var(--grey-border);
   border-bottom: 1px solid var(--grey-border);
   padding: 16px 24px;
+  animation: slideDownMenu 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideDownMenu {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .mobile-nav-drawer.open {
@@ -306,6 +367,7 @@ button, input, select, textarea {
   font-weight: 600;
   color: var(--black);
   display: block;
+  padding: 6px 0;
 }
 
 .hero-uc {
@@ -352,12 +414,13 @@ button, input, select, textarea {
   border-radius: var(--radius-md);
   padding: 6px 8px 6px 16px;
   box-shadow: var(--shadow-sm);
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
 }
 
 .search-box-inner:focus-within {
   border-color: var(--black);
   box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.08);
+  transform: translateY(-2px);
 }
 
 .search-box-inner input {
@@ -397,6 +460,11 @@ button, input, select, textarea {
   background: var(--white);
   border-color: var(--black);
   color: var(--black);
+  transform: translateY(-2px);
+}
+
+.tag-chip:active {
+  transform: scale(0.95);
 }
 
 .hero-trust-counters {
@@ -410,6 +478,11 @@ button, input, select, textarea {
 .trust-counter-box {
   display: flex;
   flex-direction: column;
+  transition: transform var(--transition-fast);
+}
+
+.trust-counter-box:hover {
+  transform: translateY(-3px);
 }
 
 .counter-num {
@@ -432,17 +505,22 @@ button, input, select, textarea {
   border: 1px solid var(--grey-border);
   background: var(--grey-light);
   box-shadow: var(--shadow-md);
+  transition: box-shadow var(--transition-normal);
+}
+
+.hero-visual-box:hover {
+  box-shadow: var(--shadow-lg);
 }
 
 .hero-visual-box img {
   width: 100%;
   height: 440px;
   object-fit: cover;
-  transition: transform 0.6s ease;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .hero-visual-box:hover img {
-  transform: scale(1.02);
+  transform: scale(1.04);
 }
 
 .hero-floating-card-1 {
@@ -461,7 +539,7 @@ button, input, select, textarea {
 
 .hero-floating-card-2 {
   position: absolute;
-  bottom: 18px;
+  bottom: 64px;
   left: 18px;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(8px);
@@ -560,6 +638,11 @@ button, input, select, textarea {
   background: var(--white);
   border-color: var(--black);
   color: var(--black);
+  transform: translateY(-2px);
+}
+
+.category-pill:active {
+  transform: scale(0.95);
 }
 
 .category-pill.active {
@@ -570,22 +653,13 @@ button, input, select, textarea {
 
 .section-urban {
   padding: 76px 0;
+  scroll-margin-top: 85px;
 }
 
 .section-urban-grey {
   background: var(--grey-card);
   border-top: 1px solid var(--grey-border);
   border-bottom: 1px solid var(--grey-border);
-}
-
-.section-urban-dark {
-  background: var(--black);
-  color: var(--white);
-  padding: 80px 0;
-}
-
-.section-urban-dark h2, .section-urban-dark h3 {
-  color: var(--white);
 }
 
 .section-header-row {
@@ -611,6 +685,21 @@ button, input, select, textarea {
   gap: 26px;
 }
 
+.services-grid-uc .uc-card {
+  animation: cardEntrance 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .uc-card {
   background: var(--white);
   border: 1px solid var(--grey-border);
@@ -623,8 +712,8 @@ button, input, select, textarea {
 
 .uc-card:hover {
   border-color: var(--black);
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-sm);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
 }
 
 .uc-card-media {
@@ -639,11 +728,11 @@ button, input, select, textarea {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .uc-card:hover .uc-card-media img {
-  transform: scale(1.06);
+  transform: scale(1.08);
 }
 
 .uc-card-time {
@@ -718,6 +807,11 @@ button, input, select, textarea {
   font-size: 1.25rem;
   font-weight: 800;
   color: var(--black);
+  transition: transform var(--transition-fast);
+}
+
+.uc-card:hover .uc-price-val {
+  transform: scale(1.05);
 }
 
 .uc-actions-row {
@@ -748,7 +842,8 @@ button, input, select, textarea {
 
 .uc-panel-box:hover {
   border-color: var(--black);
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-sm);
 }
 
 .projects-grid-uc {
@@ -764,13 +859,19 @@ button, input, select, textarea {
   height: 320px;
   border: 1px solid var(--grey-border);
   cursor: pointer;
+  transition: transform var(--transition-bounce), box-shadow var(--transition-fast);
+}
+
+.project-card-uc:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
 }
 
 .project-card-uc img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s ease;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .project-card-uc:hover img {
@@ -797,6 +898,11 @@ button, input, select, textarea {
   font-weight: 700;
   border-radius: var(--radius-full);
   margin-bottom: 8px;
+  transition: transform var(--transition-fast);
+}
+
+.project-card-uc:hover .project-tag-pill {
+  transform: translateY(-3px);
 }
 
 .booking-section-wrapper {
@@ -806,6 +912,11 @@ button, input, select, textarea {
   padding: 44px;
   max-width: 860px;
   margin: 0 auto;
+  transition: box-shadow var(--transition-fast);
+}
+
+.booking-section-wrapper:hover {
+  box-shadow: var(--shadow-sm);
 }
 
 .form-grid-2col {
@@ -835,11 +946,12 @@ button, input, select, textarea {
   font-size: 0.9rem;
   color: var(--black);
   outline: none;
-  transition: border-color var(--transition-fast);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .form-input-uc:focus {
   border-color: var(--black);
+  box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.08);
 }
 
 .date-chips-grid {
@@ -860,6 +972,15 @@ button, input, select, textarea {
   text-align: center;
   cursor: pointer;
   transition: all var(--transition-fast);
+}
+
+.date-pill-opt:hover {
+  border-color: var(--black);
+  transform: translateY(-2px);
+}
+
+.date-pill-opt:active {
+  transform: scale(0.95);
 }
 
 .date-pill-opt.active {
@@ -887,6 +1008,15 @@ button, input, select, textarea {
   transition: all var(--transition-fast);
 }
 
+.time-slot-btn:hover {
+  border-color: var(--black);
+  transform: translateY(-2px);
+}
+
+.time-slot-btn:active {
+  transform: scale(0.95);
+}
+
 .time-slot-btn.active {
   background: var(--black);
   color: var(--white);
@@ -912,6 +1042,10 @@ button, input, select, textarea {
   transition: all var(--transition-fast);
 }
 
+.prop-opt-btn:hover {
+  border-color: var(--black);
+}
+
 .prop-opt-btn.active {
   background: var(--black);
   color: var(--white);
@@ -925,40 +1059,11 @@ button, input, select, textarea {
   border-radius: var(--radius-lg);
   padding: 40px 24px;
   text-align: center;
+  animation: cardEntrance 0.4s ease;
 }
 
 .confirmation-card-success.active {
   display: block;
-}
-
-.forum-box-uc {
-  background: #181818;
-  border: 1px solid #282828;
-  color: var(--white);
-  border-radius: var(--radius-lg);
-  padding: 38px;
-}
-
-.forum-box-uc h3 {
-  color: var(--white);
-  font-size: 1.45rem;
-  margin-bottom: 8px;
-}
-
-.forum-input-dark {
-  width: 100%;
-  padding: 12px 14px;
-  border: 1px solid #333333;
-  border-radius: var(--radius-sm);
-  background: #111111;
-  color: var(--white);
-  font-size: 0.9rem;
-  outline: none;
-  margin-bottom: 14px;
-}
-
-.forum-input-dark:focus {
-  border-color: var(--white);
 }
 
 .areas-pills-wrap {
@@ -988,6 +1093,11 @@ button, input, select, textarea {
   background: var(--black);
   color: var(--white);
   border-color: var(--black);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.area-pill-item:active {
+  transform: scale(0.96);
 }
 
 .area-pill-item.hidden-pill {
@@ -996,6 +1106,18 @@ button, input, select, textarea {
 
 .area-pill-item.hidden-pill.show {
   display: inline-flex;
+  animation: fadeInPill 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fadeInPill {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .faq-minimal-list {
@@ -1011,7 +1133,12 @@ button, input, select, textarea {
   border: 1px solid var(--grey-border);
   border-radius: var(--radius-sm);
   overflow: hidden;
-  transition: border-color var(--transition-fast);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.faq-minimal-card:hover {
+  border-color: var(--black);
+  box-shadow: var(--shadow-subtle);
 }
 
 .faq-trigger-btn {
@@ -1027,21 +1154,28 @@ button, input, select, textarea {
   font-size: 0.975rem;
   font-weight: 600;
   color: var(--black);
+  transition: background var(--transition-fast);
+}
+
+.faq-trigger-btn svg {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .faq-body-text {
   max-height: 0;
   overflow: hidden;
-  transition: max-height var(--transition-normal), padding var(--transition-normal);
+  transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), padding 0.35s ease, opacity 0.3s ease;
   padding: 0 22px;
+  opacity: 0;
   color: var(--text-secondary);
   font-size: 0.875rem;
   line-height: 1.65;
 }
 
 .faq-minimal-card.active .faq-body-text {
-  max-height: 240px;
+  max-height: 260px;
   padding-bottom: 18px;
+  opacity: 1;
 }
 
 .faq-minimal-card.active .faq-trigger-btn svg {
@@ -1079,10 +1213,13 @@ button, input, select, textarea {
 .footer-links-uc a {
   color: #888888;
   font-size: 0.85rem;
+  transition: color var(--transition-fast), padding-left var(--transition-fast);
+  display: inline-block;
 }
 
 .footer-links-uc a:hover {
   color: var(--white);
+  padding-left: 4px;
 }
 
 .footer-bottom-uc {
@@ -1098,12 +1235,12 @@ button, input, select, textarea {
 .service-drawer-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
   z-index: 1000;
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--transition-normal);
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1119,18 +1256,18 @@ button, input, select, textarea {
   background: var(--white);
   border-radius: var(--radius-lg);
   border: 1px solid var(--grey-border);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
   width: 100%;
   max-width: 680px;
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
-  transform: translateY(20px);
-  transition: transform var(--transition-normal);
+  transform: translateY(28px) scale(0.96);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .service-drawer-overlay.active .service-drawer-modal {
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
 .close-modal-btn {
@@ -1154,6 +1291,7 @@ button, input, select, textarea {
 .close-modal-btn:hover {
   background: var(--black);
   color: var(--white);
+  transform: rotate(90deg);
 }
 
 .floating-whatsapp-btn {
@@ -1169,25 +1307,58 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
   transition: all var(--transition-fast);
   border: 2px solid var(--white);
+  animation: floatPulse 4s infinite ease-in-out;
+}
+
+@keyframes floatPulse {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  }
+  50% {
+    transform: translateY(-6px) scale(1.04);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.35);
+  }
 }
 
 .floating-whatsapp-btn:hover {
-  transform: scale(1.08);
-  background: #222222;
+  animation: none;
+  transform: scale(1.12);
+  background: #111111;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
 }
 
 .reveal-item {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
 }
 
 .reveal-item.revealed {
   opacity: 1;
   transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.08s; }
+.reveal-delay-2 { transition-delay: 0.16s; }
+.reveal-delay-3 { transition-delay: 0.24s; }
+.reveal-delay-4 { transition-delay: 0.32s; }
+
+.section-flash-highlight {
+  animation: sectionHighlight 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes sectionHighlight {
+  0% {
+    background-color: rgba(17, 17, 17, 0.05);
+  }
+  100% {
+    background-color: transparent;
+  }
 }
 
 .mobile-bottom-bar {

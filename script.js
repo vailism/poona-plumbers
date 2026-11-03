@@ -233,6 +233,7 @@ let activeLocation = localStorage.getItem('pp_loc') || 'Koregaon Park, Pune';
 let selectedDate = 'Tomorrow';
 let selectedTime = '10:00 AM - 12:00 PM';
 let selectedPropType = 'Residential';
+let countersAnimated = false;
 
 document.addEventListener('DOMContentLoaded', () => {
   renderLocation();
@@ -240,9 +241,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initSearch();
   initDateChips();
   initBookingForm();
-  initForumForm();
   initFaq();
   initScrollEffects();
+  initServiceButtons();
   initLucide();
 });
 
@@ -266,6 +267,29 @@ function switchLocation() {
   renderLocation();
 }
 
+function scrollToServices() {
+  const target = document.getElementById('popularServicesSection');
+  if (target) {
+    target.scrollIntoView({ behavior: 'smooth' });
+    target.classList.remove('section-flash-highlight');
+    void target.offsetWidth;
+    target.classList.add('section-flash-highlight');
+  }
+  const drawer = document.getElementById('mobileNavDrawer');
+  if (drawer && drawer.classList.contains('open')) {
+    drawer.classList.remove('open');
+  }
+}
+
+function initServiceButtons() {
+  document.querySelectorAll('a[href="#popularServicesSection"]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      scrollToServices();
+    });
+  });
+}
+
 function filterServices() {
   const cards = document.querySelectorAll('#servicesGrid .uc-card');
   const q = searchQuery.toLowerCase().trim();
@@ -279,6 +303,9 @@ function filterServices() {
 
     if (matchesCat && matchesQuery) {
       card.style.display = 'flex';
+      card.style.animation = 'none';
+      void card.offsetWidth;
+      card.style.animation = 'cardEntrance 0.45s cubic-bezier(0.16, 1, 0.3, 1) both';
       visibleCount++;
     } else {
       card.style.display = 'none';
@@ -295,7 +322,7 @@ function filterServices() {
       emptyMsg.innerHTML = `
         <h3 style="font-size: 1.15rem; margin-bottom: 6px;">No services matching "${searchQuery}"</h3>
         <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 16px;">Try searching for tap, leakage, drain, or tank.</p>
-        <button type="button" class="btn btn-black btn-sm" onclick="resetSearch()">Show All Services</button>
+        <button type="button" class="btn btn-black btn-sm" onclick="resetSearch(); scrollToServices();">Show All Services</button>
       `;
       grid.appendChild(emptyMsg);
     }
@@ -319,9 +346,9 @@ function initCategories() {
       document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
       pill.classList.add('active');
       selectedCategory = pill.dataset.category;
+      pill.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
       filterServices();
-      const s = document.getElementById('popularServicesSection');
-      if (s) s.scrollIntoView({ behavior: 'smooth' });
+      scrollToServices();
     });
   });
 }
@@ -337,8 +364,7 @@ function initSearch() {
       if (e.key === 'Enter') {
         e.preventDefault();
         filterServices();
-        const s = document.getElementById('popularServicesSection');
-        if (s) s.scrollIntoView({ behavior: 'smooth' });
+        scrollToServices();
       }
     });
   }
@@ -349,8 +375,7 @@ function initSearch() {
       if (input) input.value = q;
       searchQuery = q;
       filterServices();
-      const s = document.getElementById('popularServicesSection');
-      if (s) s.scrollIntoView({ behavior: 'smooth' });
+      scrollToServices();
     });
   });
 }
@@ -397,14 +422,19 @@ function openDetailsModal(serviceId) {
         </ul>
       </div>
 
-      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--grey-border); padding-top: 18px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--grey-border); padding-top: 18px; gap: 12px; flex-wrap: wrap;">
         <div>
           <div style="font-size: 0.75rem; color: var(--text-muted);">Pay after service</div>
           <div style="font-weight: 800; font-size: 1.25rem; color: var(--black);">₹${s.price}</div>
         </div>
-        <button type="button" class="btn btn-black" onclick="closeDetailsModal(); selectAndBook('${s.id}')">
-          Book This Service
-        </button>
+        <div style="display: flex; gap: 8px;">
+          <a href="https://wa.me/919876543210?text=${encodeURIComponent(`Hi Poona Plumbers, I would like to book ${s.name} (₹${s.price}). Please dispatch a technician to ${activeLocation}.`)}" target="_blank" class="btn btn-outline btn-sm">
+            WhatsApp
+          </a>
+          <button type="button" class="btn btn-black btn-sm" onclick="closeDetailsModal(); selectAndBook('${s.id}')">
+            Schedule Visit
+          </button>
+        </div>
       </div>
     </div>
   `;
@@ -438,7 +468,9 @@ function selectAndBook(serviceId) {
   }
   const formSection = document.getElementById('bookingSection');
   if (formSection) {
-    formSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    formSection.scrollIntoView({ behavior: 'smooth' });
+    const nameInput = document.getElementById('bookName');
+    if (nameInput) setTimeout(() => nameInput.focus(), 600);
   }
 }
 
@@ -562,34 +594,6 @@ function initBookingForm() {
   }
 }
 
-function initForumForm() {
-  const form = document.getElementById('forumDirectForm');
-  if (!form) return;
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = document.getElementById('forumUserName').value.trim() || 'Pune Homeowner';
-    const area = document.getElementById('forumUserArea').value.trim() || activeLocation;
-    const cat = document.getElementById('forumUserCat').value;
-    const query = document.getElementById('forumUserQuery').value.trim();
-
-    if (!query) {
-      alert('Please describe your plumbing issue');
-      return;
-    }
-
-    const msg = `💬 *Poona Plumbers - Consultation Query*\n\n` +
-      `👤 *Name:* ${name}\n` +
-      `📍 *Area:* ${area}\n` +
-      `🏷️ *Category:* ${cat}\n` +
-      `❓ *Question:* ${query}\n\n` +
-      `_Please provide diagnosis and approximate quote._`;
-
-    window.open(`https://wa.me/919876543210?text=${encodeURIComponent(msg)}`, '_blank');
-    form.reset();
-  });
-}
-
 function initFaq() {
   document.querySelectorAll('.faq-trigger-btn').forEach(btn => {
     btn.onclick = () => {
@@ -618,6 +622,35 @@ function toggleMobileMenu() {
   }
 }
 
+function animateCounters() {
+  if (countersAnimated) return;
+  const elements = document.querySelectorAll('.counter-val');
+  if (!elements.length) return;
+  countersAnimated = true;
+
+  elements.forEach(el => {
+    const target = parseInt(el.getAttribute('data-target'), 10);
+    const duration = 1600;
+    const startTime = performance.now();
+
+    function updateCounter(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      const current = Math.floor(easeOut * target);
+      el.textContent = current.toLocaleString();
+
+      if (progress < 1) {
+        requestAnimationFrame(updateCounter);
+      } else {
+        el.textContent = target.toLocaleString();
+      }
+    }
+
+    requestAnimationFrame(updateCounter);
+  });
+}
+
 function initScrollEffects() {
   const bar = document.getElementById('scrollProgressBar');
   const nav = document.getElementById('navbar');
@@ -635,17 +668,29 @@ function initScrollEffects() {
   }, { passive: true });
 
   if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries) => {
+    const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('revealed');
-          observer.unobserve(entry.target);
+          revealObserver.unobserve(entry.target);
         }
       });
     }, { threshold: 0.1 });
 
-    document.querySelectorAll('.reveal-item').forEach(el => observer.observe(el));
+    document.querySelectorAll('.reveal-item').forEach(el => revealObserver.observe(el));
+
+    const counterSection = document.getElementById('heroCounters');
+    if (counterSection) {
+      const counterObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          animateCounters();
+          counterObserver.disconnect();
+        }
+      }, { threshold: 0.2 });
+      counterObserver.observe(counterSection);
+    }
   } else {
     document.querySelectorAll('.reveal-item').forEach(el => el.classList.add('revealed'));
+    animateCounters();
   }
 }
