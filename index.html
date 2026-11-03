@@ -19,7 +19,8 @@
     "@type": "Plumber",
     "name": "Poona Plumbers",
     "image": "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=1200&q=80",
-    "telephone": "+919876543210",
+    "telephone": "+917378880404",
+    "email": "Poonaplumber@gmail.com",
     "priceRange": "₹149 - ₹499",
     "address": {
       "@type": "PostalAddress",
@@ -63,20 +64,12 @@
     <div class="container">
       <div class="nav-inner">
         <a href="#home" class="brand-wrapper">
-          <div class="brand-icon">
-            <i data-lucide="wrench" style="width: 18px; height: 18px;"></i>
-          </div>
+          <img src="PP.png" alt="Poona Plumbers Logo" style="width: 36px; height: 36px; border-radius: 8px; object-fit: contain; flex-shrink: 0;" />
           <div>
             <div class="brand-title">POONA PLUMBERS</div>
             <div class="brand-tag">PUNE SERVICE HUB</div>
           </div>
         </a>
-
-        <button type="button" class="location-chip-btn" onclick="switchLocation()" title="Click to change Pune area">
-          <i data-lucide="map-pin" style="width: 14px; height: 14px;"></i>
-          <span id="locationDisplay">Koregaon Park, Pune</span>
-          <i data-lucide="refresh-cw" style="width: 12px; height: 12px; color: var(--text-muted);"></i>
-        </button>
 
         <ul class="nav-links-group">
           <li><a href="#popularServicesSection" class="nav-item-link" id="navServicesBtn">Services</a></li>
@@ -90,10 +83,14 @@
         </ul>
 
         <div class="nav-actions-group">
-          <a href="tel:+919876543210" class="btn btn-black btn-sm">
+          <a href="https://wa.me/917378880404?text=Hi%20Poona%20Plumbers,%20I%20would%20like%20to%20inquire%20about%20plumbing%20services." target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm nav-wa-btn" title="Chat on WhatsApp">
+            <i data-lucide="message-circle" style="width: 14px; height: 14px;"></i>
+            <span>WhatsApp</span>
+          </a>
+          <button type="button" onclick="openCallModal()" class="btn btn-black btn-sm" title="Call Us Now">
             <i data-lucide="phone" style="width: 14px; height: 14px;"></i>
             <span>Call Now</span>
-          </a>
+          </button>
           <button type="button" class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle Navigation">
             <i data-lucide="menu" style="width: 22px; height: 22px;"></i>
           </button>
@@ -113,8 +110,14 @@
         <li><a href="#faqSection" onclick="toggleMobileMenu()">FAQ</a></li>
       </ul>
       <div style="display: flex; gap: 10px;">
-        <a href="tel:+919876543210" class="btn btn-black btn-sm" style="flex: 1;">Call Now</a>
-        <a href="#popularServicesSection" class="btn btn-outline btn-sm" style="flex: 1;" onclick="toggleMobileMenu(); scrollToServices();">Explore Services</a>
+        <button type="button" onclick="toggleMobileMenu(); openCallModal();" class="btn btn-black btn-sm" style="flex: 1;">
+          <i data-lucide="phone" style="width: 14px; height: 14px;"></i>
+          <span>Call Now</span>
+        </button>
+        <a href="https://wa.me/917378880404?text=Hi%20Poona%20Plumbers,%20I%20need%20plumbing%20services." target="_blank" class="btn btn-outline btn-sm" style="flex: 1;">
+          <i data-lucide="message-circle" style="width: 14px; height: 14px;"></i>
+          <span>WhatsApp</span>
+        </a>
       </div>
     </div>
   </header>
@@ -138,9 +141,10 @@
               <div style="font-weight: 700; font-size: 0.95rem; margin-bottom: 2px;">⚡ Priority Emergency Dispatch Activated</div>
               <div style="font-size: 0.8rem; opacity: 0.85;">Technicians on duty across Pune hubs. Guaranteed arrival in 30–45 mins.</div>
             </div>
-            <a href="tel:+919876543210" class="btn btn-white btn-sm" style="flex-shrink: 0;">
-              Call Priority Line
-            </a>
+            <button type="button" onclick="openCallModal()" class="btn btn-white btn-sm" style="flex-shrink: 0;">
+              <i data-lucide="phone-call" style="width: 14px; height: 14px;"></i>
+              <span>Call 7378880404</span>
+            </button>
           </div>
 
           <h1 class="hero-heading" id="heroHeading">
@@ -191,7 +195,7 @@
         </div>
 
         <div class="hero-visual-box">
-          <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=1200&q=80" alt="Professional Plumber at Work" />
+          <img src="logo.png" alt="Poona Plumbers Professional Work" />
           <div class="hero-floating-card-1">
             <div style="font-weight: 800; font-size: 1.05rem; color: var(--black);">★ 4.9 Rating</div>
             <div style="font-size: 0.725rem; color: var(--text-secondary);">2,500+ Verified Reviews</div>
@@ -596,14 +600,14 @@
                 <span class="uc-price-val">₹99</span>
               </div>
               <div class="uc-custom-actions">
-                <a href="https://wa.me/919876543210?text=Hi%20Poona%20Plumbers,%20I%20have%20a%20custom%20plumbing%20requirement.%20Please%20provide%20a%20consultation%20and%20estimate." target="_blank" rel="noopener noreferrer" class="btn-custom-whatsapp" id="customServiceWhatsappBtn" aria-label="Message on WhatsApp">
+                <a href="https://wa.me/917378880404?text=Hi%20Poona%20Plumbers,%20I%20have%20a%20custom%20plumbing%20requirement.%20Please%20provide%20a%20consultation%20and%20estimate." target="_blank" rel="noopener noreferrer" class="btn-custom-whatsapp" id="customServiceWhatsappBtn" aria-label="Message on WhatsApp">
                   <i data-lucide="message-circle" style="width: 15px; height: 15px;"></i>
                   <span>Message</span>
                 </a>
-                <a href="tel:+919876543210" class="btn-custom-phone" id="customServicePhoneBtn" aria-label="Call Master Plumber">
+                <button type="button" onclick="openCallModal()" class="btn-custom-phone" id="customServicePhoneBtn" aria-label="Call Master Plumber">
                   <i data-lucide="phone" style="width: 15px; height: 15px;"></i>
                   <span>Call Now</span>
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -892,7 +896,7 @@
             <i data-lucide="zap" style="width: 16px; height: 16px;"></i>
             <span>Prefer booking in 1 click? Chat with our Pune dispatcher</span>
           </div>
-          <a href="https://wa.me/919876543210?text=Hi%20Poona%20Plumbers,%20I%20would%20like%20to%20quickly%20book%20a%20technician%20in%20Pune." target="_blank" rel="noopener noreferrer" class="quick-wa-btn">
+          <a href="https://wa.me/917378880404?text=Hi%20Poona%20Plumbers,%20I%20would%20like%20to%20quickly%20book%20a%20technician%20in%20Pune." target="_blank" rel="noopener noreferrer" class="quick-wa-btn">
             <i data-lucide="message-circle" style="width: 14px; height: 14px;"></i>
             <span>Quick Book on WhatsApp</span>
           </a>
@@ -1020,14 +1024,14 @@
                 <label>Mobile Number (10 digits) *</label>
                 <div class="phone-input-wrap">
                   <span class="phone-prefix">+91</span>
-                  <input type="tel" id="bookPhone" class="form-input-uc" placeholder="9876543210" maxlength="10" required />
+                  <input type="tel" id="bookPhone" class="form-input-uc" placeholder="7378880404" maxlength="10" required />
                 </div>
               </div>
             </div>
 
             <div class="form-group-uc">
-              <label>Doorstep Address in Pune *</label>
-              <input type="text" id="bookAddress" class="form-input-uc" placeholder="Flat / House No., Society Name, Street, Locality" required />
+              <label>Doorstep Address in Pune (Optional)</label>
+              <input type="text" id="bookAddress" class="form-input-uc" placeholder="Society / Locality or share location on WhatsApp" />
             </div>
 
             <div class="form-group-uc">
@@ -1083,7 +1087,7 @@
                   <i data-lucide="map-pin" style="width: 15px; height: 15px;"></i>
                   <span>Doorstep Address</span>
                 </div>
-                <div class="review-item-val" id="reviewAddress">Flat 302, Koregaon Park, Pune</div>
+                <div class="review-item-val" id="reviewAddress">Pune (Shared on WhatsApp)</div>
               </div>
 
               <div class="review-item-row">
@@ -1091,7 +1095,7 @@
                   <i data-lucide="user" style="width: 15px; height: 15px;"></i>
                   <span>Customer Contact</span>
                 </div>
-                <div class="review-item-val" id="reviewContact">Anand Kulkarni (+91 9876543210)</div>
+                <div class="review-item-val" id="reviewContact">Anand Kulkarni (+91 73788 80404)</div>
               </div>
 
               <div class="review-item-row review-pricing-row">
@@ -1242,9 +1246,7 @@
       <div class="footer-uc-grid">
         <div>
           <div class="brand-wrapper" style="margin-bottom: 14px;">
-            <div class="brand-icon" style="background: var(--white); color: var(--black);">
-              <i data-lucide="wrench" style="width: 18px; height: 18px;"></i>
-            </div>
+            <img src="PP.png" alt="Poona Plumbers Logo" style="width: 36px; height: 36px; border-radius: 8px; object-fit: contain; flex-shrink: 0;" />
             <div>
               <div class="brand-title" style="color: var(--white);">POONA PLUMBERS</div>
               <div class="brand-tag" style="color: #888888;">PROFESSIONAL HOME SERVICES</div>
@@ -1284,8 +1286,17 @@
           <p style="font-size: 0.825rem; color: #888888; line-height: 1.6; margin-bottom: 12px;">
             Koregaon Park, Kothrud, Baner, Hinjewadi, Viman Nagar, Kalyani Nagar, Aundh, Wakad, Magarpatta, Hadapsar, Shivaji Nagar, Camp.
           </p>
-          <div style="font-size: 0.875rem; color: var(--white); font-weight: 700;">
-            Support Helpline: +91 98765 43210
+          <div style="font-size: 0.875rem; color: var(--white); font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+            <i data-lucide="phone" style="width: 14px; height: 14px;"></i>
+            <span>Support: <a href="tel:+917378880404" style="color: inherit; text-decoration: none;">+91 73788 80404</a></span>
+          </div>
+          <div style="font-size: 0.85rem; color: #888888; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+            <i data-lucide="mail" style="width: 14px; height: 14px;"></i>
+            <span>Email: <a href="mailto:Poonaplumber@gmail.com" style="color: var(--white); text-decoration: underline;">Poonaplumber@gmail.com</a></span>
+          </div>
+          <div style="font-size: 0.85rem; color: #888888; display: flex; align-items: center; gap: 6px;">
+            <i data-lucide="message-circle" style="width: 14px; height: 14px;"></i>
+            <span>WhatsApp: <a href="https://wa.me/917378880404" target="_blank" style="color: var(--white); text-decoration: underline;">+91 73788 80404</a></span>
           </div>
         </div>
       </div>
@@ -1310,19 +1321,71 @@
     </div>
   </div>
 
+  <div class="service-drawer-overlay" id="phoneCallModal" onclick="if(event.target===this) closeCallModal()">
+    <div class="call-modal-box">
+      <button type="button" class="close-modal-btn" onclick="closeCallModal()">
+        <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+      </button>
+      <div class="call-modal-header">
+        <div class="call-modal-icon-badge">
+          <i data-lucide="phone-call" style="width: 24px; height: 24px;"></i>
+        </div>
+        <div class="call-online-tag">
+          <span class="pulse-radar-dot"></span>
+          <span>Technical Dispatchers Available Now</span>
+        </div>
+        <h3 class="call-modal-title">Call Poona Plumbers</h3>
+        <p class="call-modal-desc">Connect directly with our senior technician in Pune for immediate booking, custom estimates, or emergency assistance.</p>
+      </div>
+
+      <div class="call-number-display">
+        <div class="call-number-text">+91 73788 80404</div>
+        <button type="button" class="copy-number-btn" onclick="copyPhoneNumber(this)" title="Copy phone number">
+          <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
+          <span>Copy</span>
+        </button>
+      </div>
+
+      <div class="call-modal-actions">
+        <a href="tel:+917378880404" class="btn btn-black btn-modal-call">
+          <i data-lucide="phone" style="width: 16px; height: 16px;"></i>
+          <span>Start Phone Call</span>
+        </a>
+        <a href="https://wa.me/917378880404?text=Hi%20Poona%20Plumbers,%20I%20would%20like%20to%20speak%20with%20a%20technician." target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-modal-wa">
+          <i data-lucide="message-circle" style="width: 16px; height: 16px;"></i>
+          <span>Chat on WhatsApp</span>
+        </a>
+      </div>
+
+      <div class="call-modal-footer">
+        <div class="call-modal-email">
+          <i data-lucide="mail" style="width: 14px; height: 14px;"></i>
+          <span>Email: <a href="mailto:Poonaplumber@gmail.com">Poonaplumber@gmail.com</a></span>
+        </div>
+        <div class="call-modal-info">Available 24/7 across all Pune localities</div>
+      </div>
+    </div>
+  </div>
+
   <div class="mobile-bottom-bar">
-    <a href="tel:+919876543210" class="btn btn-black btn-sm" style="flex: 1;">
+    <button type="button" onclick="openCallModal()" class="btn btn-black btn-sm" style="flex: 1;">
       <i data-lucide="phone" style="width: 14px; height: 14px;"></i>
-      Call Now
-    </a>
-    <a href="#popularServicesSection" class="btn btn-outline btn-sm" style="flex: 1;" onclick="scrollToServices()">
-      Explore Services
+      <span>Call Now</span>
+    </button>
+    <a href="https://wa.me/917378880404?text=Hi%20Poona%20Plumbers,%20I%20need%20plumbing%20services.%20Please%20share%20details." target="_blank" class="btn btn-outline btn-sm" style="flex: 1;">
+      <i data-lucide="message-circle" style="width: 14px; height: 14px;"></i>
+      <span>WhatsApp</span>
     </a>
   </div>
 
-  <a href="https://wa.me/919876543210?text=Hi%20Poona%20Plumbers,%20I%20need%20plumbing%20services.%20Please%20share%20details." target="_blank" class="floating-whatsapp-btn" aria-label="Chat on WhatsApp">
-    <i data-lucide="message-circle" style="width: 28px; height: 28px;"></i>
-  </a>
+  <div class="floating-contact-group">
+    <button type="button" class="floating-call-btn" onclick="openCallModal()" aria-label="Call 7378880404" title="Call Us">
+      <i data-lucide="phone" style="width: 22px; height: 22px;"></i>
+    </button>
+    <a href="https://wa.me/917378880404?text=Hi%20Poona%20Plumbers,%20I%20need%20plumbing%20services.%20Please%20share%20details." target="_blank" class="floating-whatsapp-btn" aria-label="Chat on WhatsApp" title="WhatsApp Us">
+      <i data-lucide="message-circle" style="width: 24px; height: 24px;"></i>
+    </a>
+  </div>
 
   <script src="script.js"></script>
 </body>

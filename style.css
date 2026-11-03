@@ -2061,6 +2061,188 @@ button, input, select, textarea {
   transform: rotate(90deg);
 }
 
+.call-modal-box {
+  background: var(--white);
+  border: 1px solid var(--grey-border);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  max-width: 440px;
+  width: 100%;
+  position: relative;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(28px) scale(0.96);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.service-drawer-overlay.active .call-modal-box {
+  transform: translateY(0) scale(1);
+}
+
+.call-modal-icon-badge {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--black);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px auto;
+}
+
+.call-online-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--grey-light);
+  border: 1px solid var(--grey-border);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 12px;
+}
+
+.call-modal-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--black);
+  margin-bottom: 6px;
+}
+
+.call-modal-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 18px;
+}
+
+.call-number-display {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--grey-light);
+  border: 1.5px solid var(--grey-border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+.call-number-text {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--black);
+  letter-spacing: 0.5px;
+}
+
+.copy-number-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--white);
+  border: 1px solid var(--grey-border);
+  padding: 6px 12px;
+  border-radius: var(--radius-xs);
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: var(--black);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.copy-number-btn:hover {
+  background: var(--black);
+  color: var(--white);
+  border-color: var(--black);
+}
+
+.call-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.btn-modal-call, .btn-modal-wa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+}
+
+.call-modal-footer {
+  border-top: 1px solid var(--grey-border);
+  padding-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.call-modal-email {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.call-modal-email a {
+  color: var(--black);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.call-modal-info {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.floating-contact-group {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 999;
+}
+
+.floating-call-btn {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: var(--black);
+  color: var(--white);
+  border: 2px solid var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: transform var(--transition-bounce), background var(--transition-fast);
+}
+
+.floating-call-btn:hover {
+  transform: scale(1.1);
+  background: var(--text-primary);
+}
+
+.floating-contact-group .floating-whatsapp-btn {
+  position: static;
+  bottom: auto;
+  right: auto;
+  width: 54px;
+  height: 54px;
+}
+
 .floating-whatsapp-btn {
   position: fixed;
   bottom: 24px;
@@ -2241,8 +2423,17 @@ button, input, select, textarea {
   body {
     padding-bottom: 70px;
   }
-  .floating-whatsapp-btn {
+  .floating-contact-group {
     bottom: 80px;
+    right: 14px;
+    gap: 8px;
+  }
+  .floating-call-btn, .floating-contact-group .floating-whatsapp-btn {
+    width: 46px;
+    height: 46px;
+  }
+  .nav-wa-btn span {
+    display: none;
   }
   .services-grid-uc .uc-card.uc-card-custom {
     grid-column: span 1;

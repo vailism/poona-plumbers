@@ -588,7 +588,7 @@ function dispatchCalculatorWhatsApp() {
     `📍 *Location:* ${activeLocation}\n\n` +
     `_Please check technician availability for this package visit._`;
 
-  window.open(`https://wa.me/919876543210?text=${encodeURIComponent(msg)}`, '_blank');
+  window.open(`https://wa.me/917378880404?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
 function transferCalculatorToBooking() {
@@ -716,7 +716,7 @@ function openDetailsModal(serviceId) {
           <div style="font-weight: 800; font-size: 1.25rem; color: var(--black);">₹${s.price}</div>
         </div>
         <div style="display: flex; gap: 8px;">
-          <a href="https://wa.me/919876543210?text=${encodeURIComponent(`Hi Poona Plumbers, I would like to book ${s.name} (₹${s.price}). Please dispatch a technician to ${activeLocation}.`)}" target="_blank" class="btn btn-outline btn-sm">
+          <a href="https://wa.me/917378880404?text=${encodeURIComponent(`Hi Poona Plumbers, I would like to book ${s.name} (₹${s.price}). Please dispatch a technician to ${activeLocation}.`)}" target="_blank" class="btn btn-outline btn-sm">
             WhatsApp
           </a>
           <button type="button" class="btn btn-black btn-sm" onclick="closeDetailsModal(); selectAndBook('${s.id}')">
@@ -739,8 +739,44 @@ function closeDetailsModal() {
   }
 }
 
+function openCallModal() {
+  const modal = document.getElementById('phoneCallModal');
+  if (modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+}
+
+function closeCallModal() {
+  const modal = document.getElementById('phoneCallModal');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+function copyPhoneNumber(btn) {
+  navigator.clipboard.writeText('7378880404').then(() => {
+    const origHtml = btn.innerHTML;
+    btn.innerHTML = `<i data-lucide="check" style="width: 14px; height: 14px;"></i><span>Copied!</span>`;
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+    setTimeout(() => {
+      btn.innerHTML = origHtml;
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }, 2000);
+  }).catch(() => {
+    alert('Phone number: +91 73788 80404');
+  });
+}
+
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeDetailsModal();
+  if (e.key === 'Escape') {
+    closeDetailsModal();
+    closeCallModal();
+  }
 });
 
 let currentBookingStep = 1;
@@ -786,7 +822,6 @@ function goToStep(step) {
 function validateStep2() {
   const name = document.getElementById('bookName').value.trim();
   const phone = document.getElementById('bookPhone').value.trim();
-  const address = document.getElementById('bookAddress').value.trim();
 
   if (name.length < 2) {
     alert('Please enter your full name');
@@ -796,11 +831,6 @@ function validateStep2() {
   if (!/^[6-9]\d{9}$/.test(phone.replace(/\D/g, ''))) {
     alert('Please enter a valid 10-digit mobile number');
     document.getElementById('bookPhone').focus();
-    return false;
-  }
-  if (address.length < 4) {
-    alert('Please provide your complete doorstep address in Pune');
-    document.getElementById('bookAddress').focus();
     return false;
   }
   return true;
@@ -816,7 +846,7 @@ function validateAndGoToStep3() {
 
   const name = document.getElementById('bookName').value.trim();
   const phone = document.getElementById('bookPhone').value.trim();
-  const address = document.getElementById('bookAddress').value.trim();
+  const address = (document.getElementById('bookAddress')?.value || '').trim();
 
   const rService = document.getElementById('reviewServiceName');
   const rSchedule = document.getElementById('reviewSchedule');
@@ -826,7 +856,7 @@ function validateAndGoToStep3() {
 
   if (rService) rService.textContent = serviceName;
   if (rSchedule) rSchedule.textContent = `${selectedDate} (${selectedTime})`;
-  if (rAddress) rAddress.textContent = `${address} (${selectedPropType})`;
+  if (rAddress) rAddress.textContent = address ? `${address} (${selectedPropType})` : `Pune (${selectedPropType}) - Shared via WhatsApp`;
   if (rContact) rContact.textContent = `${name} (+91 ${phone})`;
   if (rPrice) rPrice.textContent = price;
 
@@ -843,7 +873,7 @@ function submitMultiStepBooking() {
   const phone = document.getElementById('bookPhone').value.trim();
   const select = document.getElementById('bookServiceSelect');
   const service = select ? select.value : 'General Plumbing';
-  const address = document.getElementById('bookAddress').value.trim();
+  const address = (document.getElementById('bookAddress')?.value || '').trim();
   const notes = document.getElementById('bookNotes').value.trim();
 
   const bookingId = `PN-${Math.floor(10000 + Math.random() * 90000)}`;
@@ -855,7 +885,7 @@ function submitMultiStepBooking() {
       <strong>Service:</strong> ${service}<br/>
       <strong>Schedule:</strong> ${selectedDate} (${selectedTime})<br/>
       <strong>Customer:</strong> ${name} (+91 ${phone})<br/>
-      <strong>Address:</strong> ${address} (${selectedPropType})<br/>
+      <strong>Address:</strong> ${address ? address : 'Confirmed via WhatsApp'} (${selectedPropType})<br/>
       <strong>Payment Mode:</strong> Pay After Service (Cash / UPI)
     `;
   }
@@ -874,18 +904,18 @@ function submitMultiStepBooking() {
     `🛠️ *Service:* ${service}\n` +
     `📅 *Schedule:* ${selectedDate} (${selectedTime})\n` +
     `🏠 *Property:* ${selectedPropType}\n` +
-    `📍 *Address:* ${address}, ${activeLocation}\n` +
+    `📍 *Address:* ${address ? address : 'Will share location on WhatsApp'}, ${activeLocation}\n` +
     `${notes ? `📝 *Notes:* ${notes}\n` : ''}\n` +
     `_Please confirm technician dispatch. Thank you!_`;
 
   const waBtn = document.getElementById('openWhatsAppBookingBtn');
   if (waBtn) {
     waBtn.onclick = () => {
-      window.open(`https://wa.me/919876543210?text=${encodeURIComponent(msg)}`, '_blank');
+      window.open(`https://wa.me/917378880404?text=${encodeURIComponent(msg)}`, '_blank');
     };
   }
 
-  window.open(`https://wa.me/919876543210?text=${encodeURIComponent(msg)}`, '_blank');
+  window.open(`https://wa.me/917378880404?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
 function resetMultiStepBooking() {
