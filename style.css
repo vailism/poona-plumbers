@@ -2222,7 +2222,8 @@ button, input, select, textarea {
   z-index: 999;
 }
 
-.floating-call-btn {
+.floating-call-btn,
+.floating-gmail-btn {
   width: 54px;
   height: 54px;
   border-radius: 50%;
@@ -2235,11 +2236,14 @@ button, input, select, textarea {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
   cursor: pointer;
   transition: transform var(--transition-bounce), background var(--transition-fast);
+  text-decoration: none;
 }
 
-.floating-call-btn:hover {
+.floating-call-btn:hover,
+.floating-gmail-btn:hover {
   transform: scale(1.1);
   background: var(--text-primary);
+  color: var(--white);
 }
 
 .floating-contact-group .floating-whatsapp-btn {
@@ -2442,7 +2446,9 @@ button, input, select, textarea {
     right: 14px;
     gap: 8px;
   }
-  .floating-call-btn, .floating-contact-group .floating-whatsapp-btn {
+  .floating-call-btn,
+  .floating-gmail-btn,
+  .floating-contact-group .floating-whatsapp-btn {
     width: 46px;
     height: 46px;
   }
