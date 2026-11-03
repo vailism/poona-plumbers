@@ -604,9 +604,13 @@ button, input, select, textarea {
   border-radius: var(--radius-lg);
   overflow: hidden;
   border: 1px solid var(--grey-border);
-  background: var(--grey-light);
+  background: #000000;
   box-shadow: var(--shadow-md);
   transition: box-shadow var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 460px;
 }
 
 .hero-visual-box:hover {
@@ -615,13 +619,16 @@ button, input, select, textarea {
 
 .hero-visual-box img {
   width: 100%;
-  height: 440px;
-  object-fit: cover;
+  height: 460px;
+  object-fit: contain;
+  background: #000000;
+  padding: 36px 28px 90px 28px;
+  display: block;
   transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .hero-visual-box:hover img {
-  transform: scale(1.04);
+  transform: scale(1.02);
 }
 
 .hero-floating-card-1 {
@@ -2416,6 +2423,13 @@ button, input, select, textarea {
   .emergency-banner-box {
     flex-direction: column;
     text-align: center;
+  }
+  .hero-visual-box {
+    min-height: 380px;
+  }
+  .hero-visual-box img {
+    height: 380px;
+    padding: 30px 16px 85px 16px;
   }
   .mobile-bottom-bar {
     display: flex;
