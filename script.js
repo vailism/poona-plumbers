@@ -257,6 +257,7 @@ let selectedTime = '10:00 AM - 12:00 PM';
 let selectedPropType = 'Residential';
 let countersAnimated = false;
 let selectedCalcItems = new Set(['tap-repair', 'drain-cleaning']);
+const GOOGLE_SHEET_WEBHOOK_URL = '';
 
 document.addEventListener('DOMContentLoaded', () => {
   renderLocation();
@@ -270,8 +271,23 @@ document.addEventListener('DOMContentLoaded', () => {
   initServiceButtons();
   initCalculator();
   initComparisonSlider();
+  updateBookingHistoryCount();
   initLucide();
 });
+
+function sendToGoogleSheet(data) {
+  if (!GOOGLE_SHEET_WEBHOOK_URL) return;
+  try {
+    fetch(GOOGLE_SHEET_WEBHOOK_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    }).catch(() => {});
+  } catch (err) {}
+}
 
 function initLucide() {
   if (typeof lucide !== 'undefined') {
@@ -883,6 +899,23 @@ function submitMultiStepBooking() {
 
   const bookingId = `PN-${Math.floor(10000 + Math.random() * 90000)}`;
 
+  const bookingPayload = {
+    bookingId,
+    timestamp: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+    service,
+    schedule: `${selectedDate} (${selectedTime})`,
+    customerName: name,
+    customerPhone: phone,
+    propertyType: selectedPropType,
+    address: address || 'Shared on WhatsApp',
+    locality: activeLocation,
+    notes: notes || 'None',
+    status: 'Confirmed'
+  };
+
+  sendToGoogleSheet(bookingPayload);
+  saveBookingToHistory(bookingPayload);
+
   const summaryDetails = document.getElementById('confirmedSummaryDetails');
   if (summaryDetails) {
     summaryDetails.innerHTML = `
@@ -1111,4 +1144,91 @@ function initScrollEffects() {
     document.querySelectorAll('.reveal-item').forEach(el => el.classList.add('revealed'));
     animateCounters();
   }
+}
+
+function getBookingHistory() {
+  try {
+    return JSON.parse(localStorage.getItem('pp_bookings') || '[]');
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveBookingToHistory(item) {
+  const list = getBookingHistory();
+  list.unshift(item);
+  localStorage.setItem('pp_bookings', JSON.stringify(list.slice(0, 20)));
+  updateBookingHistoryCount();
+}
+
+function updateBookingHistoryCount() {
+  const count = getBookingHistory().length;
+  const navBadge = document.getElementById('navBookingCount');
+  const mobBadge = document.getElementById('mobileBookingCount');
+  if (navBadge) {
+    navBadge.textContent = count;
+    navBadge.style.display = count > 0 ? 'inline-flex' : 'none';
+  }
+  if (mobBadge) {
+    mobBadge.textContent = count;
+  }
+}
+
+function openBookingsHistoryModal() {
+  const modal = document.getElementById('bookingsHistoryModal');
+  const container = document.getElementById('bookingHistoryListContainer');
+  if (!modal || !container) return;
+
+  const history = getBookingHistory();
+  if (history.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 32px 16px; color: var(--text-secondary);">
+        <i data-lucide="calendar-x" style="width: 32px; height: 32px; margin: 0 auto 10px auto; display: block; opacity: 0.4;"></i>
+        <div style="font-weight: 700; margin-bottom: 4px; color: var(--black);">No Bookings Yet</div>
+        <div style="font-size: 0.8rem;">Your scheduled doorstep services will appear here.</div>
+      </div>
+    `;
+  } else {
+    container.innerHTML = history.map(b => `
+      <div class="history-card-item">
+        <div class="history-card-header">
+          <strong style="color: var(--black); font-size: 0.9rem;">${b.service}</strong>
+          <span class="badge-tag">${b.bookingId}</span>
+        </div>
+        <div class="history-card-body">
+          <div>📅 ${b.schedule}</div>
+          <div>📍 ${b.address} (${b.locality})</div>
+          <div>👤 ${b.customerName} • +91 ${b.customerPhone}</div>
+        </div>
+        <button type="button" class="btn btn-black btn-sm" onclick="closeBookingsHistoryModal(); rebookFromHistory('${b.service}')" style="width: 100%;">
+          Re-Book This Service
+        </button>
+      </div>
+    `).join('');
+  }
+
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function closeBookingsHistoryModal() {
+  const modal = document.getElementById('bookingsHistoryModal');
+  if (modal) modal.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function rebookFromHistory(serviceName) {
+  const select = document.getElementById('bookServiceSelect');
+  if (select) {
+    for (let i = 0; i < select.options.length; i++) {
+      if (select.options[i].value === serviceName || select.options[i].text.includes(serviceName)) {
+        select.selectedIndex = i;
+        break;
+      }
+    }
+  }
+  goToStep(1);
+  const formSection = document.getElementById('bookingSection');
+  if (formSection) formSection.scrollIntoView({ behavior: 'smooth' });
 }

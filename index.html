@@ -87,6 +87,11 @@
         </ul>
 
         <div class="nav-actions-group">
+          <button type="button" class="btn btn-outline btn-sm nav-history-btn" onclick="openBookingsHistoryModal()" title="View My Bookings" id="navHistoryBtn">
+            <i data-lucide="clock" style="width: 14px; height: 14px;"></i>
+            <span>My Bookings</span>
+            <span class="booking-count-badge" id="navBookingCount" style="display: none;">0</span>
+          </button>
           <a href="https://wa.me/917378880404?text=Hi%20Poona%20Plumbers,%20I%20would%20like%20to%20inquire%20about%20plumbing%20services." target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm nav-wa-btn" title="Chat on WhatsApp">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 00-3.48-8.413Z"/></svg>
             <span>WhatsApp</span>
@@ -104,6 +109,7 @@
 
     <div class="mobile-nav-drawer" id="mobileNavDrawer">
       <ul class="mobile-nav-links">
+        <li><a href="javascript:void(0)" onclick="toggleMobileMenu(); openBookingsHistoryModal();">My Bookings (<span id="mobileBookingCount">0</span>)</a></li>
         <li><a href="#popularServicesSection" onclick="toggleMobileMenu(); scrollToServices();">Services</a></li>
         <li><a href="#calculatorSection" onclick="toggleMobileMenu()">Price Calculator</a></li>
         <li><a href="#workmanshipSection" onclick="toggleMobileMenu()">Quality</a></li>
@@ -625,6 +631,44 @@
     </div>
   </section>
 
+  <section class="section-urban" id="photoEstimateSection" style="padding-top: 0; padding-bottom: 32px;">
+    <div class="container">
+      <div class="photo-estimate-card">
+        <div class="photo-estimate-content">
+          <span class="badge-tag" style="margin-bottom: 8px;">Instant Pre-Diagnosis</span>
+          <h3 style="font-size: 1.45rem; margin-bottom: 8px; color: var(--black);">Not Sure What the Issue Is?</h3>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; max-width: 520px; margin-bottom: 18px;">
+            Snap a quick photo or 5-second video of your leaking pipe, tap, or fixture. Our Pune master plumber will diagnose the issue and reply with an estimated repair quote in under 2 minutes.
+          </p>
+          <div class="photo-estimate-actions">
+            <a href="https://wa.me/917378880404?text=Hi%20Poona%20Plumbers,%20I'm%20sharing%20a%20photo%20of%20my%20plumbing%20problem.%20Please%20provide%20a%20quick%20diagnosis%20and%20estimate." target="_blank" rel="noopener noreferrer" class="btn btn-black btn-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 00-3.48-8.413Z"/></svg>
+              <span>Send Photo on WhatsApp</span>
+            </a>
+            <a href="https://wa.me/917378880404?text=Hi%20Poona%20Plumbers,%20I'm%20sharing%20a%20voice%20note%20explaining%20my%20plumbing%20issue." target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+              <i data-lucide="mic" style="width: 15px; height: 15px;"></i>
+              <span>Send Voice Note</span>
+            </a>
+          </div>
+        </div>
+        <div class="photo-estimate-badge-group">
+          <div class="pe-badge">
+            <i data-lucide="clock" style="width: 17px; height: 17px;"></i>
+            <span>Average reply: <strong>&lt; 2 minutes</strong></span>
+          </div>
+          <div class="pe-badge">
+            <i data-lucide="shield-check" style="width: 17px; height: 17px;"></i>
+            <span>100% Free Consultation</span>
+          </div>
+          <div class="pe-badge">
+            <i data-lucide="map-pin" style="width: 17px; height: 17px;"></i>
+            <span>All Pune Localities Covered</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section-urban section-urban-grey" id="calculatorSection">
     <div class="container">
       <div style="max-width: 600px; margin-bottom: 36px;">
@@ -666,6 +710,18 @@
               </button>
             </div>
           </div>
+        </div>
+
+        <div class="payment-modes-strip">
+          <div class="payment-strip-title">Supported Post-Service Payment Modes</div>
+          <div class="payment-logos-list">
+            <span class="pay-chip">Google Pay</span>
+            <span class="pay-chip">PhonePe</span>
+            <span class="pay-chip">Paytm</span>
+            <span class="pay-chip">BHIM UPI</span>
+            <span class="pay-chip">Cash on Completion</span>
+          </div>
+          <div class="payment-strip-sub">Pay ₹0 in advance • Pay securely only after technician completes leak-free testing</div>
         </div>
       </div>
     </div>
@@ -952,8 +1008,43 @@
           <div style="background: var(--white); border: 1px solid var(--grey-border); border-radius: var(--radius-md); padding: 18px; max-width: 500px; margin: 0 auto 24px auto; text-align: left; font-size: 0.85rem; line-height: 1.8;" id="confirmedSummaryDetails">
           </div>
 
+          <div class="booking-timeline-tracker">
+            <div class="timeline-step done">
+              <div class="timeline-indicator"><i data-lucide="check" style="width: 13px; height: 13px;"></i></div>
+              <div>
+                <div class="timeline-step-name">1. Request Received & Logged</div>
+                <div class="timeline-step-desc">Dispatched to Pune Central Hub</div>
+              </div>
+            </div>
+            <div class="timeline-step current">
+              <div class="timeline-indicator"><i data-lucide="radio" style="width: 13px; height: 13px;"></i></div>
+              <div>
+                <div class="timeline-step-name">2. Technician Assignment</div>
+                <div class="timeline-step-desc">Matching nearest vetted professional</div>
+              </div>
+            </div>
+            <div class="timeline-step pending">
+              <div class="timeline-indicator">3</div>
+              <div>
+                <div class="timeline-step-name">3. WhatsApp Confirmation Call</div>
+                <div class="timeline-step-desc">Technician confirms parts & arrival time</div>
+              </div>
+            </div>
+            <div class="timeline-step pending">
+              <div class="timeline-indicator">4</div>
+              <div>
+                <div class="timeline-step-name">4. Doorstep Service & 30-Day Warranty</div>
+                <div class="timeline-step-desc">Clean job execution with digital invoice</div>
+              </div>
+            </div>
+          </div>
+
           <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
             <button type="button" class="btn btn-outline" id="bookAnotherBtn" onclick="resetMultiStepBooking()">Book Another Service</button>
+            <button type="button" class="btn btn-outline btn-print-receipt" onclick="window.print()">
+              <i data-lucide="printer" style="width: 15px; height: 15px;"></i>
+              <span>Print Receipt</span>
+            </button>
             <button type="button" class="btn btn-black" id="openWhatsAppBookingBtn">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 00-3.48-8.413Z"/></svg>
               <span>Open WhatsApp Ticket</span>
@@ -1385,6 +1476,29 @@
           <span>Email: <a href="mailto:Poonaplumber@gmail.com">Poonaplumber@gmail.com</a></span>
         </div>
         <div class="call-modal-info">Available 24/7 across all Pune localities</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="service-drawer-overlay" id="bookingsHistoryModal" onclick="if(event.target===this) closeBookingsHistoryModal()">
+    <div class="service-drawer-modal" style="max-width: 520px;">
+      <button type="button" class="close-modal-btn" onclick="closeBookingsHistoryModal()">
+        <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+      </button>
+      <div style="padding: 24px;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+          <i data-lucide="clock" style="width: 20px; height: 20px; color: var(--black);"></i>
+          <h3 style="font-size: 1.3rem; margin: 0; color: var(--black);">My Service Bookings</h3>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 20px;">
+          Saved history of your past and upcoming doorstep plumbing bookings in Pune.
+        </p>
+        <div id="bookingHistoryListContainer" style="max-height: 60vh; overflow-y: auto;"></div>
+        <div style="margin-top: 20px; text-align: center;">
+          <button type="button" class="btn btn-outline btn-sm" onclick="closeBookingsHistoryModal(); scrollToServices();" style="width: 100%;">
+            Explore & Book New Service
+          </button>
+        </div>
       </div>
     </div>
   </div>
