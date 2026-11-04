@@ -774,23 +774,23 @@
         <div class="calc-items-grid" id="calcItemsGrid"></div>
 
         <div class="calc-summary-panel">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-            <h3 style="font-size: 1.15rem; font-weight: 700;">Package Summary</h3>
-            <span class="badge-tag" id="calcCountBadge">0 services</span>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 8px;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; min-width: 0;">Package Summary</h3>
+            <span class="badge-tag" id="calcCountBadge" style="flex-shrink: 0; white-space: nowrap;">0 services</span>
           </div>
-          <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5;">Click services on the left to add or remove them from your doorstep visit package.</p>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5;">Select services to add or remove them from your doorstep visit package.</p>
 
           <ul class="calc-summary-list" id="calcSummaryList">
-            <li style="font-size: 0.85rem; color: var(--text-muted); padding: 12px 0;">No services selected yet. Click any service card on the left.</li>
+            <li style="font-size: 0.85rem; color: var(--text-muted); padding: 12px 0;">No services selected yet. Click any service card above.</li>
           </ul>
 
           <div style="border-top: 1px solid var(--grey-border); padding-top: 14px; margin-top: 12px;">
-            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px;">
-              <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; gap: 8px;">
+              <div style="min-width: 0; flex: 1;">
                 <div style="font-size: 0.725rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Estimated Total</div>
                 <div style="font-size: 0.775rem; color: #16a34a; font-weight: 600;" id="calcDiscountText"></div>
               </div>
-              <div style="font-size: 1.6rem; font-weight: 800; color: var(--black);" id="calcTotalVal">₹0</div>
+              <div style="font-size: 1.6rem; font-weight: 800; color: var(--black); flex-shrink: 0; white-space: nowrap;" id="calcTotalVal">₹0</div>
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 8px;">

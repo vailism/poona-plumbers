@@ -617,14 +617,14 @@ function initCalculator() {
     const isChecked = selectedCalcItems.has(s.id);
     return `
       <div class="calc-item-card ${isChecked ? 'selected' : ''}" data-id="${s.id}" onclick="toggleCalcItem('${s.id}')">
-        <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1;">
           <div class="calc-check-box">${isChecked ? '✓' : ''}</div>
-          <div>
-            <div style="font-weight: 700; font-size: 0.875rem; color: var(--black);">${s.name}</div>
+          <div style="min-width: 0; flex: 1;">
+            <div style="font-weight: 700; font-size: 0.875rem; color: var(--black); word-break: break-word;">${s.name}</div>
             <div style="font-size: 0.75rem; color: var(--text-secondary);">⏱ ${s.duration}</div>
           </div>
         </div>
-        <div style="font-weight: 800; font-size: 0.95rem; color: var(--black);">₹${s.price}</div>
+        <div style="font-weight: 800; font-size: 0.95rem; color: var(--black); flex-shrink: 0; white-space: nowrap; margin-left: 8px;">₹${s.price}</div>
       </div>
     `;
   }).join('');
@@ -661,7 +661,7 @@ function updateCalculatorSummary() {
   countBadge.textContent = `${items.length} ${items.length === 1 ? 'service' : 'services'}`;
 
   if (items.length === 0) {
-    listEl.innerHTML = `<li style="font-size: 0.85rem; color: var(--text-muted); padding: 12px 0;">No services selected yet. Click any service card on the left.</li>`;
+    listEl.innerHTML = `<li style="font-size: 0.85rem; color: var(--text-muted); padding: 12px 0;">No services selected yet. Click any service card above.</li>`;
     totalVal.textContent = '₹0';
     if (discountText) discountText.textContent = '';
     return;
