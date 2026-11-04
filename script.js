@@ -370,6 +370,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initComparisonSlider();
   updateBookingHistoryCount();
   initLocalityHubs();
+  setLanguage(currentLanguage);
+  renderDiagSymptoms();
   initLucide();
 });
 
@@ -1530,4 +1532,512 @@ function initLocalityHubs() {
       selectLocalityHub(newHash);
     }
   });
+}
+
+let currentLanguage = localStorage.getItem('pp_lang') || 'en';
+
+const TRANSLATIONS = {
+  en: {
+    heroHeading: 'Professional Plumbing Services. Booked in Minutes.',
+    heroSubtitle: 'Discover trusted plumbing professionals for your home. Transparent pricing, convenient scheduling, and quality service at your doorstep across Pune.',
+    modeStandard: 'Standard Visit',
+    modeEmergency: '⚡ 30-Min Emergency',
+    servicesBtn: 'Services',
+    diagnosticBtn: 'Diagnosis',
+    rateCardBtn: 'Rate Card',
+    calcBtn: 'Price Calculator',
+    qualityBtn: 'Quality',
+    whyUsBtn: 'Why Us',
+    howBtn: 'How It Works',
+    reviewsBtn: 'Reviews',
+    faqBtn: 'FAQ',
+    navHistory: 'My Bookings',
+    navCall: 'Call Now',
+    dockEta: '30-Min Fast Arrival',
+    dockBook: 'Book Plumber',
+    diagBadge: 'Visual Troubleshooter',
+    diagTitle: "Not Sure What's Leaking? 3-Tap Diagnosis",
+    diagSub: 'Select where the issue is occurring and your symptom to get an instant root cause, required parts, and repair price estimate.',
+    diagStep1: '1. Select Area',
+    diagStep2: '2. Select Problem Symptom',
+    diagAreaBath: 'Bathroom & Toilet',
+    diagAreaKitchen: 'Kitchen & Sink',
+    diagAreaTank: 'Tank & Pump',
+    diagAreaWalls: 'Walls & Seepage',
+    diagTime: 'Estimated Time',
+    diagParts: 'Required Spares',
+    diagCost: 'Fixed Labor Cost',
+    diagBook: 'Book Plumber for This Fix',
+    rateCardTitle: 'Official 2026 Pune Rate Card',
+    rateCardSub: 'Standardized labor charges with 30-day service warranty across all Pune localities. Zero hidden fees.'
+  },
+  mr: {
+    heroHeading: 'पुण्यातील अग्रगण्य घरपोच प्लंबिंग सेवा.',
+    heroSubtitle: 'विश्वसनीय आणि कुशल प्लंबर आता फक्त एका क्लिकवर. पारदर्शक दर, वेळेवर सेवा आणि ३० दिवसांची काम वॉरंटी संपूर्ण पुणे शहरात.',
+    modeStandard: 'नियमित भेट',
+    modeEmergency: '⚡ ३० मिनिटांत तातडीची सेवा',
+    servicesBtn: 'सेवा',
+    diagnosticBtn: 'समस्या शोधा',
+    rateCardBtn: 'दरपत्रक',
+    calcBtn: 'किंमत अंदाज',
+    qualityBtn: 'गुणवत्ता',
+    whyUsBtn: 'आम्हीच का',
+    howBtn: 'कसे कार्य करते',
+    reviewsBtn: 'अभिप्राय',
+    faqBtn: 'प्रश्न उत्तरे',
+    navHistory: 'माझे बुकिंग',
+    navCall: 'कॉल करा',
+    dockEta: '३० मिनिटांत जलद आगमन',
+    dockBook: 'प्लंबर बुक करा',
+    diagBadge: 'जलद समस्या निवारण',
+    diagTitle: 'गळती कुठे आहे? ३-टॅप मध्ये समस्या शोधा',
+    diagSub: 'समस्या कुठे आणि काय होत आहे ते निवडा आणि त्वरित कारण, लागणारे सुटे भाग व दुरुस्तीचा अंदाज मिळवा.',
+    diagStep1: '१. समस्येचे ठिकाण निवडा',
+    diagStep2: '२. लक्षण निवडा',
+    diagAreaBath: 'बाथरूम आणि शौचालय',
+    diagAreaKitchen: 'स्वयंपाकघर आणि सिंक',
+    diagAreaTank: 'पाण्याची टाकी आणि मोटर',
+    diagAreaWalls: 'भिंती आणि पाझर',
+    diagTime: 'अंदाजे वेळ',
+    diagParts: 'लागणारे सुटे भाग',
+    diagCost: 'निश्चित मजुरी',
+    diagBook: 'या दुरुस्तीसाठी प्लंबर बुक करा',
+    rateCardTitle: 'पुणे अधिकृत २०२६ प्लंबिंग दरपत्रक',
+    rateCardSub: 'संपूर्ण पुण्यासाठी निश्चित मजुरी दर आणि ३० दिवसांची सेवा हमी. कोणतेही लपवलेले शुल्क नाही.'
+  }
+};
+
+function setLanguage(lang) {
+  currentLanguage = lang;
+  localStorage.setItem('pp_lang', lang);
+  const data = TRANSLATIONS[lang] || TRANSLATIONS.en;
+
+  const codeEn = document.getElementById('langCodeEn');
+  const codeMr = document.getElementById('langCodeMr');
+  const mobCodeEn = document.getElementById('mobLangCodeEn');
+  const mobCodeMr = document.getElementById('mobLangCodeMr');
+
+  if (codeEn) codeEn.classList.toggle('active', lang === 'en');
+  if (codeMr) codeMr.classList.toggle('active', lang === 'mr');
+  if (mobCodeEn) mobCodeEn.classList.toggle('active', lang === 'en');
+  if (mobCodeMr) mobCodeMr.classList.toggle('active', lang === 'mr');
+
+  const heroHeading = document.getElementById('heroHeading');
+  const heroSubtitle = document.getElementById('heroSubtitle');
+  const navServices = document.getElementById('navServicesBtn');
+  const navDiagnostic = document.getElementById('navDiagnosticBtn');
+  const navRateCard = document.getElementById('navRateCardBtn');
+  const navCalc = document.getElementById('navCalcBtn');
+  const navQuality = document.getElementById('navQualityBtn');
+  const navWhyUs = document.getElementById('navWhyUsBtn');
+  const navHow = document.getElementById('navHowBtn');
+  const navReviews = document.getElementById('navReviewsBtn');
+  const navFaq = document.getElementById('navFaqBtn');
+  const navHistoryText = document.getElementById('navHistoryText');
+  const navCallText = document.getElementById('navCallText');
+
+  const dockEtaText = document.getElementById('dockEtaText');
+  const dockBookText = document.getElementById('dockBookText');
+
+  const diagBadge = document.getElementById('diagBadge');
+  const diagTitle = document.getElementById('diagTitle');
+  const diagSub = document.getElementById('diagSub');
+  const diagStep1 = document.getElementById('diagStep1Label');
+  const diagStep2 = document.getElementById('diagStep2Label');
+  const diagAreaBath = document.getElementById('diagAreaBath');
+  const diagAreaKitchen = document.getElementById('diagAreaKitchen');
+  const diagAreaTank = document.getElementById('diagAreaTank');
+  const diagAreaWalls = document.getElementById('diagAreaWalls');
+  const diagTime = document.getElementById('diagTimeLabel');
+  const diagParts = document.getElementById('diagPartsLabel');
+  const diagCost = document.getElementById('diagCostLabel');
+  const diagBook = document.getElementById('diagBookBtnText');
+
+  const rateCardTitle = document.getElementById('rateCardHeaderTitle');
+  const rateCardSub = document.getElementById('rateCardHeaderSub');
+
+  if (heroHeading) heroHeading.textContent = data.heroHeading;
+  if (heroSubtitle) heroSubtitle.textContent = data.heroSubtitle;
+  if (navServices) navServices.textContent = data.servicesBtn;
+  if (navDiagnostic) navDiagnostic.textContent = data.diagnosticBtn;
+  if (navRateCard) navRateCard.textContent = data.rateCardBtn;
+  if (navCalc) navCalc.textContent = data.calcBtn;
+  if (navQuality) navQuality.textContent = data.qualityBtn;
+  if (navWhyUs) navWhyUs.textContent = data.whyUsBtn;
+  if (navHow) navHow.textContent = data.howBtn;
+  if (navReviews) navReviews.textContent = data.reviewsBtn;
+  if (navFaq) navFaq.textContent = data.faqBtn;
+  if (navHistoryText) navHistoryText.textContent = data.navHistory;
+  if (navCallText) navCallText.textContent = data.navCall;
+
+  if (dockEtaText) dockEtaText.textContent = data.dockEta;
+  if (dockBookText) dockBookText.textContent = data.dockBook;
+
+  if (diagBadge) diagBadge.textContent = data.diagBadge;
+  if (diagTitle) diagTitle.textContent = data.diagTitle;
+  if (diagSub) diagSub.textContent = data.diagSub;
+  if (diagStep1) diagStep1.textContent = data.diagStep1;
+  if (diagStep2) diagStep2.textContent = data.diagStep2;
+  if (diagAreaBath) diagAreaBath.textContent = data.diagAreaBath;
+  if (diagAreaKitchen) diagAreaKitchen.textContent = data.diagAreaKitchen;
+  if (diagAreaTank) diagAreaTank.textContent = data.diagAreaTank;
+  if (diagAreaWalls) diagAreaWalls.textContent = data.diagAreaWalls;
+  if (diagTime) diagTime.textContent = data.diagTime;
+  if (diagParts) diagParts.textContent = data.diagParts;
+  if (diagCost) diagCost.textContent = data.diagCost;
+  if (diagBook) diagBook.textContent = data.diagBook;
+
+  if (rateCardTitle) rateCardTitle.textContent = data.rateCardTitle;
+  if (rateCardSub) rateCardSub.textContent = data.rateCardSub;
+}
+
+function toggleLanguage() {
+  const nextLang = currentLanguage === 'en' ? 'mr' : 'en';
+  setLanguage(nextLang);
+}
+
+const DIAGNOSTIC_DATA = {
+  bathroom: {
+    label: 'Bathroom & Toilet',
+    symptoms: [
+      {
+        id: 'b-tap-drip',
+        name: 'Tap / Wall Mixer Dripping Continuously',
+        cause: 'Worn internal spindle cartridge, faulty rubber gasket or mineral scale deposit.',
+        time: '20 - 30 Mins',
+        parts: '1/2" brass spindle, O-ring washer, Teflon tape',
+        cost: '₹149 - ₹249',
+        serviceId: 'tap-repair',
+        serviceName: 'Tap & Faucet Repair'
+      },
+      {
+        id: 'b-flush-leak',
+        name: 'Toilet Flush Cistern Continuously Running',
+        cause: 'Worn siphon washer, misaligned ball valve or calcified flush discharge seal.',
+        time: '30 - 45 Mins',
+        parts: 'Dual-flush siphon kit, inlet valve float',
+        cost: '₹249 - ₹349',
+        serviceId: 'toilet-seat',
+        serviceName: 'Toilet & Sanitaryware Repair'
+      },
+      {
+        id: 'b-shower-low',
+        name: 'Low Shower / Diverter Flow',
+        cause: 'Calcified shower aerator nozzles or diverter cartridge airlock.',
+        time: '25 - 35 Mins',
+        parts: 'Diverter cartridge, descaling solution',
+        cost: '₹199 - ₹299',
+        serviceId: 'tap-repair',
+        serviceName: 'Tap & Faucet Repair'
+      },
+      {
+        id: 'b-drain-choke',
+        name: 'Bathroom Floor Drain Water Backing Up',
+        cause: 'Hair and soap accumulation in the P-trap water barrier.',
+        time: '30 - 40 Mins',
+        parts: 'Heavy-duty drain snake, bio-enzyme clearer',
+        cost: '₹299 - ₹399',
+        serviceId: 'drain-cleaning',
+        serviceName: 'Drain & Sewer Line Unblocking'
+      }
+    ]
+  },
+  kitchen: {
+    label: 'Kitchen Sink & Utility',
+    symptoms: [
+      {
+        id: 'k-sink-choke',
+        name: 'Kitchen Sink Water Draining Very Slowly',
+        cause: 'Grease and food sediment clogging the corrugated waste pipe and bottle trap.',
+        time: '25 - 35 Mins',
+        parts: 'Heavy drain auger, flexible waste pipe replacement',
+        cost: '₹249 - ₹349',
+        serviceId: 'drain-cleaning',
+        serviceName: 'Drain & Sewer Line Unblocking'
+      },
+      {
+        id: 'k-tap-leak',
+        name: 'Swan Neck / Sink Mixer Base Leaking',
+        cause: 'Damaged ceramic disc or loose braided connection hose beneath counter.',
+        time: '20 - 30 Mins',
+        parts: 'Braided stainless steel inlet hose, washer',
+        cost: '₹149 - ₹249',
+        serviceId: 'tap-repair',
+        serviceName: 'Tap & Faucet Repair'
+      },
+      {
+        id: 'k-ro-inlet',
+        name: 'Water Purifier (RO) / Washing Machine Line Leak',
+        cause: 'Loose push-fit connector or cracked angle valve nipple.',
+        time: '20 - 30 Mins',
+        parts: 'Angle cock valve, 1/4" RO diverter connector',
+        cost: '₹199 - ₹299',
+        serviceId: 'pipe-leakage',
+        serviceName: 'Bathroom & Pipeline Leakage Repair'
+      }
+    ]
+  },
+  tank: {
+    label: 'Water Tank & Motor',
+    symptoms: [
+      {
+        id: 't-tank-overflow',
+        name: 'Overhead Sintex Tank Overflowing Continuously',
+        cause: 'Faulty mechanical ball valve or stuck electronic water level sensor.',
+        time: '30 - 45 Mins',
+        parts: 'Heavy-duty brass float valve with ball',
+        cost: '₹299 - ₹399',
+        serviceId: 'water-tank',
+        serviceName: 'Overhead & Underground Tank Cleaning'
+      },
+      {
+        id: 't-pump-airlock',
+        name: 'Water Pump Running but No Water Reaching Tank',
+        cause: 'Suction line airlock or clogged foot valve at the underground sump.',
+        time: '40 - 60 Mins',
+        parts: 'Brass foot valve, priming connection',
+        cost: '₹349 - ₹499',
+        serviceId: 'water-tank',
+        serviceName: 'Overhead & Underground Tank Cleaning'
+      },
+      {
+        id: 't-tank-sludge',
+        name: 'Muddy or Foul-Smelling Water from Taps',
+        cause: 'Sediment and microbial biofilm accumulated at tank bottom.',
+        time: '60 - 90 Mins',
+        parts: 'UV disinfectant, rotary tank scrub',
+        cost: 'Starting ₹799',
+        serviceId: 'water-tank',
+        serviceName: 'Overhead & Underground Tank Cleaning'
+      }
+    ]
+  },
+  pipeline: {
+    label: 'Walls & Concealed Lines',
+    symptoms: [
+      {
+        id: 'p-wall-damp',
+        name: 'Wall Dampness, Peeling Paint or Seepage',
+        cause: 'Micro-crack in concealed CPVC joint or loose wall mixer concealed elbow.',
+        time: '45 - 90 Mins',
+        parts: 'CPVC solvent cement, pressure testing plug, coupler',
+        cost: '₹399 - ₹699',
+        serviceId: 'pipe-leakage',
+        serviceName: 'Bathroom & Pipeline Leakage Repair'
+      },
+      {
+        id: 'p-main-burst',
+        name: 'High Pressure Water Gushing from Main Pipe',
+        cause: 'Sheared PVC union or ruptured booster line.',
+        time: 'Emergency (~20 Mins)',
+        parts: 'High-pressure CPVC union, brass gate valve',
+        cost: '₹349 - ₹549',
+        serviceId: 'pipe-leakage',
+        serviceName: 'Bathroom & Pipeline Leakage Repair'
+      }
+    ]
+  }
+};
+
+let currentDiagArea = 'bathroom';
+let currentDiagSymptom = null;
+
+function selectDiagArea(areaKey) {
+  if (!DIAGNOSTIC_DATA[areaKey]) return;
+  currentDiagArea = areaKey;
+
+  document.querySelectorAll('.diag-area-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-area') === areaKey);
+  });
+
+  renderDiagSymptoms();
+}
+
+function renderDiagSymptoms() {
+  const container = document.getElementById('diagSymptomsWrap');
+  if (!container) return;
+  const areaData = DIAGNOSTIC_DATA[currentDiagArea];
+  if (!areaData) return;
+
+  container.innerHTML = areaData.symptoms.map((s, index) => `
+    <button type="button" class="diag-symptom-btn ${index === 0 ? 'active' : ''}" data-sym="${s.id}" onclick="selectDiagSymptom('${s.id}')">
+      ${s.name}
+    </button>
+  `).join('');
+
+  if (areaData.symptoms.length > 0) {
+    selectDiagSymptom(areaData.symptoms[0].id);
+  }
+}
+
+function selectDiagSymptom(symId) {
+  const areaData = DIAGNOSTIC_DATA[currentDiagArea];
+  if (!areaData) return;
+  const sym = areaData.symptoms.find(item => item.id === symId);
+  if (!sym) return;
+
+  currentDiagSymptom = sym;
+
+  document.querySelectorAll('.diag-symptom-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-sym') === symId);
+  });
+
+  const title = document.getElementById('diagResultTitle');
+  const cause = document.getElementById('diagResultCause');
+  const time = document.getElementById('diagResultTime');
+  const parts = document.getElementById('diagResultParts');
+  const cost = document.getElementById('diagResultCost');
+  const waBtn = document.getElementById('diagWaBtn');
+
+  if (title) title.textContent = sym.name;
+  if (cause) cause.textContent = sym.cause;
+  if (time) time.textContent = sym.time;
+  if (parts) parts.textContent = sym.parts;
+  if (cost) cost.textContent = sym.cost;
+
+  if (waBtn) {
+    const text = `Hi Poona Plumbers, I used your diagnostic tool for: ${sym.name} in Pune. Root cause identified: ${sym.cause}. Estimated labor: ${sym.cost}. Please dispatch a technician.`;
+    waBtn.href = `https://wa.me/917030009191?text=${encodeURIComponent(text)}`;
+  }
+}
+
+function bookFromDiagnostic() {
+  if (!currentDiagSymptom) return;
+  const sym = currentDiagSymptom;
+
+  const select = document.getElementById('bookServiceSelect');
+  if (select) {
+    for (let i = 0; i < select.options.length; i++) {
+      if (select.options[i].value === sym.serviceName || select.options[i].text.includes(sym.serviceName)) {
+        select.selectedIndex = i;
+        break;
+      }
+    }
+  }
+
+  const notesInput = document.getElementById('bookNotes');
+  if (notesInput) {
+    notesInput.value = `Diagnosed Issue: ${sym.name} (${sym.cause}). Est. Cost: ${sym.cost}`;
+  }
+
+  goToStep(1);
+  const bookingSec = document.getElementById('bookingSection');
+  if (bookingSec) {
+    bookingSec.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+const RATE_CARD_ITEMS = [
+  { name: 'Tap / Faucet Washer & Spindle Replacement', cat: 'tap', time: '20-30 mins', price: '₹149', warranty: '30-Day Warranty', desc: 'Fix dripping taps, loose knobs, worn spindle cartridges' },
+  { name: 'Wall Mixer / Diverter Repair', cat: 'tap', time: '30-45 mins', price: '₹249', warranty: '30-Day Warranty', desc: 'Concealed diverter cartridge replacement, pressure balancing' },
+  { name: 'New Tap / Angle Cock Installation', cat: 'tap', time: '15-25 mins', price: '₹149', warranty: '30-Day Warranty', desc: 'Mounting brass/CP bib cock, angle valve for geyser/jet' },
+  { name: 'Overhead Shower Fitting & Descaling', cat: 'tap', time: '20-30 mins', price: '₹199', warranty: '30-Day Warranty', desc: 'Shower arm fitting, high-pressure rain shower descaling' },
+  { name: 'Health Faucet / Jet Spray Replacement', cat: 'toilet', time: '15-20 mins', price: '₹149', warranty: '30-Day Warranty', desc: 'Fix leaking trigger, flexible hose, or angle cock valve' },
+  { name: 'Toilet Flush Cistern Internal Mechanism Repair', cat: 'toilet', time: '30-40 mins', price: '₹249', warranty: '30-Day Warranty', desc: 'Replace dual flush siphon, inlet ball valve, flush button' },
+  { name: 'Western Commode Seat Cover Replacement', cat: 'toilet', time: '20 mins', price: '₹199', warranty: '30-Day Warranty', desc: 'Soft-close hydraulic or standard seat cover installation' },
+  { name: 'Full Western / Indian Toilet Installation', cat: 'toilet', time: '60-90 mins', price: '₹799', warranty: '30-Day Warranty', desc: 'Floor mounting, wax ring seal, waste pipe connection' },
+  { name: 'Kitchen Sink Waste Coupling & Pipe Fix', cat: 'drain', time: '25-35 mins', price: '₹199', warranty: '30-Day Warranty', desc: 'Install stainless waste coupling, flexible waste pipe' },
+  { name: 'Kitchen Sink Drain Clog Removal', cat: 'drain', time: '30-40 mins', price: '₹299', warranty: '30-Day Warranty', desc: 'Grease, food residue removal using mechanical drain snake' },
+  { name: 'Bathroom Floor Drain / Trap Choke Clearing', cat: 'drain', time: '30-45 mins', price: '₹299', warranty: '30-Day Warranty', desc: 'P-trap hair, soap scum and mineral unblocking' },
+  { name: 'Main Society Sewer Line Clearing (Auger)', cat: 'drain', time: '60-90 mins', price: '₹599', warranty: '30-Day Warranty', desc: 'Heavy-duty motorized drain machine line descaling' },
+  { name: 'Wash Basin Mounting & Bottle Trap Repair', cat: 'pipe', time: '30-45 mins', price: '₹299', warranty: '30-Day Warranty', desc: 'Pedestal or wall-mount basin fitting, silicone perimeter seal' },
+  { name: 'Concealed CPVC Pipe Leakage Joint Repair', cat: 'pipe', time: '45-60 mins', price: '₹399', warranty: '30-Day Warranty', desc: 'Leak detection, precision tile cutting, CPVC coupler welding' },
+  { name: 'Main Water Line Gate Valve / Ball Valve Fix', cat: 'pipe', time: '30-40 mins', price: '₹299', warranty: '30-Day Warranty', desc: 'Replace stuck or sheared isolation ball valves' },
+  { name: 'Water Pressure Booster Pump Plumbing Line', cat: 'tank', time: '60-90 mins', price: '₹499', warranty: '30-Day Warranty', desc: 'Inlet/outlet bypass valves, non-return valve fitting' },
+  { name: 'Overhead Tank Ball Float Valve Replacement', cat: 'tank', time: '30-45 mins', price: '₹299', warranty: '30-Day Warranty', desc: 'Heavy brass float valve replacement to prevent overflow' },
+  { name: 'Underground Sump Foot Valve Replacement', cat: 'tank', time: '45-60 mins', price: '₹349', warranty: '30-Day Warranty', desc: 'Submersible suction check valve replacement & line priming' },
+  { name: '500L - 1000L Overhead Water Tank Cleaning', cat: 'tank', time: '60-90 mins', price: '₹799', warranty: '30-Day Warranty', desc: 'Sludge evacuation, high-pressure rotary scrub, UV sterilization' },
+  { name: 'Instant / Storage Geyser Plumbing Connection', cat: 'pipe', time: '30-40 mins', price: '₹299', warranty: '30-Day Warranty', desc: 'Hot & cold flexible braided connection, non-return safety valve' }
+];
+
+let currentRateCategory = 'all';
+
+function openRateCardModal() {
+  const modal = document.getElementById('rateCardModal');
+  if (modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    renderRateCardList();
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  }
+}
+
+function closeRateCardModal() {
+  const modal = document.getElementById('rateCardModal');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+function filterRateCategory(cat) {
+  currentRateCategory = cat;
+  document.querySelectorAll('.rate-tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-cat') === cat);
+  });
+  renderRateCardList();
+}
+
+function filterRateCard() {
+  renderRateCardList();
+}
+
+function renderRateCardList() {
+  const container = document.getElementById('rateItemsList');
+  if (!container) return;
+
+  const query = (document.getElementById('rateCardSearchInput')?.value || '').toLowerCase().trim();
+
+  const filtered = RATE_CARD_ITEMS.filter(item => {
+    const matchesCat = currentRateCategory === 'all' || item.cat === currentRateCategory;
+    const matchesQuery = !query || item.name.toLowerCase().includes(query) || item.desc.toLowerCase().includes(query);
+    return matchesCat && matchesQuery;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 24px; color: var(--text-secondary);">
+        No exact job matches found. Call <a href="tel:7030009191" style="color: var(--black); font-weight: 700;">+91 70300 09191</a> for a custom quote.
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = filtered.map(item => `
+    <div class="rate-row-item">
+      <div class="rate-item-main">
+        <div class="rate-item-title">${item.name}</div>
+        <div class="rate-item-desc">${item.desc} • ⏱️ ${item.time}</div>
+      </div>
+      <div class="rate-item-price-col">
+        <div class="rate-item-price">${item.price}</div>
+        <div class="rate-item-warranty">${item.warranty}</div>
+      </div>
+      <button type="button" class="btn btn-black btn-sm" onclick="closeRateCardModal(); bookFromRateCard('${item.name.replace(/'/g, "\\'")}', '${item.price}')" style="flex-shrink: 0; padding: 6px 12px; font-size: 0.75rem;">
+        Book Fix
+      </button>
+    </div>
+  `).join('');
+
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function bookFromRateCard(serviceName, price) {
+  const notesInput = document.getElementById('bookNotes');
+  if (notesInput) {
+    notesInput.value = `Rate Card Service: ${serviceName} (${price} Fixed Labor)`;
+  }
+  goToStep(1);
+  const bookingSec = document.getElementById('bookingSection');
+  if (bookingSec) {
+    bookingSec.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function scrollToBooking() {
+  goToStep(1);
+  const bookingSec = document.getElementById('bookingSection');
+  if (bookingSec) {
+    bookingSec.scrollIntoView({ behavior: 'smooth' });
+  }
 }
