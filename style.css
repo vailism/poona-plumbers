@@ -4073,20 +4073,29 @@ button, input, select, textarea {
     visibility: hidden;
   }
   #bookingSuccessCard,
-  #bookingSuccessCard * {
+  #bookingSuccessCard *,
+  #rateCardModal.active,
+  #rateCardModal.active * {
     visibility: visible;
   }
-  #bookingSuccessCard {
+  #bookingSuccessCard,
+  #rateCardModal.active .rate-card-modal-box {
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
+    max-width: 100%;
     border: none !important;
     box-shadow: none !important;
+    max-height: none !important;
   }
   .mobile-bottom-bar,
+  .mobile-sticky-dock,
   .floating-contact-group,
-  .nav-uc,
+  .navbar,
+  .close-modal-btn,
+  .rate-card-search-wrap,
+  .rate-card-tabs,
   #bookAnotherBtn,
   #openWhatsAppBookingBtn,
   .btn-print-receipt {

@@ -949,11 +949,18 @@ function validateStep2() {
     document.getElementById('bookName').focus();
     return false;
   }
-  if (!/^[6-9]\d{9}$/.test(phone.replace(/\D/g, ''))) {
+  let cleanPhone = phone.replace(/\D/g, '');
+  if (cleanPhone.length === 12 && cleanPhone.startsWith('91')) {
+    cleanPhone = cleanPhone.slice(2);
+  } else if (cleanPhone.length === 11 && cleanPhone.startsWith('0')) {
+    cleanPhone = cleanPhone.slice(1);
+  }
+  if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
     alert('Please enter a valid 10-digit mobile number');
     document.getElementById('bookPhone').focus();
     return false;
   }
+  document.getElementById('bookPhone').value = cleanPhone;
   return true;
 }
 
@@ -1718,7 +1725,7 @@ const DIAGNOSTIC_DATA = {
         parts: 'Dual-flush siphon kit, inlet valve float',
         cost: '₹249 - ₹349',
         serviceId: 'toilet-seat',
-        serviceName: 'Toilet & Sanitaryware Repair'
+        serviceName: 'Toilet Flush & Jet Spray Repair'
       },
       {
         id: 'b-shower-low',
@@ -1728,7 +1735,7 @@ const DIAGNOSTIC_DATA = {
         parts: 'Diverter cartridge, descaling solution',
         cost: '₹199 - ₹299',
         serviceId: 'tap-repair',
-        serviceName: 'Tap & Faucet Repair'
+        serviceName: 'Shower & Diverter Installation'
       },
       {
         id: 'b-drain-choke',
@@ -1738,7 +1745,7 @@ const DIAGNOSTIC_DATA = {
         parts: 'Heavy-duty drain snake, bio-enzyme clearer',
         cost: '₹299 - ₹399',
         serviceId: 'drain-cleaning',
-        serviceName: 'Drain & Sewer Line Unblocking'
+        serviceName: 'Motorized Drain Cleaning'
       }
     ]
   },
@@ -1753,7 +1760,7 @@ const DIAGNOSTIC_DATA = {
         parts: 'Heavy drain auger, flexible waste pipe replacement',
         cost: '₹249 - ₹349',
         serviceId: 'drain-cleaning',
-        serviceName: 'Drain & Sewer Line Unblocking'
+        serviceName: 'Kitchen Sink Plumbing & Trap Fix'
       },
       {
         id: 'k-tap-leak',
@@ -1773,7 +1780,7 @@ const DIAGNOSTIC_DATA = {
         parts: 'Angle cock valve, 1/4" RO diverter connector',
         cost: '₹199 - ₹299',
         serviceId: 'pipe-leakage',
-        serviceName: 'Bathroom & Pipeline Leakage Repair'
+        serviceName: 'Bathroom Leakage & Seepage Repair'
       }
     ]
   },
@@ -1788,7 +1795,7 @@ const DIAGNOSTIC_DATA = {
         parts: 'Heavy-duty brass float valve with ball',
         cost: '₹299 - ₹399',
         serviceId: 'water-tank',
-        serviceName: 'Overhead & Underground Tank Cleaning'
+        serviceName: 'Water Tank Deep Scrub & Cleaning'
       },
       {
         id: 't-pump-airlock',
@@ -1798,7 +1805,7 @@ const DIAGNOSTIC_DATA = {
         parts: 'Brass foot valve, priming connection',
         cost: '₹349 - ₹499',
         serviceId: 'water-tank',
-        serviceName: 'Overhead & Underground Tank Cleaning'
+        serviceName: 'Water Tank Deep Scrub & Cleaning'
       },
       {
         id: 't-tank-sludge',
@@ -1808,7 +1815,7 @@ const DIAGNOSTIC_DATA = {
         parts: 'UV disinfectant, rotary tank scrub',
         cost: 'Starting ₹799',
         serviceId: 'water-tank',
-        serviceName: 'Overhead & Underground Tank Cleaning'
+        serviceName: 'Water Tank Deep Scrub & Cleaning'
       }
     ]
   },
@@ -1823,7 +1830,7 @@ const DIAGNOSTIC_DATA = {
         parts: 'CPVC solvent cement, pressure testing plug, coupler',
         cost: '₹399 - ₹699',
         serviceId: 'pipe-leakage',
-        serviceName: 'Bathroom & Pipeline Leakage Repair'
+        serviceName: 'Bathroom Leakage & Seepage Repair'
       },
       {
         id: 'p-main-burst',
@@ -1833,7 +1840,7 @@ const DIAGNOSTIC_DATA = {
         parts: 'High-pressure CPVC union, brass gate valve',
         cost: '₹349 - ₹549',
         serviceId: 'pipe-leakage',
-        serviceName: 'Bathroom & Pipeline Leakage Repair'
+        serviceName: '24/7 Emergency Burst Pipe Clamp'
       }
     ]
   }
@@ -2026,6 +2033,53 @@ function bookFromRateCard(serviceName, price) {
   const notesInput = document.getElementById('bookNotes');
   if (notesInput) {
     notesInput.value = `Rate Card Service: ${serviceName} (${price} Fixed Labor)`;
+  }
+  const select = document.getElementById('bookServiceSelect');
+  if (select) {
+    const sLower = serviceName.toLowerCase();
+    for (let i = 0; i < select.options.length; i++) {
+      const optVal = select.options[i].value.toLowerCase();
+      if ((sLower.includes('tap') || sLower.includes('faucet') || sLower.includes('angle cock')) && optVal.includes('tap')) {
+        select.selectedIndex = i;
+        break;
+      }
+      if ((sLower.includes('toilet') || sLower.includes('jet spray') || sLower.includes('flush') || sLower.includes('commode')) && optVal.includes('toilet')) {
+        select.selectedIndex = i;
+        break;
+      }
+      if (sLower.includes('drain') && optVal.includes('drain')) {
+        select.selectedIndex = i;
+        break;
+      }
+      if ((sLower.includes('geyser') || sLower.includes('heater')) && optVal.includes('heater')) {
+        select.selectedIndex = i;
+        break;
+      }
+      if (sLower.includes('tank') && optVal.includes('tank')) {
+        select.selectedIndex = i;
+        break;
+      }
+      if (sLower.includes('shower') && optVal.includes('shower')) {
+        select.selectedIndex = i;
+        break;
+      }
+      if (sLower.includes('sink') && optVal.includes('sink')) {
+        select.selectedIndex = i;
+        break;
+      }
+      if (sLower.includes('burst') && optVal.includes('burst')) {
+        select.selectedIndex = i;
+        break;
+      }
+      if ((sLower.includes('seepage') || sLower.includes('leakage')) && optVal.includes('leakage')) {
+        select.selectedIndex = i;
+        break;
+      }
+      if (sLower.includes('basin') && optVal.includes('basin')) {
+        select.selectedIndex = i;
+        break;
+      }
+    }
   }
   goToStep(1);
   const bookingSec = document.getElementById('bookingSection');
