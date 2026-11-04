@@ -259,6 +259,103 @@ let countersAnimated = false;
 let selectedCalcItems = new Set(['tap-repair', 'drain-cleaning']);
 const GOOGLE_SHEET_WEBHOOK_URL = '';
 
+let latestBookingId = '';
+let detectedGpsLink = '';
+let attachedPhotoName = '';
+let attachedPhotoDataUrl = '';
+let currentSelectedHub = 'baner';
+
+const PUNE_HUBS = {
+  'baner': {
+    name: 'Baner & Balewadi Hub',
+    shortName: 'Baner',
+    sub: 'High-rise societies, modern conceal diverters, booster pump maintenance & sensor tap servicing.',
+    arrival: '20-25 Min',
+    societies: 'Pan Card Club Rd, Baner-Pashan Link Rd, Rohan Leher, Palladio, Supreme Amadore, VTP Urban Nest.',
+    services: 'Grohe & Jaquar concealed thermostatic diverters, pressure boosting systems, kitchen sink waste couplings.',
+    plumbers: '4 Licensed Plumbers with fully stocked mobile vans (o-rings, spindles, PPR pipes, drain snakes).',
+    emergency: 'Direct patch to on-call Baner plumber: <a href="tel:7030009191" style="color: var(--black); font-weight: 700;">+91 70300 09191</a>',
+    waText: 'Hello Poona Plumbers, I need an emergency technician in Baner / Balewadi'
+  },
+  'kothrud': {
+    name: 'Kothrud & Karve Nagar Hub',
+    shortName: 'Kothrud',
+    sub: 'Old bungalow re-piping, heritage society GI to CPVC upgrades, overhead Sintex tank cleaning.',
+    arrival: '20-30 Min',
+    societies: 'Paud Road, Ideal Colony, Mayur Colony, Dahanukar Colony, Cummins College Rd, Gujrat Colony.',
+    services: 'Wall-crack leak detection, overhead float valve replacement, motorized borewell line fixes.',
+    plumbers: '3 Senior Master Plumbers with heavy pipe cutters, threading machines & hydro-pressure pumps.',
+    emergency: 'Direct patch to on-call Kothrud plumber: <a href="tel:7030009191" style="color: var(--black); font-weight: 700;">+91 70300 09191</a>',
+    waText: 'Hello Poona Plumbers, I need a plumber in Kothrud / Karve Nagar'
+  },
+  'hinjewadi': {
+    name: 'Hinjewadi IT Park Hub',
+    shortName: 'Hinjewadi',
+    sub: 'Phase 1, 2 & 3 tech campuses, township high-rises, RO water purifier & instant geyser connections.',
+    arrival: '25-35 Min',
+    societies: 'Megapolis, Blue Ridge, Life Republic, Godrej 24, Joyville, Rama Fusion Towers, Phase 1 Maan Rd.',
+    services: 'RO membrane flushing, geyser heating element replacement, washing machine inlet/outlet lines.',
+    plumbers: '5 Mobile Techs equipped for gated high-rises with security badges and standard safety kit.',
+    emergency: 'Direct patch to on-call Hinjewadi plumber: <a href="tel:7030009191" style="color: var(--black); font-weight: 700;">+91 70300 09191</a>',
+    waText: 'Hello Poona Plumbers, I need a technician in Hinjewadi Phase 1/2/3'
+  },
+  'wakad': {
+    name: 'Wakad & Pimple Saudagar Hub',
+    shortName: 'Wakad',
+    sub: 'Modern residential towers, commode jet spray fixes, dual-flush cistern repairs, kitchen blockages.',
+    arrival: '20-25 Min',
+    societies: 'Dutta Mandir Rd, Kaspate Wasti, Kunal Icon Rd, Roseland Residency, Park Royale, Signature Park.',
+    services: 'Parryware & Hindware flush valves, kitchen sink siphon bottlenecks, motorized drain snakes.',
+    plumbers: '4 Certified Technicians on patrol along Mumbai-Pune highway corridor.',
+    emergency: 'Direct patch to on-call Wakad plumber: <a href="tel:7030009191" style="color: var(--black); font-weight: 700;">+91 70300 09191</a>',
+    waText: 'Hello Poona Plumbers, I need a plumbing technician in Wakad / Pimple Saudagar'
+  },
+  'koregaon-park': {
+    name: 'Koregaon Park & KP Hub',
+    shortName: 'Koregaon Park',
+    sub: 'Luxury villas, European designer bath suites, water softener plants & high-flow rain showers.',
+    arrival: '15-25 Min',
+    societies: 'North Main Rd, Lane 5 to 7, South Main Rd, Ganga Orchard, Atur Park, Vascon Windermere.',
+    services: 'Kohler & Hansgrohe ceramic discs, jacuzzi lines, central hot-water circulation loops.',
+    plumbers: '3 Premium Fixture Specialists trained on luxury German & American bathroom fittings.',
+    emergency: 'Direct patch to on-call KP plumber: <a href="tel:7030009191" style="color: var(--black); font-weight: 700;">+91 70300 09191</a>',
+    waText: 'Hello Poona Plumbers, I need a plumber in Koregaon Park'
+  },
+  'viman-nagar': {
+    name: 'Viman Nagar & Kharadi Hub',
+    shortName: 'Viman Nagar',
+    sub: 'Airport corridor & EON Free Zone, rental tenant moves, instant fixture repair, leakage arrest.',
+    arrival: '20-30 Min',
+    societies: 'Clover Park, Mistas, Ganga Constella, Marvel Cerise, World Trade Center Kharadi, Forest County.',
+    services: 'Balcony drainage clearing, tap washer replacement, basin bottle trap cleaning, water meter fitting.',
+    plumbers: '4 Licensed Plumbers available 24/7 for emergency tenant plumbing.',
+    emergency: 'Direct patch to on-call Viman Nagar plumber: <a href="tel:7030009191" style="color: var(--black); font-weight: 700;">+91 70300 09191</a>',
+    waText: 'Hello Poona Plumbers, I need a plumber in Viman Nagar / Kharadi'
+  },
+  'aundh': {
+    name: 'Aundh & Pashan Hub',
+    shortName: 'Aundh',
+    sub: 'Established residential societies, main pipeline pressure regulators, underground sump motor fixes.',
+    arrival: '20-25 Min',
+    societies: 'DP Road, Sindh Society, Anand Park, Medipoint Hospital lane, Pashan Lake Rd, Abhimanshree.',
+    services: 'Submersible sump pumps, non-return check valves, main water line gate valves, PPR hot lines.',
+    plumbers: '3 Senior Mechanics with heavy plumbing equipment and diagnostic cameras.',
+    emergency: 'Direct patch to on-call Aundh plumber: <a href="tel:7030009191" style="color: var(--black); font-weight: 700;">+91 70300 09191</a>',
+    waText: 'Hello Poona Plumbers, I need a technician in Aundh / Pashan'
+  },
+  'magarpatta': {
+    name: 'Magarpatta & Hadapsar Hub',
+    shortName: 'Magarpatta',
+    sub: 'Cybercity IT township, Amanora Park Town, mega-gated societies & commercial plumbing.',
+    arrival: '25-35 Min',
+    societies: 'Amanora Future Towers, Roystonea, Jasminium, Cosmos, SP Infocity, Magarpatta Sector 1-12.',
+    services: 'High-rise main line descaling, commercial urinal flush sensors, kitchen grease trap clearing.',
+    plumbers: '4 Industrial & Domestic Plumbers stationed right at Magarpatta South Gate.',
+    emergency: 'Direct patch to on-call Magarpatta plumber: <a href="tel:7030009191" style="color: var(--black); font-weight: 700;">+91 70300 09191</a>',
+    waText: 'Hello Poona Plumbers, I need a plumber in Magarpatta City / Amanora'
+  }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   renderLocation();
   initCategories();
@@ -272,6 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCalculator();
   initComparisonSlider();
   updateBookingHistoryCount();
+  initLocalityHubs();
   initLucide();
 });
 
@@ -875,9 +973,23 @@ function validateAndGoToStep3() {
   const rContact = document.getElementById('reviewContact');
   const rPrice = document.getElementById('reviewPrice');
 
+  let displayAddress = address;
+  if (!displayAddress) {
+    if (detectedGpsLink) {
+      displayAddress = 'GPS Coordinates Captured';
+    } else {
+      displayAddress = `${activeLocation} (Shared via WhatsApp)`;
+    }
+  } else {
+    displayAddress = `${address} (${selectedPropType})`;
+  }
+  if (attachedPhotoName) {
+    displayAddress += ` • 📸 Photo: ${attachedPhotoName}`;
+  }
+
   if (rService) rService.textContent = serviceName;
   if (rSchedule) rSchedule.textContent = `${selectedDate} (${selectedTime})`;
-  if (rAddress) rAddress.textContent = address ? `${address} (${selectedPropType})` : `Pune (${selectedPropType}) - Shared via WhatsApp`;
+  if (rAddress) rAddress.textContent = displayAddress;
   if (rContact) rContact.textContent = `${name} (+91 ${phone})`;
   if (rPrice) rPrice.textContent = price;
 
@@ -898,6 +1010,7 @@ function submitMultiStepBooking() {
   const notes = document.getElementById('bookNotes').value.trim();
 
   const bookingId = `PN-${Math.floor(10000 + Math.random() * 90000)}`;
+  latestBookingId = bookingId;
 
   const bookingPayload = {
     bookingId,
@@ -907,9 +1020,11 @@ function submitMultiStepBooking() {
     customerName: name,
     customerPhone: phone,
     propertyType: selectedPropType,
-    address: address || 'Shared on WhatsApp',
+    address: address || (detectedGpsLink ? `GPS: ${detectedGpsLink}` : 'Shared on WhatsApp'),
     locality: activeLocation,
     notes: notes || 'None',
+    hasPhoto: !!attachedPhotoName,
+    gpsLink: detectedGpsLink || '',
     status: 'Confirmed'
   };
 
@@ -923,7 +1038,9 @@ function submitMultiStepBooking() {
       <strong>Service:</strong> ${service}<br/>
       <strong>Schedule:</strong> ${selectedDate} (${selectedTime})<br/>
       <strong>Customer:</strong> ${name} (+91 ${phone})<br/>
-      <strong>Address:</strong> ${address ? address : 'Confirmed via WhatsApp'} (${selectedPropType})<br/>
+      <strong>Address:</strong> ${address ? address : (detectedGpsLink ? 'GPS Pin Captured' : 'Confirmed via WhatsApp')} (${selectedPropType})<br/>
+      ${detectedGpsLink ? `<strong>GPS Coordinates:</strong> <a href="${detectedGpsLink}" target="_blank" rel="noopener noreferrer" style="color: var(--black); text-decoration: underline;">Open Google Maps Location</a><br/>` : ''}
+      ${attachedPhotoName ? `<strong>Issue Photo:</strong> Attached (${attachedPhotoName})<br/>` : ''}
       <strong>Payment Mode:</strong> Pay After Service (Cash / UPI)
     `;
   }
@@ -936,15 +1053,24 @@ function submitMultiStepBooking() {
   if (progBar) progBar.style.display = 'none';
   if (successCard) successCard.classList.add('active');
 
-  const msg = `🔧 *Poona Plumbers - Direct Booking Request (${bookingId})*\n\n` +
+  let msg = `🔧 *Poona Plumbers - Direct Booking Request (${bookingId})*\n\n` +
     `👤 *Customer:* ${name}\n` +
     `📞 *Phone:* ${phone}\n` +
     `🛠️ *Service:* ${service}\n` +
     `📅 *Schedule:* ${selectedDate} (${selectedTime})\n` +
     `🏠 *Property:* ${selectedPropType}\n` +
-    `📍 *Address:* ${address ? address : 'Will share location on WhatsApp'}, ${activeLocation}\n` +
-    `${notes ? `📝 *Notes:* ${notes}\n` : ''}\n` +
-    `_Please confirm technician dispatch. Thank you!_`;
+    `📍 *Address:* ${address ? address : 'Will share location on WhatsApp'}, ${activeLocation}\n`;
+
+  if (detectedGpsLink) {
+    msg += `🗺️ *GPS Pin:* ${detectedGpsLink}\n`;
+  }
+  if (attachedPhotoName) {
+    msg += `📸 *Fixture Photo:* Attached in chat (${attachedPhotoName})\n`;
+  }
+  if (notes) {
+    msg += `📝 *Notes:* ${notes}\n`;
+  }
+  msg += `\n_Please confirm technician dispatch. Thank you!_`;
 
   const waBtn = document.getElementById('openWhatsAppBookingBtn');
   if (waBtn) {
@@ -974,6 +1100,16 @@ function resetMultiStepBooking() {
   if (bPhone) bPhone.value = '';
   if (bAddress) bAddress.value = '';
   if (bNotes) bNotes.value = '';
+
+  removeUploadedPhoto();
+  detectedGpsLink = '';
+  const gpsPill = document.getElementById('gpsSuccessPill');
+  if (gpsPill) {
+    gpsPill.style.display = 'none';
+    gpsPill.innerHTML = '';
+  }
+  const gpsLabel = document.getElementById('detectGpsLabel');
+  if (gpsLabel) gpsLabel.textContent = 'Auto-Detect GPS Pin';
 
   goToStep(1);
 }
@@ -1231,4 +1367,167 @@ function rebookFromHistory(serviceName) {
   goToStep(1);
   const formSection = document.getElementById('bookingSection');
   if (formSection) formSection.scrollIntoView({ behavior: 'smooth' });
+}
+
+function detectGPSLocation() {
+  const addrInput = document.getElementById('bookAddress');
+  const label = document.getElementById('detectGpsLabel');
+  const pill = document.getElementById('gpsSuccessPill');
+
+  if (!navigator.geolocation) {
+    alert('Geolocation is not supported by your browser. Please enter your society or area name.');
+    return;
+  }
+
+  if (label) label.textContent = 'Detecting GPS...';
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const lat = pos.coords.latitude.toFixed(6);
+      const lng = pos.coords.longitude.toFixed(6);
+      detectedGpsLink = `https://maps.google.com/?q=${lat},${lng}`;
+      if (addrInput) {
+        if (!addrInput.value.trim() || addrInput.value.includes('maps.google.com')) {
+          addrInput.value = `GPS Pin: ${detectedGpsLink}`;
+        } else {
+          addrInput.value = `${addrInput.value.trim()} [GPS: ${detectedGpsLink}]`;
+        }
+      }
+      if (label) label.textContent = 'GPS Captured ✓';
+      if (pill) {
+        pill.innerHTML = `<i data-lucide="check-circle" style="width: 14px; height: 14px; flex-shrink: 0;"></i><span>Exact GPS captured (${lat}, ${lng}). Dispatch van routed directly.</span>`;
+        pill.style.display = 'flex';
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      }
+    },
+    (err) => {
+      if (label) label.textContent = 'Auto-Detect GPS Pin';
+      alert('Unable to detect location. Please check browser location permissions or type your society address.');
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+  );
+}
+
+function setWhatsAppPinNote() {
+  const addrInput = document.getElementById('bookAddress');
+  const pill = document.getElementById('gpsSuccessPill');
+  if (addrInput) {
+    addrInput.value = 'Will drop live WhatsApp GPS pin on confirmation';
+  }
+  if (pill) {
+    pill.innerHTML = `<i data-lucide="message-circle" style="width: 14px; height: 14px; flex-shrink: 0;"></i><span>Noted! You can drop your live WhatsApp location pin immediately after booking.</span>`;
+    pill.style.display = 'flex';
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  }
+}
+
+function shareLiveLocationOnWhatsApp() {
+  const bId = latestBookingId || 'Doorstep Service';
+  let text = `Hello Poona Plumbers, here is my location update for Booking ${bId}.`;
+  if (detectedGpsLink) {
+    text += ` My exact GPS Pin: ${detectedGpsLink}`;
+  } else {
+    text += ` Dropping my live WhatsApp location pin below:`;
+  }
+  window.open(`https://wa.me/917030009191?text=${encodeURIComponent(text)}`, '_blank');
+}
+
+function handlePhotoUpload(input) {
+  if (!input.files || input.files.length === 0) return;
+  const file = input.files[0];
+  attachedPhotoName = file.name;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    attachedPhotoDataUrl = e.target.result;
+    const promptView = document.getElementById('photoPromptView');
+    const previewView = document.getElementById('photoPreviewView');
+    const thumbImg = document.getElementById('photoThumbImg');
+    const thumbName = document.getElementById('photoThumbName');
+
+    if (thumbImg) thumbImg.src = attachedPhotoDataUrl;
+    if (thumbName) thumbName.textContent = file.name;
+    if (promptView) promptView.style.display = 'none';
+    if (previewView) previewView.style.display = 'flex';
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeUploadedPhoto() {
+  attachedPhotoName = '';
+  attachedPhotoDataUrl = '';
+  const input = document.getElementById('issuePhotoInput');
+  if (input) input.value = '';
+  const promptView = document.getElementById('photoPromptView');
+  const previewView = document.getElementById('photoPreviewView');
+  const thumbImg = document.getElementById('photoThumbImg');
+  if (thumbImg) thumbImg.src = '';
+  if (promptView) promptView.style.display = 'block';
+  if (previewView) previewView.style.display = 'none';
+}
+
+function selectLocalityHub(key) {
+  if (!PUNE_HUBS[key]) return;
+  currentSelectedHub = key;
+  const data = PUNE_HUBS[key];
+
+  document.querySelectorAll('.locality-hub-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-hub') === key);
+  });
+
+  const title = document.getElementById('localityDetailTitle');
+  const sub = document.getElementById('localityDetailSub');
+  const arrival = document.getElementById('localityArrivalTime');
+  const societies = document.getElementById('localitySocietiesText');
+  const services = document.getElementById('localityServicesText');
+  const plumbers = document.getElementById('localityPlumbersText');
+  const emergency = document.getElementById('localityEmergencyText');
+  const ctaCity = document.getElementById('localityCtaCity');
+  const waBtn = document.getElementById('localityWaBtn');
+
+  if (title) title.textContent = data.name;
+  if (sub) sub.textContent = data.sub;
+  if (arrival) arrival.textContent = data.arrival;
+  if (societies) societies.textContent = data.societies;
+  if (services) services.textContent = data.services;
+  if (plumbers) plumbers.textContent = data.plumbers;
+  if (emergency) emergency.innerHTML = data.emergency;
+  if (ctaCity) ctaCity.textContent = data.shortName;
+  if (waBtn) {
+    waBtn.href = `https://wa.me/917030009191?text=${encodeURIComponent(data.waText)}`;
+    const span = waBtn.querySelector('span');
+    if (span) span.textContent = `WhatsApp ${data.shortName} Team`;
+  }
+
+  activeLocation = `${data.shortName}, Pune`;
+  renderLocation();
+}
+
+function bookFromLocalityHub() {
+  const data = PUNE_HUBS[currentSelectedHub] || PUNE_HUBS['baner'];
+  activeLocation = `${data.shortName}, Pune`;
+  renderLocation();
+  const addrInput = document.getElementById('bookAddress');
+  if (addrInput && !addrInput.value) {
+    addrInput.value = `${data.shortName}, Pune`;
+  }
+
+  goToStep(1);
+  const bookingSec = document.getElementById('bookingSection');
+  if (bookingSec) {
+    bookingSec.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function initLocalityHubs() {
+  const hash = window.location.hash.replace('#', '').toLowerCase();
+  if (hash && PUNE_HUBS[hash]) {
+    selectLocalityHub(hash);
+  }
+  window.addEventListener('hashchange', () => {
+    const newHash = window.location.hash.replace('#', '').toLowerCase();
+    if (newHash && PUNE_HUBS[newHash]) {
+      selectLocalityHub(newHash);
+    }
+  });
 }

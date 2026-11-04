@@ -1045,6 +1045,10 @@
               <i data-lucide="printer" style="width: 15px; height: 15px;"></i>
               <span>Print Receipt</span>
             </button>
+            <button type="button" class="btn btn-outline" id="sharePinWaBtn" onclick="shareLiveLocationOnWhatsApp()">
+              <i data-lucide="map-pin" style="width: 15px; height: 15px;"></i>
+              <span>Drop GPS Pin on WhatsApp</span>
+            </button>
             <button type="button" class="btn btn-black" id="openWhatsAppBookingBtn">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 00-3.48-8.413Z"/></svg>
               <span>Open WhatsApp Ticket</span>
@@ -1139,6 +1143,41 @@
             <div class="form-group-uc">
               <label>Doorstep Address in Pune (Optional)</label>
               <input type="text" id="bookAddress" class="form-input-uc" placeholder="Society / Locality or share location on WhatsApp" />
+              <div class="address-gps-tools">
+                <button type="button" class="btn-gps-tool" id="detectGpsBtn" onclick="detectGPSLocation()">
+                  <i data-lucide="navigation" style="width: 13px; height: 13px;"></i>
+                  <span id="detectGpsLabel">Auto-Detect GPS Pin</span>
+                </button>
+                <button type="button" class="btn-gps-tool" onclick="setWhatsAppPinNote()">
+                  <i data-lucide="map-pin" style="width: 13px; height: 13px;"></i>
+                  <span>Drop Pin on WhatsApp</span>
+                </button>
+              </div>
+              <div id="gpsSuccessPill" class="gps-success-banner" style="display: none;"></div>
+            </div>
+
+            <div class="form-group-uc">
+              <label>Attach Problem Photo / Video (Optional)</label>
+              <div class="photo-upload-box" id="photoDropzone" onclick="document.getElementById('issuePhotoInput').click()">
+                <input type="file" id="issuePhotoInput" accept="image/*,video/*" capture="environment" style="display: none;" onchange="handlePhotoUpload(this)" />
+                <div id="photoPromptView">
+                  <div class="photo-prompt-row">
+                    <i data-lucide="camera" style="width: 18px; height: 18px; color: var(--black);"></i>
+                    <span style="font-weight: 700; font-size: 0.85rem; color: var(--black);">Upload / Snap Photo of Leak or Fixture</span>
+                  </div>
+                  <div style="font-size: 0.74rem; color: var(--text-secondary);">Helps plumber carry exact Jaquar / Grohe replacement cartridges</div>
+                </div>
+                <div id="photoPreviewView" style="display: none; align-items: center; justify-content: space-between; gap: 10px;">
+                  <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                    <img id="photoThumbImg" src="" alt="Issue Thumbnail" style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover; border: 1px solid var(--grey-border); flex-shrink: 0;" />
+                    <div style="min-width: 0; text-align: left;">
+                      <div id="photoThumbName" style="font-size: 0.8rem; font-weight: 700; color: var(--black); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></div>
+                      <div style="font-size: 0.7rem; color: var(--text-muted);">Ready for technician dispatch</div>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-outline btn-sm" onclick="event.stopPropagation(); removeUploadedPhoto();" style="padding: 4px 10px; font-size: 0.72rem;">Remove</button>
+                </div>
+              </div>
             </div>
 
             <div class="form-group-uc">
@@ -1253,10 +1292,72 @@
 
   <section class="section-urban" id="localitiesSection">
     <div class="container" style="text-align: center;">
-      <div style="max-width: 600px; margin: 0 auto 32px auto;">
-        <span class="badge-tag" style="margin-bottom: 8px;">Locality Coverage</span>
-        <h2 style="font-size: 2rem; margin-bottom: 6px;">Service Localities Across Pune</h2>
-        <p style="color: var(--text-secondary); font-size: 0.925rem;">Our mobile vans are stationed across major neighborhoods for fast 30-minute arrival.</p>
+      <div style="max-width: 650px; margin: 0 auto 28px auto;">
+        <span class="badge-tag" style="margin-bottom: 8px;">Locality Dispatch Network</span>
+        <h2 style="font-size: 2rem; margin-bottom: 6px;">Hyper-Local Dispatch Hubs Across Pune</h2>
+        <p style="color: var(--text-secondary); font-size: 0.925rem;">Stationed rapid-response vans in every Pune micro-market for guaranteed 30-minute arrival.</p>
+      </div>
+
+      <div class="locality-hub-selector" id="localityHubSelector" role="tablist" aria-label="Pune Locality Dispatch Hubs">
+        <button type="button" class="locality-hub-btn active" data-hub="baner" onclick="selectLocalityHub('baner')">Baner & Balewadi</button>
+        <button type="button" class="locality-hub-btn" data-hub="kothrud" onclick="selectLocalityHub('kothrud')">Kothrud & Karve Nagar</button>
+        <button type="button" class="locality-hub-btn" data-hub="hinjewadi" onclick="selectLocalityHub('hinjewadi')">Hinjewadi IT Park</button>
+        <button type="button" class="locality-hub-btn" data-hub="wakad" onclick="selectLocalityHub('wakad')">Wakad & Pimple Saudagar</button>
+        <button type="button" class="locality-hub-btn" data-hub="koregaon-park" onclick="selectLocalityHub('koregaon-park')">Koregaon Park & KP</button>
+        <button type="button" class="locality-hub-btn" data-hub="viman-nagar" onclick="selectLocalityHub('viman-nagar')">Viman Nagar & Kharadi</button>
+        <button type="button" class="locality-hub-btn" data-hub="aundh" onclick="selectLocalityHub('aundh')">Aundh & Pashan</button>
+        <button type="button" class="locality-hub-btn" data-hub="magarpatta" onclick="selectLocalityHub('magarpatta')">Magarpatta & Hadapsar</button>
+      </div>
+
+      <div class="locality-detail-card" id="localityDetailCard">
+        <div class="locality-detail-header">
+          <div>
+            <div class="locality-hub-status">
+              <span class="status-indicator"></span>
+              <span>Dedicated Mobile Unit On Patrol</span>
+            </div>
+            <h3 class="locality-detail-title" id="localityDetailTitle">Baner & Balewadi Hub</h3>
+            <p class="locality-detail-sub" id="localityDetailSub">High-rise societies, modern conceal diverters, booster pump maintenance & sensor tap servicing.</p>
+          </div>
+          <div class="locality-arrival-box">
+            <div class="locality-arrival-time" id="localityArrivalTime">20-25 Min</div>
+            <div class="locality-arrival-label">Avg. Arrival Window</div>
+          </div>
+        </div>
+
+        <div class="locality-detail-grid">
+          <div class="locality-detail-item">
+            <div class="locality-item-label">Key Gated Societies Serviced</div>
+            <div class="locality-item-text" id="localitySocietiesText">Pan Card Club Rd, Baner-Pashan Link Rd, Rohan Leher, Palladio, Supreme Amadore, VTP Urban Nest.</div>
+          </div>
+          <div class="locality-detail-item">
+            <div class="locality-item-label">Specialist Capabilities</div>
+            <div class="locality-item-text" id="localityServicesText">Grohe & Jaquar concealed thermostatic diverters, pressure boosting systems, kitchen sink waste couplings.</div>
+          </div>
+          <div class="locality-detail-item">
+            <div class="locality-item-label">Technicians On Duty Today</div>
+            <div class="locality-item-text" id="localityPlumbersText">4 Licensed Plumbers with fully stocked mobile vans (o-rings, spindels, PPR pipes, drain snakes).</div>
+          </div>
+          <div class="locality-detail-item">
+            <div class="locality-item-label">Priority Dispatch Line</div>
+            <div class="locality-item-text" id="localityEmergencyText">Direct patch to on-call Baner plumber: <a href="tel:7030009191" style="color: var(--black); font-weight: 700;">+91 70300 09191</a></div>
+          </div>
+        </div>
+
+        <div class="locality-detail-footer">
+          <button type="button" class="btn btn-black" onclick="bookFromLocalityHub()">
+            <i data-lucide="calendar" style="width: 15px; height: 15px;"></i>
+            <span>Book Plumber in <span id="localityCtaCity">Baner</span></span>
+          </button>
+          <a href="https://wa.me/917030009191?text=Hello%20Poona%20Plumbers%2C%20I%20need%20a%20technician%20in%20Baner" id="localityWaBtn" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 00-3.48-8.413Z"/></svg>
+            <span>WhatsApp Baner Team</span>
+          </a>
+        </div>
+      </div>
+
+      <div style="margin: 28px auto 14px auto; font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">
+        All 24+ Pune Service Zones
       </div>
 
       <div class="areas-pills-wrap" id="areasWrap">
