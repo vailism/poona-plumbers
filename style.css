@@ -2598,30 +2598,20 @@ button, input, select, textarea {
     letter-spacing: 0.03em;
   }
   .hero-visual-box {
-    min-height: 250px;
-    height: 250px;
+    min-height: 260px;
+    height: 260px;
     border-radius: 18px;
     overflow: hidden;
     margin-top: 8px;
   }
   .hero-visual-box img {
-    height: 250px;
-    padding: 16px 12px 65px 12px;
+    height: 260px;
+    padding: 14px 10px 58px 10px;
     object-fit: contain;
   }
-  .hero-floating-card-1 {
-    top: 10px;
-    right: 10px;
-    padding: 5px 10px;
-    font-size: 0.7rem;
-    border-radius: 8px;
-  }
+  .hero-floating-card-1,
   .hero-floating-card-2 {
-    bottom: 60px;
-    left: 10px;
-    padding: 5px 8px;
-    font-size: 0.68rem;
-    border-radius: 8px;
+    display: none !important;
   }
   .hero-metric-bar {
     padding: 8px 6px;
