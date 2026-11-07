@@ -189,8 +189,13 @@
           <div class="hero-search-wrapper">
             <div class="search-box-inner">
               <i data-lucide="search" style="width: 18px; height: 18px; color: var(--text-muted); flex-shrink: 0;"></i>
-              <input type="text" id="heroSearchInput" placeholder="What plumbing service do you need? (e.g. tap, leakage, drain)..." autocomplete="off" />
-              <button type="button" class="btn btn-black btn-sm" onclick="filterServices(); scrollToServices();">Search</button>
+              <input type="text" id="heroSearchInput" class="hero-search-input" placeholder="Search service (e.g. tap, leak, drain)..." autocomplete="off" />
+              <button type="button" class="search-clear-btn" id="searchClearBtn" onclick="clearHeroSearch()" aria-label="Clear search" style="display: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+              <button type="button" class="btn-search" id="heroSearchBtn" onclick="handleHeroSearch(event)" aria-label="Search Services">
+                <span id="heroSearchBtnText">Search</span>
+              </button>
             </div>
             <div class="search-autocomplete-dropdown" id="searchAutocomplete"></div>
           </div>

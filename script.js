@@ -505,11 +505,38 @@ function filterServices() {
   }
 }
 
+function handleHeroSearch(e) {
+  if (e && e.preventDefault) e.preventDefault();
+  const input = document.getElementById('heroSearchInput');
+  if (input) {
+    searchQuery = input.value.trim();
+    input.blur();
+  }
+  hideAutocomplete();
+  filterServices();
+  scrollToServices();
+}
+
+function clearHeroSearch() {
+  const input = document.getElementById('heroSearchInput');
+  if (input) {
+    input.value = '';
+    searchQuery = '';
+    input.focus();
+  }
+  const clearBtn = document.getElementById('searchClearBtn');
+  if (clearBtn) clearBtn.style.display = 'none';
+  hideAutocomplete();
+  filterServices();
+}
+
 function resetSearch() {
   selectedCategory = 'all';
   searchQuery = '';
   const input = document.getElementById('heroSearchInput');
   if (input) input.value = '';
+  const clearBtn = document.getElementById('searchClearBtn');
+  if (clearBtn) clearBtn.style.display = 'none';
   document.querySelectorAll('.category-pill').forEach(p => p.classList.toggle('active', p.dataset.category === 'all'));
   filterServices();
 }
@@ -529,18 +556,20 @@ function initCategories() {
 
 function initSearch() {
   const input = document.getElementById('heroSearchInput');
+  const clearBtn = document.getElementById('searchClearBtn');
   if (input) {
     input.addEventListener('input', (e) => {
       searchQuery = e.target.value;
+      if (clearBtn) {
+        clearBtn.style.display = searchQuery.trim().length > 0 ? 'inline-flex' : 'none';
+      }
       filterServices();
       renderAutocomplete(searchQuery);
     });
-    input.addEventListener('keypress', (e) => {
+    input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
-        filterServices();
-        scrollToServices();
-        hideAutocomplete();
+        handleHeroSearch(e);
       }
     });
   }
@@ -548,7 +577,10 @@ function initSearch() {
   document.querySelectorAll('.tag-chip').forEach(chip => {
     chip.addEventListener('click', () => {
       const q = chip.dataset.query;
-      if (input) input.value = q;
+      if (input) {
+        input.value = q;
+        if (clearBtn) clearBtn.style.display = 'inline-flex';
+      }
       searchQuery = q;
       filterServices();
       scrollToServices();
@@ -1576,7 +1608,9 @@ const TRANSLATIONS = {
     diagCost: 'Fixed Labor Cost',
     diagBook: 'Book Plumber for This Fix',
     rateCardTitle: 'Official 2026 Pune Rate Card',
-    rateCardSub: 'Standardized labor charges with 30-day service warranty across all Pune localities. Zero hidden fees.'
+    rateCardSub: 'Standardized labor charges with 30-day service warranty across all Pune localities. Zero hidden fees.',
+    searchPlaceholder: 'Search service (e.g. tap, leak, drain)...',
+    searchBtnText: 'Search'
   },
   mr: {
     heroHeading: 'पुण्यातील अग्रगण्य घरपोच प्लंबिंग सेवा.',
@@ -1610,7 +1644,9 @@ const TRANSLATIONS = {
     diagCost: 'निश्चित मजुरी',
     diagBook: 'या दुरुस्तीसाठी प्लंबर बुक करा',
     rateCardTitle: 'पुणे अधिकृत २०२६ प्लंबिंग दरपत्रक',
-    rateCardSub: 'संपूर्ण पुण्यासाठी निश्चित मजुरी दर आणि ३० दिवसांची सेवा हमी. कोणतेही लपवलेले शुल्क नाही.'
+    rateCardSub: 'संपूर्ण पुण्यासाठी निश्चित मजुरी दर आणि ३० दिवसांची सेवा हमी. कोणतेही लपवलेले शुल्क नाही.',
+    searchPlaceholder: 'सेवा शोधा (उदा. नळ, गळती, ड्रेनेज)...',
+    searchBtnText: 'शोधा'
   }
 };
 
@@ -1696,6 +1732,15 @@ function setLanguage(lang) {
 
   if (rateCardTitle) rateCardTitle.textContent = data.rateCardTitle;
   if (rateCardSub) rateCardSub.textContent = data.rateCardSub;
+
+  const heroSearchInput = document.getElementById('heroSearchInput');
+  const heroSearchBtnText = document.getElementById('heroSearchBtnText');
+  if (heroSearchInput && data.searchPlaceholder) {
+    heroSearchInput.placeholder = data.searchPlaceholder;
+  }
+  if (heroSearchBtnText && data.searchBtnText) {
+    heroSearchBtnText.textContent = data.searchBtnText;
+  }
 }
 
 function toggleLanguage() {
