@@ -271,7 +271,7 @@ const PUNE_HUBS = {
     shortName: 'Baner',
     sub: 'High-rise societies, modern conceal diverters, booster pump maintenance & sensor tap servicing.',
     arrival: '20-25 Min',
-    societies: 'Pan Card Club Rd, Baner-Pashan Link Rd, Rohan Leher, Palladio, Supreme Amadore, VTP Urban Nest.',
+    societies: 'Pan Card Club Rd, Baner-Pashan Link Rd, Rohan Leher, Palladio, Supreme Amadore, VTP Sierra.',
     services: 'Grohe & Jaquar concealed thermostatic diverters, pressure boosting systems, kitchen sink waste couplings.',
     plumbers: '4 Licensed Plumbers with fully stocked mobile vans (o-rings, spindles, PPR pipes, drain snakes).',
     emergency: 'Direct patch to on-call Baner plumber: <a href="tel:7030009191" style="color: var(--black); font-weight: 700;">+91 70300 09191</a>',

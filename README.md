@@ -3,7 +3,7 @@
 Modern, premium website for Poona Plumbers - Doorstep Plumbing Solutions in Pune.
 
 ## Features
-- Pure HTML5, CSS3, and JavaScript (Zero external frameworks, Apple / Urban Company aesthetic)
+- Pure HTML5, CSS3, and JavaScript (Zero external frameworks, modern premium minimalist aesthetic)
 - 10+ core plumbing services with instant cost calculator and custom consultation booking
 - Interactive multi-step appointment booking wizard with direct WhatsApp routing
 - Google Sheets webhook integration (`sendToGoogleSheet`) for automatic logging of dispatch requests
