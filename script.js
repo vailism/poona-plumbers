@@ -368,7 +368,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initServiceButtons();
   initCalculator();
   initComparisonSlider();
-  updateBookingHistoryCount();
   initLocalityHubs();
   setLanguage(currentLanguage);
   renderDiagSymptoms();
@@ -396,21 +395,8 @@ function initLucide() {
 }
 
 function renderLocation() {
-  const el = document.getElementById('locationDisplay');
-  if (el) el.textContent = activeLocation;
-  const navLoc = document.getElementById('activeLocLabel');
-  if (navLoc) navLoc.textContent = activeLocation;
   const pillName = document.getElementById('locAvailabilityName');
   if (pillName) pillName.textContent = activeLocation;
-}
-
-function switchLocation() {
-  const current = activeLocation.replace(', Pune', '');
-  const currentIndex = LOCALITIES.indexOf(current);
-  const nextIndex = (currentIndex + 1) % LOCALITIES.length;
-  activeLocation = `${LOCALITIES[nextIndex]}, Pune`;
-  localStorage.setItem('pp_loc', activeLocation);
-  renderLocation();
 }
 
 function setServiceMode(mode) {
@@ -475,11 +461,12 @@ function filterServices() {
     const matchesCat = (selectedCategory === 'all' || cardCat === selectedCategory || (isCustom && (selectedCategory === 'all' || selectedCategory === 'custom')));
     const matchesQuery = (q === '' || cardSearch.toLowerCase().includes(q));
 
+    const wasHidden = card.style.display === 'none';
     if (matchesCat && matchesQuery) {
-      card.style.display = 'flex';
-      card.style.animation = 'none';
-      void card.offsetWidth;
-      card.style.animation = 'cardEntrance 0.45s cubic-bezier(0.16, 1, 0.3, 1) both';
+      if (wasHidden || !card.style.display) {
+        card.style.display = 'flex';
+        card.style.animation = 'cardEntrance 0.45s cubic-bezier(0.16, 1, 0.3, 1) both';
+      }
       visibleCount++;
     } else {
       card.style.display = 'none';
@@ -621,7 +608,7 @@ function renderAutocomplete(query) {
   box.innerHTML = matches.map(s => `
     <div class="autocomplete-item" onclick="openDetailsModal('${s.id}'); hideAutocomplete();">
       <div style="display: flex; align-items: center; gap: 10px;">
-        <img src="${s.image}" style="width: 38px; height: 38px; border-radius: var(--radius-xs); object-fit: cover;" alt="${s.name}" />
+        <img src="${s.image}" style="width: 38px; height: 38px; border-radius: var(--radius-xs); object-fit: cover;" alt="${s.name}" loading="lazy" decoding="async" />
         <div>
           <div style="font-weight: 700; font-size: 0.875rem; color: var(--black);">${s.name}</div>
           <div style="font-size: 0.75rem; color: var(--text-secondary);">${s.categoryName} • ⏱ ${s.duration}</div>
@@ -830,7 +817,7 @@ function openDetailsModal(serviceId) {
 
   body.innerHTML = `
     <div style="height: 240px; width: 100%; position: relative; background: var(--grey-light);">
-      <img src="${s.image}" alt="${s.name}" style="width: 100%; height: 100%; object-fit: cover;" />
+      <img src="${s.image}" alt="${s.name}" style="width: 100%; height: 100%; object-fit: cover;" decoding="async" />
     </div>
     <div style="padding: 28px;">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; gap: 12px;">
@@ -1070,7 +1057,6 @@ function submitMultiStepBooking() {
   };
 
   sendToGoogleSheet(bookingPayload);
-  saveBookingToHistory(bookingPayload);
 
   const summaryDetails = document.getElementById('confirmedSummaryDetails');
   if (summaryDetails) {
@@ -1283,15 +1269,21 @@ function initScrollEffects() {
   const bar = document.getElementById('scrollProgressBar');
   const nav = document.getElementById('navbar');
 
+  let ticking = false;
   window.addEventListener('scroll', () => {
-    const st = window.scrollY || document.documentElement.scrollTop;
-    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    if (bar && height > 0) {
-      const p = (st / height) * 100;
-      bar.style.width = `${p}%`;
-    }
-    if (nav) {
-      nav.classList.toggle('scrolled', st > 20);
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        const st = window.scrollY || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        if (bar && height > 0) {
+          bar.style.width = `${(st / height) * 100}%`;
+        }
+        if (nav) {
+          nav.classList.toggle('scrolled', st > 20);
+        }
+        ticking = false;
+      });
+      ticking = true;
     }
   }, { passive: true });
 
@@ -1321,25 +1313,6 @@ function initScrollEffects() {
     document.querySelectorAll('.reveal-item').forEach(el => el.classList.add('revealed'));
     animateCounters();
   }
-}
-
-function getBookingHistory() {
-  try {
-    return JSON.parse(localStorage.getItem('pp_bookings') || '[]');
-  } catch (e) {
-    return [];
-  }
-}
-
-function saveBookingToHistory(item) {
-  const list = getBookingHistory();
-  list.unshift(item);
-  localStorage.setItem('pp_bookings', JSON.stringify(list.slice(0, 20)));
-  updateBookingHistoryCount();
-}
-
-function updateBookingHistoryCount() {
-  // Bookings history pill removed per user request
 }
 
 function detectGPSLocation() {
@@ -1522,7 +1495,6 @@ const TRANSLATIONS = {
     howBtn: 'How It Works',
     reviewsBtn: 'Reviews',
     faqBtn: 'FAQ',
-    navHistory: 'My Bookings',
     navCall: 'Call Now',
     dockEta: '30-Min Fast Arrival',
     dockBook: 'Book Plumber',
@@ -1558,7 +1530,6 @@ const TRANSLATIONS = {
     howBtn: 'कसे कार्य करते',
     reviewsBtn: 'अभिप्राय',
     faqBtn: 'प्रश्न उत्तरे',
-    navHistory: 'माझे बुकिंग',
     navCall: 'कॉल करा',
     dockEta: '३० मिनिटांत जलद आगमन',
     dockBook: 'प्लंबर बुक करा',
@@ -1632,6 +1603,21 @@ function setLanguage(lang) {
 
   if (heroHeading) heroHeading.textContent = data.heroHeading;
   if (heroSubtitle) heroSubtitle.textContent = data.heroSubtitle;
+
+  const modeStdBtn = document.getElementById('modeStandardBtn');
+  const modeEmgBtn = document.getElementById('modeEmergencyBtn');
+  if (modeStdBtn) {
+    const s = modeStdBtn.querySelector('span');
+    if (s) s.textContent = data.modeStandard;
+  }
+  if (modeEmgBtn) {
+    const spans = modeEmgBtn.querySelectorAll('span');
+    if (spans.length > 1) {
+      spans[1].textContent = data.modeEmergency;
+    } else if (spans.length === 1) {
+      spans[0].textContent = data.modeEmergency;
+    }
+  }
   if (navServices) navServices.textContent = data.servicesBtn;
   if (navDiagnostic) navDiagnostic.textContent = data.diagnosticBtn;
   if (navRateCard) navRateCard.textContent = data.rateCardBtn;
