@@ -1339,75 +1339,7 @@ function saveBookingToHistory(item) {
 }
 
 function updateBookingHistoryCount() {
-  const count = getBookingHistory().length;
-  const navBadge = document.getElementById('navBookingCount');
-  const mobBadge = document.getElementById('mobileBookingCount');
-  if (navBadge) {
-    navBadge.textContent = count;
-    navBadge.style.display = count > 0 ? 'inline-flex' : 'none';
-  }
-  if (mobBadge) {
-    mobBadge.textContent = count;
-  }
-}
-
-function openBookingsHistoryModal() {
-  const modal = document.getElementById('bookingsHistoryModal');
-  const container = document.getElementById('bookingHistoryListContainer');
-  if (!modal || !container) return;
-
-  const history = getBookingHistory();
-  if (history.length === 0) {
-    container.innerHTML = `
-      <div style="text-align: center; padding: 32px 16px; color: var(--text-secondary);">
-        <i data-lucide="calendar-x" style="width: 32px; height: 32px; margin: 0 auto 10px auto; display: block; opacity: 0.4;"></i>
-        <div style="font-weight: 700; margin-bottom: 4px; color: var(--black);">No Bookings Yet</div>
-        <div style="font-size: 0.8rem;">Your scheduled doorstep services will appear here.</div>
-      </div>
-    `;
-  } else {
-    container.innerHTML = history.map(b => `
-      <div class="history-card-item">
-        <div class="history-card-header">
-          <strong style="color: var(--black); font-size: 0.9rem;">${b.service}</strong>
-          <span class="badge-tag">${b.bookingId}</span>
-        </div>
-        <div class="history-card-body">
-          <div>📅 ${b.schedule}</div>
-          <div>📍 ${b.address} (${b.locality})</div>
-          <div>👤 ${b.customerName} • +91 ${b.customerPhone}</div>
-        </div>
-        <button type="button" class="btn btn-black btn-sm" onclick="closeBookingsHistoryModal(); rebookFromHistory('${b.service}')" style="width: 100%;">
-          Re-Book This Service
-        </button>
-      </div>
-    `).join('');
-  }
-
-  modal.classList.add('active');
-  document.body.style.overflow = 'hidden';
-  if (typeof lucide !== 'undefined') lucide.createIcons();
-}
-
-function closeBookingsHistoryModal() {
-  const modal = document.getElementById('bookingsHistoryModal');
-  if (modal) modal.classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-function rebookFromHistory(serviceName) {
-  const select = document.getElementById('bookServiceSelect');
-  if (select) {
-    for (let i = 0; i < select.options.length; i++) {
-      if (select.options[i].value === serviceName || select.options[i].text.includes(serviceName)) {
-        select.selectedIndex = i;
-        break;
-      }
-    }
-  }
-  goToStep(1);
-  const formSection = document.getElementById('bookingSection');
-  if (formSection) formSection.scrollIntoView({ behavior: 'smooth' });
+  // Bookings history pill removed per user request
 }
 
 function detectGPSLocation() {
@@ -1676,7 +1608,6 @@ function setLanguage(lang) {
   const navHow = document.getElementById('navHowBtn');
   const navReviews = document.getElementById('navReviewsBtn');
   const navFaq = document.getElementById('navFaqBtn');
-  const navHistoryText = document.getElementById('navHistoryText');
   const navCallText = document.getElementById('navCallText');
 
   const dockEtaText = document.getElementById('dockEtaText');
@@ -1710,7 +1641,6 @@ function setLanguage(lang) {
   if (navHow) navHow.textContent = data.howBtn;
   if (navReviews) navReviews.textContent = data.reviewsBtn;
   if (navFaq) navFaq.textContent = data.faqBtn;
-  if (navHistoryText) navHistoryText.textContent = data.navHistory;
   if (navCallText) navCallText.textContent = data.navCall;
 
   if (dockEtaText) dockEtaText.textContent = data.dockEta;

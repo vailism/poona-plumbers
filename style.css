@@ -2513,8 +2513,7 @@ button, input, select, textarea {
     display: none;
   }
   .nav-actions-group .nav-wa-btn,
-  .nav-actions-group .btn-black,
-  .nav-history-btn {
+  .nav-actions-group .btn-black {
     display: none;
   }
   .brand-sub, .brand-tag {
@@ -2540,13 +2539,6 @@ button, input, select, textarea {
     display: flex;
     align-items: center;
     gap: 6px;
-  }
-  .nav-history-btn {
-    padding: 6px 10px;
-    font-size: 0.74rem;
-    font-weight: 600;
-    border-radius: var(--radius-full);
-    gap: 5px;
   }
   .mobile-menu-btn {
     display: flex;
@@ -3125,9 +3117,6 @@ button, input, select, textarea {
 }
 
 @media (max-width: 380px) {
-  .nav-history-btn span:not(.booking-count-badge) {
-    display: none;
-  }
   .brand-title {
     font-size: 0.84rem;
   }
@@ -3321,43 +3310,6 @@ button, input, select, textarea {
   align-items: center;
   gap: 12px;
   font-size: 0.875rem;
-}
-
-.booking-count-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--black);
-  color: var(--white);
-  font-size: 0.65rem;
-  font-weight: 700;
-  margin-left: 4px;
-}
-
-.history-card-item {
-  background: var(--white);
-  border: 1px solid var(--grey-border);
-  border-radius: var(--radius-md);
-  padding: 16px;
-  margin-bottom: 12px;
-  text-align: left;
-}
-
-.history-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.history-card-body {
-  font-size: 0.825rem;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 12px;
 }
 
 @media (max-width: 768px) {

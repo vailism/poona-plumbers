@@ -7,7 +7,6 @@ Modern, premium website for Poona Plumbers - Doorstep Plumbing Solutions in Pune
 - 10+ core plumbing services with instant cost calculator and custom consultation booking
 - Interactive multi-step appointment booking wizard with direct WhatsApp routing
 - Google Sheets webhook integration (`sendToGoogleSheet`) for automatic logging of dispatch requests
-- "My Bookings" drawer powered by local storage with 1-click re-booking
 - Live 4-step dispatch timeline tracker in the confirmation card
 - Printable professional work order receipts (`@media print` styling)
 - Photo / 5-second video diagnostic prompt routing directly to WhatsApp
