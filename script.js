@@ -395,13 +395,43 @@ function initLucide() {
   }
 }
 
+function getHubForLocality(locName) {
+  const clean = (locName || '').toLowerCase();
+  if (clean.includes('baner') || clean.includes('balewadi')) return { key: 'baner', ...PUNE_HUBS['baner'] };
+  if (clean.includes('kothrud') || clean.includes('karve')) return { key: 'kothrud', ...PUNE_HUBS['kothrud'] };
+  if (clean.includes('hinjewadi') || clean.includes('maan')) return { key: 'hinjewadi', ...PUNE_HUBS['hinjewadi'] };
+  if (clean.includes('wakad') || clean.includes('pimple')) return { key: 'wakad', ...PUNE_HUBS['wakad'] };
+  if (clean.includes('koregaon') || clean.includes('kalyani')) return { key: 'koregaon-park', ...PUNE_HUBS['koregaon-park'] };
+  if (clean.includes('viman') || clean.includes('kharadi')) return { key: 'viman-nagar', ...PUNE_HUBS['viman-nagar'] };
+  if (clean.includes('aundh') || clean.includes('pashan')) return { key: 'aundh', ...PUNE_HUBS['aundh'] };
+  if (clean.includes('magarpatta') || clean.includes('hadapsar')) return { key: 'magarpatta', ...PUNE_HUBS['magarpatta'] };
+  return { key: 'koregaon-park', ...PUNE_HUBS['koregaon-park'] };
+}
+
 function renderLocation() {
   const el = document.getElementById('locationDisplay');
   if (el) el.textContent = activeLocation;
   const navLoc = document.getElementById('activeLocLabel');
   if (navLoc) navLoc.textContent = activeLocation;
+
+  const hub = getHubForLocality(activeLocation);
   const pillName = document.getElementById('locAvailabilityName');
   if (pillName) pillName.textContent = activeLocation;
+
+  const bannerText = document.getElementById('localityBannerText');
+  if (bannerText) {
+    const techCount = hub.plumbers ? hub.plumbers.split(' ')[0] : '4';
+    const isMr = currentLanguage === 'mr';
+    bannerText.innerHTML = isMr
+      ? `<strong>${techCount} प्लंबर उपलब्ध</strong> : <span id="locAvailabilityName">${activeLocation}</span> • ~${hub.arrival} आगमन`
+      : `<strong>${techCount} technicians on duty</strong> in <span id="locAvailabilityName">${activeLocation}</span> • ~${hub.arrival} dispatch`;
+  }
+
+  const dockEta = document.getElementById('dockEtaText');
+  if (dockEta) {
+    const isMr = currentLanguage === 'mr';
+    dockEta.textContent = isMr ? `~${hub.arrival} आगमन (${hub.shortName})` : `~${hub.arrival} in ${hub.shortName}`;
+  }
 }
 
 function switchLocation() {
@@ -925,10 +955,216 @@ function copyPhoneNumber(btn) {
   });
 }
 
+/* ==========================================================================
+   LOCALITY PICKER, 60-SEC CALLBACK, SOS WATER SHUTOFF & RATE CARD SHARING
+   ========================================================================== */
+
+function openLocalityPickerModal() {
+  const modal = document.getElementById('localityPickerModal');
+  const grid = document.getElementById('localityPickerGrid');
+  if (!modal || !grid) return;
+
+  const currentHubKey = getHubForLocality(activeLocation).key;
+
+  grid.innerHTML = Object.keys(PUNE_HUBS).map(key => {
+    const hub = PUNE_HUBS[key];
+    const isActive = key === currentHubKey;
+    const techCount = hub.plumbers ? hub.plumbers.split(' ')[0] : '4';
+    return `
+      <div class="locality-picker-card ${isActive ? 'active' : ''}" onclick="selectLocalityPicker('${key}')">
+        <div class="loc-pick-name">${hub.shortName}</div>
+        <div class="loc-pick-meta">
+          <span class="loc-pick-arrival">⚡ ${hub.arrival}</span>
+          <span>•</span>
+          <span class="loc-pick-techs">🟢 ${techCount} Plumbers</span>
+        </div>
+        <div class="loc-pick-soc">${hub.societies}</div>
+      </div>
+    `;
+  }).join('');
+
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function closeLocalityPickerModal() {
+  const modal = document.getElementById('localityPickerModal');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+function selectLocalityPicker(hubKey) {
+  selectLocalityHub(hubKey);
+  closeLocalityPickerModal();
+}
+
+let callbackCountdownInterval = null;
+
+function openCallbackModal() {
+  const modal = document.getElementById('callbackModal');
+  const formView = document.getElementById('callbackFormView');
+  const successView = document.getElementById('callbackSuccessView');
+  const locSelect = document.getElementById('cbLocalitySelect');
+  if (!modal) return;
+
+  if (locSelect) {
+    locSelect.innerHTML = LOCALITIES.map(loc => `
+      <option value="${loc}, Pune" ${activeLocation.includes(loc) ? 'selected' : ''}>${loc}, Pune</option>
+    `).join('');
+  }
+
+  if (formView) formView.style.display = 'block';
+  if (successView) successView.style.display = 'none';
+
+  if (callbackCountdownInterval) {
+    clearInterval(callbackCountdownInterval);
+    callbackCountdownInterval = null;
+  }
+
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  const phoneInput = document.getElementById('cbPhoneInput');
+  if (phoneInput) setTimeout(() => phoneInput.focus(), 300);
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function closeCallbackModal() {
+  const modal = document.getElementById('callbackModal');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  if (callbackCountdownInterval) {
+    clearInterval(callbackCountdownInterval);
+    callbackCountdownInterval = null;
+  }
+}
+
+function submit60SecCallback(e) {
+  e.preventDefault();
+  const phoneInput = document.getElementById('cbPhoneInput');
+  const phone = (phoneInput ? phoneInput.value : '').trim().replace(/\D/g, '');
+  if (phone.length !== 10) {
+    alert('Please enter a valid 10-digit mobile number.');
+    return;
+  }
+
+  const locSelect = document.getElementById('cbLocalitySelect');
+  const locality = locSelect ? locSelect.value : activeLocation;
+  const issueInput = document.querySelector('input[name="cbIssue"]:checked');
+  const issue = issueInput ? issueInput.value : 'General Plumbing Issue';
+
+  try {
+    const saved = JSON.parse(localStorage.getItem('pp_callbacks') || '[]');
+    saved.unshift({
+      id: `CB-${Date.now().toString().slice(-4)}`,
+      phone: `+91 ${phone}`,
+      locality,
+      issue,
+      date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
+    });
+    localStorage.setItem('pp_callbacks', JSON.stringify(saved.slice(0, 10)));
+  } catch (err) {}
+
+  const waMsg = `🚨 *URGENT 60-SEC CALLBACK REQUEST*\n\n` +
+    `📱 *Customer Phone:* +91 ${phone}\n` +
+    `📍 *Locality:* ${locality}\n` +
+    `🛠️ *Issue:* ${issue}\n` +
+    `⚡ *Response Window:* Immediate (within 60s)\n` +
+    `🌐 *Source:* poonaplumber.com`;
+
+  const waUrl = `https://wa.me/917030009191?text=${encodeURIComponent(waMsg)}`;
+  const waBtn = document.getElementById('cbWaFallbackBtn');
+  if (waBtn) waBtn.href = waUrl;
+
+  const targetPhone = document.getElementById('cbTargetPhone');
+  if (targetPhone) targetPhone.textContent = `+91 ${phone}`;
+
+  const formView = document.getElementById('callbackFormView');
+  const successView = document.getElementById('callbackSuccessView');
+  if (formView) formView.style.display = 'none';
+  if (successView) successView.style.display = 'block';
+
+  try {
+    window.open(waUrl, '_blank');
+  } catch (err) {}
+
+  startCallbackTimer();
+}
+
+function startCallbackTimer() {
+  let seconds = 60;
+  const totalLength = 276.46;
+  const secEl = document.getElementById('countdownSecondsText');
+  const progressEl = document.getElementById('countdownDialProgress');
+
+  if (callbackCountdownInterval) clearInterval(callbackCountdownInterval);
+
+  if (secEl) secEl.textContent = '60';
+  if (progressEl) progressEl.style.strokeDashoffset = '0';
+
+  callbackCountdownInterval = setInterval(() => {
+    seconds--;
+    if (secEl) secEl.textContent = seconds < 10 ? `0${seconds}` : `${seconds}`;
+    if (progressEl) {
+      const offset = totalLength - (seconds / 60) * totalLength;
+      progressEl.style.strokeDashoffset = `${offset}`;
+    }
+
+    if (seconds <= 0) {
+      clearInterval(callbackCountdownInterval);
+      callbackCountdownInterval = null;
+      if (secEl) secEl.textContent = '00';
+    }
+  }, 1000);
+}
+
+function openSosModal() {
+  const modal = document.getElementById('sosModal');
+  if (modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  }
+}
+
+function closeSosModal() {
+  const modal = document.getElementById('sosModal');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+function shareRateCardWhatsApp() {
+  const text = `📋 *Poona Plumbers - Official 2026 Pune Plumbing Rate Card*\n\n` +
+    `💧 *Doorstep Visit & Inspection:* ₹149\n` +
+    `🔧 *Tap & Faucet Repair:* from ₹149\n` +
+    `🚽 *Toilet Flush Cistern & Jet Spray:* from ₹199\n` +
+    `⚡ *Motorized Drain Cleaning:* from ₹299\n` +
+    `🛁 *Concealed Pipe Leakage Fix:* from ₹249\n` +
+    `🛢️ *Overhead Tank Cleaning:* from ₹499\n` +
+    `🚿 *Geyser Fitting & Repair:* from ₹249\n\n` +
+    `✅ 30-Day Re-work Guarantee\n` +
+    `✅ 30-Minute Rapid Arrival across Pune\n` +
+    `✅ Verified Plumbers (Jaquar, Grohe, Astral MRP spares)\n\n` +
+    `📞 *Call:* +91 70300 09191\n` +
+    `🌐 *View & Book Online:* https://poonaplumber.com`;
+  window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+}
+
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     closeDetailsModal();
     closeCallModal();
+    closeRateCardModal();
+    closeBookingsHistoryModal();
+    closeLocalityPickerModal();
+    closeCallbackModal();
+    closeSosModal();
   }
 });
 
@@ -1581,6 +1817,11 @@ const TRANSLATIONS = {
     heroSubtitle: 'Discover trusted plumbing professionals for your home. Transparent pricing, convenient scheduling, and quality service at your doorstep across Pune.',
     modeStandard: 'Standard Visit',
     modeEmergency: '⚡ 30-Min Emergency',
+    emergencySosBtnText: '🚨 Stop Flood: 30-Sec SOS',
+    emergencyCallbackBtnText: '⚡ Request 60-Sec Call',
+    locModalTitle: 'Select Your Pune Locality',
+    locModalSub: 'See live technician availability and guaranteed arrival times in your area.',
+    locChangeWord: 'Change',
     servicesBtn: 'Services',
     diagnosticBtn: 'Diagnosis',
     rateCardBtn: 'Rate Card',
@@ -1609,14 +1850,32 @@ const TRANSLATIONS = {
     diagBook: 'Book Plumber for This Fix',
     rateCardTitle: 'Official 2026 Pune Rate Card',
     rateCardSub: 'Standardized labor charges with 30-day service warranty across all Pune localities. Zero hidden fees.',
+    rateShareWaText: 'Share on WhatsApp',
     searchPlaceholder: 'Search service (e.g. tap, leak, drain)...',
-    searchBtnText: 'Search'
+    searchBtnText: 'Search',
+    cbTitle: 'Request 60-Second Call Back',
+    cbDesc: 'Water leaking or need quick plumbing advice? Enter your mobile number — our on-call supervisor will call you within 60 seconds.',
+    cbPhoneLabel: 'Your Mobile Number *',
+    cbLocLabel: 'Your Locality in Pune',
+    cbIssueLabel: 'Plumbing Issue (Optional)',
+    cbSubmitBtnText: 'Call Me Within 60 Seconds',
+    cbOnlineTag: 'Senior Dispatcher Available in Pune',
+    cbDispatchedText: 'High-Priority Alert Dispatched',
+    cbCallingTitle: 'Calling Your Phone Now!',
+    cbCallingSub: 'Our on-duty Pune technical lead is dialing',
+    sosModalTitle: 'Water Flooding? 30-Sec SOS Guide',
+    sosModalSub: 'Follow these 4 instant steps to isolate your water line while our plumber is on the way.'
   },
   mr: {
     heroHeading: 'पुण्यातील अग्रगण्य घरपोच प्लंबिंग सेवा.',
     heroSubtitle: 'विश्वसनीय आणि कुशल प्लंबर आता फक्त एका क्लिकवर. पारदर्शक दर, वेळेवर सेवा आणि ३० दिवसांची काम वॉरंटी संपूर्ण पुणे शहरात.',
     modeStandard: 'नियमित भेट',
     modeEmergency: '⚡ ३० मिनिटांत तातडीची सेवा',
+    emergencySosBtnText: '🚨 पाणी गळती: ३०-सेकंद SOS',
+    emergencyCallbackBtnText: '⚡ ६०-सेकंदात कॉल मिळवा',
+    locModalTitle: 'तुमचा पुणे परिसर निवडा',
+    locModalSub: 'तुमच्या भागातील तंत्रज्ञांची उपलब्धता आणि येण्याचा वेळ पहा.',
+    locChangeWord: 'बदला',
     servicesBtn: 'सेवा',
     diagnosticBtn: 'समस्या शोधा',
     rateCardBtn: 'दरपत्रक',
@@ -1645,8 +1904,21 @@ const TRANSLATIONS = {
     diagBook: 'या दुरुस्तीसाठी प्लंबर बुक करा',
     rateCardTitle: 'पुणे अधिकृत २०२६ प्लंबिंग दरपत्रक',
     rateCardSub: 'संपूर्ण पुण्यासाठी निश्चित मजुरी दर आणि ३० दिवसांची सेवा हमी. कोणतेही लपवलेले शुल्क नाही.',
+    rateShareWaText: 'व्हॉट्सॲपवर शेअर करा',
     searchPlaceholder: 'सेवा शोधा (उदा. नळ, गळती, ड्रेनेज)...',
-    searchBtnText: 'शोधा'
+    searchBtnText: 'शोधा',
+    cbTitle: '६०-सेकंदात त्वरित कॉल मिळवा',
+    cbDesc: 'पाणी गळत आहे किंवा त्वरित सल्ल्याची गरज आहे? तुमचा मोबाईल नंबर टाका — आमचे पर्यवेक्षक ६० सेकंदात तुम्हाला कॉल करतील.',
+    cbPhoneLabel: 'तुमचा मोबाईल नंबर *',
+    cbLocLabel: 'पुण्यातील तुमचा परिसर',
+    cbIssueLabel: 'समस्या (ऐच्छिक)',
+    cbSubmitBtnText: 'मला ६० सेकंदात कॉल करा',
+    cbOnlineTag: 'पुण्यातील मुख्य तंत्रज्ञ उपलब्ध',
+    cbDispatchedText: 'तातडीची सूचना पाठवली गेली आहे',
+    cbCallingTitle: 'आता तुमच्या फोनवर कॉल येत आहे!',
+    cbCallingSub: 'आमचे मुख्य तंत्रज्ञ डायल करत आहेत',
+    sosModalTitle: 'पाणी वाहत आहे? ३०-सेकंद SOS मार्गदर्शक',
+    sosModalSub: 'प्लंबर येईपर्यंत घरातील मुख्य पाणी थांबवण्यासाठी या ४ सोप्या पायऱ्या वापरा.'
   }
 };
 
@@ -1698,6 +1970,25 @@ function setLanguage(lang) {
 
   const rateCardTitle = document.getElementById('rateCardHeaderTitle');
   const rateCardSub = document.getElementById('rateCardHeaderSub');
+  const rateShareWa = document.getElementById('rateShareWaText');
+
+  const emergencySosBtn = document.getElementById('emergencySosBtnText');
+  const emergencyCbBtn = document.getElementById('emergencyCallbackBtnText');
+  const locModalTitle = document.getElementById('locModalTitle');
+  const locModalSub = document.getElementById('locModalSub');
+  const locChangeWord = document.getElementById('locChangeWord');
+
+  const cbTitle = document.getElementById('cbTitle');
+  const cbDesc = document.getElementById('cbDesc');
+  const cbPhoneLabel = document.getElementById('cbPhoneLabel');
+  const cbLocLabel = document.getElementById('cbLocLabel');
+  const cbSubmitBtnText = document.getElementById('cbSubmitBtnText');
+  const cbOnlineTag = document.getElementById('cbOnlineTag');
+  const cbDispatchedText = document.getElementById('cbDispatchedText');
+  const cbCallingTitle = document.getElementById('cbCallingTitle');
+
+  const sosModalTitle = document.getElementById('sosModalTitle');
+  const sosModalSub = document.getElementById('sosModalSub');
 
   if (heroHeading) heroHeading.textContent = data.heroHeading;
   if (heroSubtitle) heroSubtitle.textContent = data.heroSubtitle;
@@ -1732,6 +2023,25 @@ function setLanguage(lang) {
 
   if (rateCardTitle) rateCardTitle.textContent = data.rateCardTitle;
   if (rateCardSub) rateCardSub.textContent = data.rateCardSub;
+  if (rateShareWa && data.rateShareWaText) rateShareWa.textContent = data.rateShareWaText;
+
+  if (emergencySosBtn && data.emergencySosBtnText) emergencySosBtn.textContent = data.emergencySosBtnText;
+  if (emergencyCbBtn && data.emergencyCallbackBtnText) emergencyCbBtn.textContent = data.emergencyCallbackBtnText;
+  if (locModalTitle && data.locModalTitle) locModalTitle.textContent = data.locModalTitle;
+  if (locModalSub && data.locModalSub) locModalSub.textContent = data.locModalSub;
+  if (locChangeWord && data.locChangeWord) locChangeWord.textContent = data.locChangeWord;
+
+  if (cbTitle && data.cbTitle) cbTitle.textContent = data.cbTitle;
+  if (cbDesc && data.cbDesc) cbDesc.textContent = data.cbDesc;
+  if (cbPhoneLabel && data.cbPhoneLabel) cbPhoneLabel.textContent = data.cbPhoneLabel;
+  if (cbLocLabel && data.cbLocLabel) cbLocLabel.textContent = data.cbLocLabel;
+  if (cbSubmitBtnText && data.cbSubmitBtnText) cbSubmitBtnText.textContent = data.cbSubmitBtnText;
+  if (cbOnlineTag && data.cbOnlineTag) cbOnlineTag.textContent = data.cbOnlineTag;
+  if (cbDispatchedText && data.cbDispatchedText) cbDispatchedText.textContent = data.cbDispatchedText;
+  if (cbCallingTitle && data.cbCallingTitle) cbCallingTitle.textContent = data.cbCallingTitle;
+
+  if (sosModalTitle && data.sosModalTitle) sosModalTitle.textContent = data.sosModalTitle;
+  if (sosModalSub && data.sosModalSub) sosModalSub.textContent = data.sosModalSub;
 
   const heroSearchInput = document.getElementById('heroSearchInput');
   const heroSearchBtnText = document.getElementById('heroSearchBtnText');
@@ -1741,6 +2051,8 @@ function setLanguage(lang) {
   if (heroSearchBtnText && data.searchBtnText) {
     heroSearchBtnText.textContent = data.searchBtnText;
   }
+
+  renderLocation();
 }
 
 function toggleLanguage() {
