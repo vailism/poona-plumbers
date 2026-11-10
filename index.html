@@ -59,10 +59,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://images.unsplash.com" />
-  <link rel="preload" as="image" href="logo.png" fetchpriority="high" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="preload" as="image" href="logo.webp" type="image/webp" fetchpriority="high" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" />
+  </noscript>
 
-  <script src="https://unpkg.com/lucide@latest" defer></script>
+  <script src="https://unpkg.com/lucide@1.71.0/dist/umd/lucide.min.js" defer></script>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -230,7 +233,10 @@
         </div>
 
         <div class="hero-visual-box">
-          <img src="logo.png" alt="Poona Plumbers Professional Work" width="1050" height="600" fetchpriority="high" decoding="async" />
+          <picture>
+            <source srcset="logo.webp" type="image/webp" />
+            <img src="logo.png" alt="Poona Plumbers Professional Work" width="1050" height="600" fetchpriority="high" decoding="async" />
+          </picture>
           <div class="hero-floating-card-1">
             <div style="font-weight: 800; font-size: 1.05rem; color: var(--black);">★ 4.9 Rating</div>
             <div style="font-size: 0.725rem; color: var(--text-secondary);">2,500+ Verified Reviews</div>

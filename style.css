@@ -762,6 +762,18 @@ button, input, select, textarea {
   border-bottom: 1px solid var(--grey-border);
 }
 
+/* Performance optimization: lazy-render offscreen below-the-fold sections */
+#calculatorSection,
+#workmanshipSection,
+#whyUsSection,
+#projectsSection,
+#reviewsSection,
+#localitiesSection,
+#faqSection {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 650px;
+}
+
 .section-header-row {
   display: flex;
   align-items: flex-end;

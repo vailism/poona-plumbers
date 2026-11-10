@@ -372,7 +372,16 @@ document.addEventListener('DOMContentLoaded', () => {
   setLanguage(currentLanguage);
   renderDiagSymptoms();
   initLucide();
+  initServiceWorker();
 });
+
+function initServiceWorker() {
+  if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    });
+  }
+}
 
 function sendToGoogleSheet(data) {
   if (!GOOGLE_SHEET_WEBHOOK_URL) return;
@@ -544,18 +553,24 @@ function initCategories() {
 function initSearch() {
   const input = document.getElementById('heroSearchInput');
   const clearBtn = document.getElementById('searchClearBtn');
+  let searchTimer = null;
+
   if (input) {
     input.addEventListener('input', (e) => {
       searchQuery = e.target.value;
       if (clearBtn) {
         clearBtn.style.display = searchQuery.trim().length > 0 ? 'inline-flex' : 'none';
       }
-      filterServices();
-      renderAutocomplete(searchQuery);
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        filterServices();
+        renderAutocomplete(searchQuery);
+      }, 120);
     });
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
+        clearTimeout(searchTimer);
         handleHeroSearch(e);
       }
     });
