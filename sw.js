@@ -1,4 +1,4 @@
-const CACHE_NAME = 'poona-plumbers-v1';
+const CACHE_NAME = 'poona-plumbers-v2';
 const STATIC_ASSETS = [
   './',
   'index.html',
@@ -7,7 +7,14 @@ const STATIC_ASSETS = [
   'favicon.svg',
   'PP.png',
   'logo.webp',
-  'manifest.json'
+  'manifest.json',
+  'images/tap-faucet-repair-v2.webp',
+  'images/wash-basin-repair.webp',
+  'images/leakage.webp',
+  'images/shower-and-diverter.webp',
+  'images/water-heater-repair-services.webp',
+  'images/sink.webp',
+  'images/jet-spray-repair.webp'
 ];
 
 self.addEventListener('install', (event) => {
@@ -71,3 +78,4 @@ self.addEventListener('fetch', (event) => {
     );
   }
 });
+
